@@ -79,4 +79,18 @@
         ],
         "link": "https://exemplo.com/funkopop2"
     }
+    ,
+    {
+        "id": 9,
+        "name": "Quadro Decorativo Moderno",
+        "category": "quadros",
+        "price": 0.00,
+        "description": "Quadro decorativo moderno para ambientes sofisticados. Inclui duas imagens para visualização.",
+        "image": "./src/img/quadro_1.png",
+        "images": [
+            "./src/img/quadro_1.png",
+            "./src/img/quadro_1.1.png"
+        ],
+        "link": "https://exemplo.com/quadro1"
+    }
 ]
