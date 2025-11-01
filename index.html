@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Artesanatos Criativos - Portfólio</title>
-    <link rel="stylesheet" href="./css/style.css">
+    <title>Ateliê Arte Criativa - Portfólio</title>
+    <link rel="icon" type="image/jpeg" href="./src/img/logo.jpg">
+    <link rel="stylesheet" href="./src/css/style.css">
 </head>
 <body>
     <!-- Header -->
@@ -13,16 +14,15 @@
             <div class="header-content">
                 <div class="logo">
                     <span class="logo-icon">🎨</span>
-                    <span>Artesanatos Criativos</span>
+                    <span>Ateliê Arte Criativa</span>
                 </div>
                 <div class="mobile-menu">☰</div>
                 <nav>
                     <ul>
                         <li><a href="#home">Início</a></li>
-                        <li><a href="#products">Produtos</a></li>
+                        <li><a href="products.html">Produtos</a></li>
                         <li><a href="#about">Sobre</a></li>
                         <li><a href="#contact">Contato</a></li>
-                        <li><a href="#" id="admin-toggle">Admin</a></li>
                     </ul>
                 </nav>
             </div>
@@ -31,40 +31,31 @@
 
     <!-- Hero Section -->
     <section class="hero" id="home">
+        <div class="hero-bg active" style="background-image: url('https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=1920&q=80')"></div>
+        <div class="hero-bg" style="background-image: url('https://images.unsplash.com/photo-1596571210530-a65ea9fda0e3?auto=format&fit=crop&w=1920&q=80')"></div>
+        <div class="hero-bg" style="background-image: url('https://images.unsplash.com/photo-1528484786961-e60836ce769a?auto=format&fit=crop&w=1920&q=80')"></div>
         <div class="container">
             <h1>Artesanatos Únicos e Especiais</h1>
             <p>Descubra peças feitas à mão com carinho e dedicação. Cada item conta uma história especial.</p>
-            <a href="#products" class="btn">Ver Produtos</a>
+            <a href="products.html" class="btn">Ver Produtos</a>
         </div>
     </section>
 
-    <!-- Categorias -->
-    <section class="container">
-        <h2 class="section-title">Nossas Categorias</h2>
-        <div class="categories">
-            <div class="category active" data-category="all">Todos</div>
-            <div class="category" data-category="decoracao">Decoração</div>
-            <div class="category" data-category="bijuterias">Bijuterias</div>
-            <div class="category" data-category="tecidos">Tecidos</div>
-            <div class="category" data-category="personalizados">Personalizados</div>
-        </div>
-    </section>
 
-    <!-- Produtos -->
-    <section class="container" id="products">
-        <h2 class="section-title">Nossos Produtos</h2>
-        <div class="products-grid" id="products-container">
-            <!-- Produtos serão carregados dinamicamente via JavaScript -->
-        </div>
-    </section>
 
     <!-- Sobre -->
     <section class="about" id="about">
         <div class="container">
             <div class="about-content">
-                <h2 class="section-title">Sobre a Artesã</h2>
-                <p>Olá! Meu nome é Ismênia e sou apaixonada por criar peças únicas e especiais. Cada trabalho é feito com muito carinho e atenção aos detalhes, transformando materiais simples em verdadeiras obras de arte.</p>
-                <p>Minha jornada no artesanato começou há [X] anos e desde então venho me dedicando a aprender novas técnicas e explorar minha criatividade. Espero que você encontre algo especial aqui que toque seu coração!</p>
+                <div class="about-image">
+                    <img src="./src/img/logo.jpg" alt="Ismênia - Artesã">
+                </div>
+                <div class="about-text">
+                    <h2 class="section-title">Sobre a Artesã</h2>
+                    <p>Olá! Meu nome é Ismênia e sou apaixonada por criar peças únicas e especiais. Cada trabalho é feito com muito carinho e atenção aos detalhes, transformando materiais simples em verdadeiras obras de arte.</p>
+                    <br>
+                    <p>Minha jornada no artesanato começou há [X] anos e desde então venho me dedicando a aprender novas técnicas e explorar minha criatividade. Espero que você encontre algo especial aqui que toque seu coração!</p>
+                </div>
             </div>
         </div>
     </section>
@@ -76,10 +67,9 @@
                 <h2 class="section-title">Entre em Contato</h2>
                 <p>Fique à vontade para entrar em contato comigo através das minhas redes sociais ou por e-mail.</p>
                 <div class="social-links">
-                    <a href="#" class="social-icon">📷</a>
-                    <a href="#" class="social-icon">📘</a>
-                    <a href="#" class="social-icon">📧</a>
-                    <a href="#" class="social-icon">💬</a>
+                    <a href="https://www.instagram.com/_atelieartecriativa/" target="_blank">
+                        <img src="./src/img/instagram.png" alt="Instagram Ateliê Arte Criativa" class="social-media-icon">
+                    </a>
                 </div>
             </div>
         </div>
@@ -89,15 +79,15 @@
     <footer>
         <div class="container">
             <div class="footer-content">
-                <div class="footer-logo">Artesanatos Criativos</div>
+                <div class="footer-logo">Ateliê Arte Criativa</div>
                 <div class="footer-links">
                     <a href="#home">Início</a>
-                    <a href="#products">Produtos</a>
+                    <a href="products.html">Produtos</a>
                     <a href="#about">Sobre</a>
                     <a href="#contact">Contato</a>
                 </div>
                 <div class="copyright">
-                    &copy; 2023 Artesanatos Criativos. Todos os direitos reservados.
+                    &copy; 2025 Ateliê Arte Criativa. Todos os direitos reservados.
                 </div>
             </div>
         </div>
@@ -111,8 +101,11 @@
                 <span class="close-modal">&times;</span>
             </div>
             <div class="modal-body">
-                <div class="modal-image">
-                    <img id="modal-image" src="" alt="Produto">
+                <div class="modal-gallery">
+                    <div class="modal-main-image">
+                        <img id="modal-main-image" src="" alt="Produto">
+                    </div>
+                    <div class="modal-thumbs" id="modal-thumbs"></div>
                 </div>
                 <div class="modal-info">
                     <h2 id="modal-product-title">Produto</h2>
@@ -127,47 +120,6 @@
         </div>
     </div>
 
-    <!-- Painel Admin -->
-    <section class="admin-panel container" id="admin-panel">
-        <h2 class="section-title">Adicionar Novo Produto</h2>
-        <form class="admin-form" id="product-form">
-            <div class="form-group">
-                <label for="product-name">Nome do Produto</label>
-                <input type="text" id="product-name" class="form-control" required>
-            </div>
-            <div class="form-group">
-                <label for="product-category">Categoria</label>
-                <select id="product-category" class="form-control" required>
-                    <option value="">Selecione uma categoria</option>
-                    <option value="decoracao">Decoração</option>
-                    <option value="bijuterias">Bijuterias</option>
-                    <option value="tecidos">Tecidos</option>
-                    <option value="personalizados">Personalizados</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="product-price">Preço (R$)</label>
-                <input type="number" id="product-price" class="form-control" step="0.01" required>
-            </div>
-            <div class="form-group">
-                <label for="product-description">Descrição</label>
-                <textarea id="product-description" class="form-control" required></textarea>
-            </div>
-            <div class="form-group">
-                <label for="product-image">URL da Imagem</label>
-                <input type="url" id="product-image" class="form-control" required>
-            </div>
-            <div class="form-group">
-                <label for="product-link">Link para Compra</label>
-                <input type="url" id="product-link" class="form-control" required>
-            </div>
-            <div class="admin-actions">
-                <button type="button" class="btn-admin btn-cancel" id="cancel-product">Cancelar</button>
-                <button type="submit" class="btn-admin btn-save">Salvar Produto</button>
-            </div>
-        </form>
-    </section>
-
-    <script src="./js/main.js"></script>
+    <script src="./src/js/main.js"></script>
 </body>
 </html>

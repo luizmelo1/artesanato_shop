@@ -7,32 +7,30 @@ const modalTitle = document.getElementById('modal-title');
 const modalProductTitle = document.getElementById('modal-product-title');
 const modalPrice = document.getElementById('modal-price');
 const modalDescription = document.getElementById('modal-description');
-const modalImage = document.getElementById('modal-image');
+const modalMainImage = document.getElementById('modal-main-image');
+const modalThumbs = document.getElementById('modal-thumbs');
 const modalBuyLink = document.getElementById('modal-buy-link');
 const modalDetailsLink = document.getElementById('modal-details-link');
 const closeModal = document.querySelector('.close-modal');
-const adminPanel = document.getElementById('admin-panel');
-const adminToggle = document.getElementById('admin-toggle');
-const productForm = document.getElementById('product-form');
-const cancelProduct = document.getElementById('cancel-product');
 const mobileMenu = document.querySelector('.mobile-menu');
 const nav = document.querySelector('nav');
 
 // Carregar produtos do arquivo JSON
 async function fetchProducts() {
     try {
-        const res = await fetch('./db/products.json');
+        const res = await fetch('./src/db/products.json');
         if (!res.ok) throw new Error('Falha ao carregar produtos: ' + res.status);
         products = await res.json();
-        loadProducts();
+        if (productsContainer) loadProducts();
     } catch (err) {
         console.error(err);
-        productsContainer.innerHTML = '<p>Não foi possível carregar os produtos.</p>';
+        if (productsContainer) productsContainer.innerHTML = '<p>Não foi possível carregar os produtos.</p>';
     }
 }
 
 // Carregar produtos na página
 function loadProducts(filterCategory = 'all') {
+    if (!productsContainer) return; // nothing to do on pages without product container
     productsContainer.innerHTML = '';
     
     const filteredProducts = filterCategory === 'all' 
@@ -76,8 +74,43 @@ function openProductModal(productId) {
         modalProductTitle.textContent = product.name;
         modalPrice.textContent = `R$ ${product.price.toFixed(2)}`;
         modalDescription.textContent = product.description;
-        modalImage.src = product.image;
-        modalImage.alt = product.name;
+        // determine images list (prefer product.images)
+            const imgs = Array.isArray(product.images) && product.images.length ? product.images : (product.image ? [product.image] : []);
+            // re-query elements to ensure they exist in the current DOM
+            const modalMain = document.getElementById('modal-main-image');
+            const thumbsContainer = document.getElementById('modal-thumbs');
+
+            // debug info (will appear in browser console)
+            console.debug('Opening product modal', { id: productId, imgs, modalMainExists: !!modalMain, thumbsExists: !!thumbsContainer });
+
+            // set main image
+            if (modalMain) {
+                if (imgs.length) {
+                    modalMain.src = imgs[0];
+                    modalMain.alt = product.name;
+                } else {
+                    modalMain.removeAttribute('src');
+                    modalMain.alt = product.name;
+                }
+            }
+
+            // populate thumbnails
+            if (thumbsContainer) {
+                thumbsContainer.innerHTML = '';
+                imgs.forEach((src, idx) => {
+                    const thumb = document.createElement('img');
+                    thumb.src = src;
+                    if (idx === 0) thumb.classList.add('active');
+                    thumb.addEventListener('click', () => {
+                        if (modalMain) modalMain.src = src;
+                        thumbsContainer.querySelectorAll('img').forEach(i => i.classList.remove('active'));
+                        thumb.classList.add('active');
+                    });
+                    thumbsContainer.appendChild(thumb);
+                });
+                // if there is only one image, hide thumbs container to avoid empty space
+                if (imgs.length <= 1) thumbsContainer.style.display = 'none'; else thumbsContainer.style.display = '';
+            }
         modalBuyLink.href = product.link;
         modalDetailsLink.href = product.link;
         modal.style.display = 'block';
@@ -99,39 +132,7 @@ categories.forEach(category => {
     });
 });
 
-// Alternar painel admin
-adminToggle.addEventListener('click', function(e) {
-    e.preventDefault();
-    adminPanel.style.display = adminPanel.style.display === 'block' ? 'none' : 'block';
-});
 
-// Cancelar adição de produto
-cancelProduct.addEventListener('click', function() {
-    productForm.reset();
-    adminPanel.style.display = 'none';
-});
-
-// Adicionar novo produto (local apenas)
-productForm.addEventListener('submit', function(e) {
-    e.preventDefault();
-    
-    const newProduct = {
-        id: products.length > 0 ? Math.max(...products.map(p => p.id)) + 1 : 1,
-        name: document.getElementById('product-name').value,
-        category: document.getElementById('product-category').value,
-        price: parseFloat(document.getElementById('product-price').value),
-        description: document.getElementById('product-description').value,
-        image: document.getElementById('product-image').value,
-        link: document.getElementById('product-link').value
-    };
-    
-    products.push(newProduct);
-    loadProducts();
-    productForm.reset();
-    adminPanel.style.display = 'none';
-    
-    alert('Produto adicionado com sucesso!');
-});
 
 // Menu mobile
 mobileMenu.addEventListener('click', function() {
@@ -152,7 +153,29 @@ document.addEventListener('keydown', function(e) {
     }
 });
 
+// Close modal when clicking the close button
+if (closeModal) closeModal.addEventListener('click', closeProductModal);
+
+// Controle do slideshow do hero
+function initHeroSlideshow() {
+    const backgrounds = document.querySelectorAll('.hero-bg');
+    if (!backgrounds || backgrounds.length === 0) return; // nothing to do when no hero backgrounds present
+    let currentIndex = 0;
+
+    function showNextSlide() {
+        // guard against unexpected state
+        if (!backgrounds[currentIndex]) return;
+        backgrounds[currentIndex].classList.remove('active');
+        currentIndex = (currentIndex + 1) % backgrounds.length;
+        if (backgrounds[currentIndex]) backgrounds[currentIndex].classList.add('active');
+    }
+
+    // Trocar slide a cada 10 segundos
+    setInterval(showNextSlide, 10000);
+}
+
 // Inicializar página
 document.addEventListener('DOMContentLoaded', function() {
     fetchProducts();
+    initHeroSlideshow();
 });

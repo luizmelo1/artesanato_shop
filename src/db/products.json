@@ -3,7 +3,7 @@
         "id": 1,
         "name": "Vaso Decorativo Artesanal",
         "category": "decoracao",
-        "price": 45.90,
+        "price": 0.00,
         "description": "Vaso feito à mão com técnica de pintura especial. Perfeito para decorar sua casa com um toque único.",
         "image": "https://via.placeholder.com/400x300",
         "link": "https://exemplo.com/produto1"
@@ -12,7 +12,7 @@
         "id": 2,
         "name": "Colar de Contas Coloridas",
         "category": "bijuterias",
-        "price": 28.50,
+        "price": 0.00,
         "description": "Colar artesanal com contas coloridas e fecho em prata. Ideal para compor looks descontraídos.",
         "image": "https://via.placeholder.com/400x300",
         "link": "https://exemplo.com/produto2"
@@ -21,7 +21,7 @@
         "id": 3,
         "name": "Almofada de Patchwork",
         "category": "tecidos",
-        "price": 65.00,
+        "price": 0.00,
         "description": "Almofada confeccionada com retalhos de tecidos variados, criando um design único e aconchegante.",
         "image": "https://via.placeholder.com/400x300",
         "link": "https://exemplo.com/produto3"
@@ -30,7 +30,7 @@
         "id": 4,
         "name": "Porta-retratos Personalizado",
         "category": "personalizados",
-        "price": 35.00,
+        "price": 0.00,
         "description": "Porta-retratos feito sob encomenda com o nome ou frase de sua preferência.",
         "image": "https://via.placeholder.com/400x300",
         "link": "https://exemplo.com/produto4"
@@ -39,7 +39,7 @@
         "id": 5,
         "name": "Conjunto de Pratos Decorativos",
         "category": "decoracao",
-        "price": 89.90,
+        "price": 0.00,
         "description": "Conjunto de 3 pratos decorativos com pintura manual. Perfeito para compor uma mesa bonita.",
         "image": "https://via.placeholder.com/400x300",
         "link": "https://exemplo.com/produto5"
@@ -48,9 +48,35 @@
         "id": 6,
         "name": "Brinco de Argola com Detalhes",
         "category": "bijuterias",
-        "price": 22.00,
+        "price": 0.00,
         "description": "Brinco de argola com detalhes em miçangas e pedrarias. Leve e elegante.",
         "image": "https://via.placeholder.com/400x300",
         "link": "https://exemplo.com/produto6"
+    },
+    {
+        "id": 7,
+        "name": "Funko Pop - Edição Colecionável",
+        "category": "funkopop",
+        "price": 0.00,
+        "description": "Funko Pop colecionável com acabamento exclusivo. Este produto possui várias imagens para visualização.",
+        "image": "./src/img/funkopop_1.jpg",
+        "images": [
+            "./src/img/funkopop_1.jpg",
+            "./src/img/funkopop_1.1.jpg"
+        ],
+        "link": "https://exemplo.com/funkopop1"
+    },
+    {
+        "id": 8,
+        "name": "Funko Pop - Edição Especial",
+        "category": "funkopop",
+        "price": 0.00,
+        "description": "Funko Pop edição especial com detalhes únicos. Peça imperdível para colecionadores.",
+        "image": "./src/img/funkopop_2.jpg",
+        "images": [
+            "./src/img/funkopop_2.jpg",
+            "./src/img/funkopop_2.1.jpg"
+        ],
+        "link": "https://exemplo.com/funkopop2"
     }
 ]
