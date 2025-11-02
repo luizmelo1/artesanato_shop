@@ -10,7 +10,9 @@
         <meta name="keywords" content="comprar artesanato, funko pop personalizado, quadros decorativos, peças artesanais online, decoração artesanal, artesanato brasileiro">
         <meta name="author" content="Ismênia - Ateliê Arte Criativa">
         <meta name="robots" content="index, follow">
+    
         
+    
     <link rel="icon" type="image/jpeg" href="./src/img/icons/logo.jpg">
     <link rel="stylesheet" href="./src/css/style.css">
 </head>
@@ -58,13 +60,14 @@
                 <span class="search-icon" aria-hidden="true">🔍</span>
             </div>
             
-            <div class="categories" role="group" aria-label="Filtrar produtos por categoria">
+            <fieldset class="categories">
+                <legend class="sr-only">Filtrar produtos por categoria</legend>
                 <button class="category active" data-category="all" aria-pressed="true">Todos</button>
                 <button class="category" data-category="decoracao" aria-pressed="false">Decoração</button>
                 <button class="category" data-category="personalizados" aria-pressed="false">Personalizados</button>
                 <button class="category" data-category="funkopop" aria-pressed="false">Funko Pop</button>
                 <button class="category" data-category="quadros" aria-pressed="false">Quadros</button>
-            </div>
+            </fieldset>
         </section>
 
         <!-- Produtos -->
@@ -107,7 +110,7 @@
         </button>
 
     <!-- Modal de Produto -->
-    <div class="modal" id="product-modal" role="dialog" aria-modal="true" aria-labelledby="modal-product-title">
+    <dialog class="modal" id="product-modal" aria-labelledby="modal-product-title">
         <div class="modal-content">
             <div class="modal-header">
                 <h2 id="modal-title">Detalhes do Produto</h2>
@@ -131,8 +134,9 @@
                 </div>
             </div>
         </div>
-    </div>
+    </dialog>
 
     <script src="./src/js/main.js" defer></script>
+    <script src="./src/js/header.js" defer></script>
 </body>
 </html>

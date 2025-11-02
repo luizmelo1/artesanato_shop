@@ -227,7 +227,7 @@ const GlobalEventHandlers = {
         return (e) => {
             if (e.key === 'Escape') {
                 // Se modal estiver aberto
-                if (app.DOM.modal.container.classList.contains('active')) {
+                if (app.DOM.modal.container?.open) {
                     // Se zoom estiver ativo, desativa o zoom primeiro
                     if (app.DOM.modal.imageContainer?.classList.contains('zoomed')) {
                         app.DOM.modal.imageContainer.classList.remove('zoomed');
@@ -312,6 +312,9 @@ const App = {
             },
             footer: {
                 container: document.querySelector('.footer-links')
+            },
+            ui: {
+                scrollToTop: document.getElementById('scroll-to-top')
             },
             hero: {
                 backgrounds: isIndexPage ? document.querySelectorAll('.hero-bg') : null
@@ -597,22 +600,21 @@ const App = {
         // Armazenar elemento que tinha foco antes do modal abrir
         this.previouslyFocusedElement = document.activeElement;
 
-        // Resetar o estado do modal
-        this.DOM.modal.container.style.visibility = 'visible';
-        this.DOM.modal.container.classList.remove('closing');
+        // Abrir modal nativo <dialog>
+        if (typeof this.DOM.modal.container.showModal === 'function') {
+            this.DOM.modal.container.showModal();
+        } else {
+            // Fallback para navegadores sem <dialog>
+            this.DOM.modal.container.setAttribute('open', '');
+        }
         
-        // Ativar o modal com a animação
-        requestAnimationFrame(() => {
-            this.DOM.modal.container.classList.add('active');
-            
-            // Focar no botão de fechar após a animação inicial
-            setTimeout(() => {
-                const closeButton = this.DOM.modal.container.querySelector('.close-modal');
-                if (closeButton) {
-                    closeButton.focus();
-                }
-            }, 100);
-        });
+        // Focar no botão de fechar após a animação inicial
+        setTimeout(() => {
+            const closeButton = this.DOM.modal.container.querySelector('.close-modal');
+            if (closeButton) {
+                closeButton.focus();
+            }
+        }, 100);
         
         this.DOM.modal.productTitle.textContent = product.name;
         this.DOM.modal.price.textContent = `R$ ${product.price.toFixed(2)}`;
@@ -692,20 +694,23 @@ const App = {
             this.DOM.modal.imageContainer.classList.remove('zoomed');
             ImageZoomHelpers.resetTransform(this.DOM.modal.mainImage);
         }
-        
+
+        // Animação de saída antes de fechar o <dialog>
         this.DOM.modal.container.classList.add('closing');
-        this.DOM.modal.container.classList.remove('active');
-        
-        this.DOM.modal.container.addEventListener('transitionend', () => {
+        setTimeout(() => {
+            if (typeof this.DOM.modal.container.close === 'function') {
+                this.DOM.modal.container.close();
+            } else {
+                this.DOM.modal.container.removeAttribute('open');
+            }
             this.DOM.modal.container.classList.remove('closing');
-            this.DOM.modal.container.style.visibility = 'hidden';
-            
+
             // Restaurar foco para o elemento que estava focado antes do modal abrir
             if (this.previouslyFocusedElement) {
                 this.previouslyFocusedElement.focus();
                 this.previouslyFocusedElement = null;
             }
-        }, { once: true });
+        }, 300); // Tempo alinhado com a transição CSS
     },
 
     // Configurar event listeners
@@ -827,8 +832,9 @@ const App = {
         // Delegação de eventos para o modal e suas interações
         if (this.DOM.modal.container) {
             this.DOM.modal.container.addEventListener('click', (e) => {
-                // Fecha modal ao clicar na área externa
-                if (e.target === this.DOM.modal.container) {
+                // Fecha modal ao clicar no backdrop/fora do conteúdo
+                const clickedOutside = e.target === this.DOM.modal.container && !e.target.closest('.modal-content');
+                if (clickedOutside) {
                     this.closeModal();
                     return;
                 }
@@ -859,6 +865,12 @@ const App = {
                 if (this.DOM.modal.imageContainer?.classList.contains('zoomed')) {
                     this.handleImageZoom(e);
                 }
+            });
+
+            // Fecha com evento 'cancel' do <dialog> (ESC)
+            this.DOM.modal.container.addEventListener('cancel', (e) => {
+                e.preventDefault(); // Impede fechamento abrupto para manter animação
+                this.closeModal();
             });
 
             // Delegação de eventos para as miniaturas de imagem
@@ -893,6 +905,29 @@ const App = {
     setupGlobalEvents() {
         document.addEventListener('keydown', GlobalEventHandlers.handleKeyPress(this));
         window.addEventListener('resize', GlobalEventHandlers.handleResize(this));
+
+        // Scroll-to-top: mostrar/ocultar com scroll e ação de clique
+        const btn = this.DOM.ui?.scrollToTop;
+        if (btn) {
+            // Atualiza visibilidade no load inicial
+            const toggleVisibility = () => {
+                if (window.scrollY > 300) {
+                    btn.classList.add('visible');
+                } else {
+                    btn.classList.remove('visible');
+                }
+            };
+            toggleVisibility();
+
+            // Usa throttle para melhor performance em scroll
+            window.addEventListener('scroll', Utils.throttle(toggleVisibility, 150));
+
+            // Rolagem suave ao topo
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        }
     },
 
     /**
@@ -927,29 +962,4 @@ const App = {
 document.addEventListener('DOMContentLoaded', () => {
     console.log('DOM Content Loaded');
     App.initialize();
-    
-    // Configura botão voltar ao topo
-    const scrollBtn = document.getElementById('scroll-to-top');
-    if (scrollBtn) {
-        const toggleVisibility = () => {
-            if (window.scrollY > 400) {
-                scrollBtn.classList.add('show');
-                scrollBtn.setAttribute('aria-hidden', 'false');
-            } else {
-                scrollBtn.classList.remove('show');
-                scrollBtn.setAttribute('aria-hidden', 'true');
-            }
-        };
-        window.addEventListener('scroll', Utils.throttle(toggleVisibility, 150));
-        toggleVisibility();
-        
-        scrollBtn.addEventListener('click', () => {
-            const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-            if (reduceMotion) {
-                window.scrollTo(0, 0);
-            } else {
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            }
-        });
-    }
 });
