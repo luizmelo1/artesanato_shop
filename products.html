@@ -3,8 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+        <!-- Meta Tags SEO -->
     <title>Produtos - Ateliê Arte Criativa</title>
-    <link rel="icon" type="image/jpeg" href="./src/img/logo.jpg">
+        <meta name="description" content="Navegue por nossa coleção de artesanatos personalizados: Funko Pop custom, quadros decorativos, peças artesanais únicas. Entrega em todo Brasil.">
+        <meta name="keywords" content="comprar artesanato, funko pop personalizado, quadros decorativos, peças artesanais online, decoração artesanal, artesanato brasileiro">
+        <meta name="author" content="Ismênia - Ateliê Arte Criativa">
+        <meta name="robots" content="index, follow">
+        
+    <link rel="icon" type="image/jpeg" href="./src/img/icons/logo.jpg">
     <link rel="stylesheet" href="./src/css/style.css">
 </head>
 <body>
@@ -31,21 +38,45 @@
 
     <!-- Categorias e Produtos -->
     <main>
+        <!-- Título Principal da Página -->
+        <section class="container">
+            <h1 class="section-title">Nossos Produtos Artesanais</h1>
+        </section>
+
         <!-- Categorias -->
         <section class="container">
-            <h2 class="section-title">Nossas Categorias</h2>
-            <div class="categories">
-                <div class="category active" data-category="all">Todos</div>
-                <div class="category" data-category="decoracao">Decoração</div>
-                <div class="category" data-category="personalizados">Personalizados</div>
-                <div class="category" data-category="funkopop">Funko Pop</div>
-                    <div class="category" data-category="quadros">Quadros</div>
+            <h2 class="section-title">Categorias</h2>
+            
+            <!-- Barra de Busca -->
+            <div class="search-bar">
+                <input 
+                    type="search" 
+                    id="product-search" 
+                    placeholder="Buscar produtos..." 
+                    aria-label="Buscar produtos por nome"
+                    autocomplete="off">
+                <span class="search-icon" aria-hidden="true">🔍</span>
+            </div>
+            
+            <div class="categories" role="group" aria-label="Filtrar produtos por categoria">
+                <button class="category active" data-category="all" aria-pressed="true">Todos</button>
+                <button class="category" data-category="decoracao" aria-pressed="false">Decoração</button>
+                <button class="category" data-category="personalizados" aria-pressed="false">Personalizados</button>
+                <button class="category" data-category="funkopop" aria-pressed="false">Funko Pop</button>
+                <button class="category" data-category="quadros" aria-pressed="false">Quadros</button>
             </div>
         </section>
 
         <!-- Produtos -->
         <section class="container" id="products">
-            <h2 class="section-title">Nossos Produtos</h2>
+            <h2 class="section-title">Todos os Produtos</h2>
+            
+            <!-- Loader de carregamento -->
+            <div class="products-loader" id="products-loader">
+                <div class="loader-spinner"></div>
+                <p>Carregando produtos...</p>
+            </div>
+            
             <div class="products-grid" id="products-container">
                 <!-- Produtos serão carregados dinamicamente via JavaScript -->
             </div>
@@ -70,26 +101,31 @@
         </div>
     </footer>
 
+        <!-- Botão Voltar ao Topo -->
+        <button id="scroll-to-top" class="scroll-to-top" aria-label="Voltar ao topo" title="Voltar ao topo">
+            ↑
+        </button>
+
     <!-- Modal de Produto -->
-    <div class="modal" id="product-modal">
+    <div class="modal" id="product-modal" role="dialog" aria-modal="true" aria-labelledby="modal-product-title">
         <div class="modal-content">
             <div class="modal-header">
                 <h2 id="modal-title">Detalhes do Produto</h2>
-                <span class="close-modal">&times;</span>
+                <button class="close-modal" aria-label="Fechar modal">&times;</button>
             </div>
             <div class="modal-body">
                         <div class="modal-gallery">
                             <div class="modal-main-image">
-                                <img id="modal-main-image" src="" alt="Produto">
+                                <img id="modal-main-image" src="" alt="Produto artesanal selecionado em visualização ampliada">
                             </div>
                             <div class="modal-thumbs" id="modal-thumbs"></div>
                         </div>
                         <div class="modal-info">
-                    <h2 id="modal-product-title">Produto</h2>
+                    <h3 id="modal-product-title">Produto</h3>
                     <div class="modal-price" id="modal-price"></div>
                     <p class="modal-description" id="modal-description"></p>
                     <div class="modal-actions">
-                        <a href="#" class="btn btn-buy" id="modal-buy-link" target="_blank">Comprar Agora</a>
+                        <a href="#" class="btn btn-buy" id="modal-buy-link" target="_blank" rel="noopener noreferrer">Comprar Agora</a>
                         <a href="#" class="btn btn-details" id="modal-details-link">Ver na Loja</a>
                     </div>
                 </div>
@@ -97,6 +133,6 @@
         </div>
     </div>
 
-    <script src="./src/js/main.js"></script>
+    <script src="./src/js/main.js" defer></script>
 </body>
 </html>

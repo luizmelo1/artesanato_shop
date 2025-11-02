@@ -59,10 +59,10 @@
         "category": "funkopop",
         "price": 0.00,
         "description": "Funko Pop colecionável com acabamento exclusivo. Este produto possui várias imagens para visualização.",
-        "image": "./src/img/funkopop_1.jpg",
+        "image": "./src/img/funkopop/funkopop_1.jpg",
         "images": [
-            "./src/img/funkopop_1.jpg",
-            "./src/img/funkopop_1.1.jpg"
+            "./src/img/funkopop/funkopop_1.jpg",
+            "./src/img/funkopop/funkopop_1.1.jpg"
         ],
         "link": "https://exemplo.com/funkopop1"
     },
@@ -72,10 +72,10 @@
         "category": "funkopop",
         "price": 0.00,
         "description": "Funko Pop edição especial com detalhes únicos. Peça imperdível para colecionadores.",
-        "image": "./src/img/funkopop_2.jpg",
+        "image": "./src/img/funkopop/funkopop_2.jpg",
         "images": [
-            "./src/img/funkopop_2.jpg",
-            "./src/img/funkopop_2.1.jpg"
+            "./src/img/funkopop/funkopop_2.jpg",
+            "./src/img/funkopop/funkopop_2.1.jpg"
         ],
         "link": "https://exemplo.com/funkopop2"
     }
@@ -86,10 +86,10 @@
         "category": "quadros",
         "price": 0.00,
         "description": "Quadro decorativo moderno para ambientes sofisticados. Inclui duas imagens para visualização.",
-        "image": "./src/img/quadro_1.png",
+        "image": "./src/img/quadros/quadro_1.png",
         "images": [
-            "./src/img/quadro_1.png",
-            "./src/img/quadro_1.1.png"
+            "./src/img/quadros/quadro_1.png",
+            "./src/img/quadros/quadro_1.1.png"
         ],
         "link": "https://exemplo.com/quadro1"
     }

@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ateliê Arte Criativa - Portfólio</title>
-    <link rel="icon" type="image/jpeg" href="./src/img/logo.jpg">
+    
+
+    <link rel="icon" type="image/jpeg" href="./src/img/icons/logo.jpg">
     <link rel="stylesheet" href="./src/css/style.css">
 </head>
 <body>
@@ -29,26 +30,27 @@
         </div>
     </header>
 
-    <!-- Hero Section -->
-    <section class="hero" id="home">
-        <div class="hero-bg active" style="background-image: url('https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=1920&q=80')"></div>
-        <div class="hero-bg" style="background-image: url('https://images.unsplash.com/photo-1596571210530-a65ea9fda0e3?auto=format&fit=crop&w=1920&q=80')"></div>
-        <div class="hero-bg" style="background-image: url('https://images.unsplash.com/photo-1528484786961-e60836ce769a?auto=format&fit=crop&w=1920&q=80')"></div>
-        <div class="container">
-            <h1>Artesanatos Únicos e Especiais</h1>
-            <p>Descubra peças feitas à mão com carinho e dedicação. Cada item conta uma história especial.</p>
-            <a href="products.html" class="btn">Ver Produtos</a>
-        </div>
-    </section>
+    <main>
+        <!-- Hero Section -->
+        <section class="hero" id="home">
+            <div class="hero-bg active" style="background-image: url('https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=1920&q=80')"></div>
+            <div class="hero-bg" style="background-image: url('https://images.unsplash.com/photo-1596571210530-a65ea9fda0e3?auto=format&fit=crop&w=1920&q=80')"></div>
+            <div class="hero-bg" style="background-image: url('https://images.unsplash.com/photo-1528484786961-e60836ce769a?auto=format&fit=crop&w=1920&q=80')"></div>
+            <div class="container">
+                <h1>Artesanatos Únicos e Especiais</h1>
+                <p>Descubra peças feitas à mão com carinho e dedicação. Cada item conta uma história especial.</p>
+                <a href="products.html" class="btn">Ver Produtos</a>
+            </div>
+        </section>
 
 
 
-    <!-- Sobre -->
-    <section class="about" id="about">
+        <!-- Sobre -->
+        <section class="about" id="about">
         <div class="container">
             <div class="about-content">
                 <div class="about-image">
-                    <img src="./src/img/logo.jpg" alt="Ismênia - Artesã">
+                    <img src="./src/img/icons/logo.jpg" alt="Ismênia, artesã do Ateliê Arte Criativa, segurando peças artesanais">
                 </div>
                 <div class="about-text">
                     <h2 class="section-title">Sobre a Artesã</h2>
@@ -60,23 +62,24 @@
         </div>
     </section>
 
-    <!-- Contato -->
-    <section class="contact" id="contact">
-        <div class="container">
-            <div class="contact-content">
-                <h2 class="section-title">Entre em Contato</h2>
-                <p>Fique à vontade para entrar em contato através do Instagram ou enviar um e-mail.</p>
-                <div class="social-links">
-                    <a href="https://www.instagram.com/_atelieartecriativa/" target="_blank">
-                        <img src="./src/img/instagram.png" alt="Instagram Ateliê Arte Criativa" class="social-media-icon">
-                    </a>
-                    <a href="mailto:atelieartecriativa083@gmail.com">
-                        <img src="./src/img/email.png" alt="Email Ateliê Arte Criativa" class="social-media-icon">
-                    </a>
+        <!-- Contato -->
+        <section class="contact" id="contact">
+            <div class="container">
+                <div class="contact-content">
+                    <h2 class="section-title">Entre em Contato</h2>
+                    <p>Fique à vontade para entrar em contato através do Instagram ou enviar um e-mail.</p>
+                    <div class="social-links">
+                        <a href="https://www.instagram.com/_atelieartecriativa/" target="_blank" rel="noopener noreferrer" aria-label="Visite nosso Instagram">
+                            <img src="./src/img/icons/instagram.png" alt="Ícone do Instagram - Siga o Ateliê Arte Criativa para ver nossos produtos artesanais" class="social-media-icon">
+                        </a>
+                        <a href="mailto:atelieartecriativa083@gmail.com" aria-label="Envie um e-mail">
+                            <img src="./src/img/icons/email.png" alt="Ícone de e-mail - Entre em contato com o Ateliê Arte Criativa" class="social-media-icon">
+                        </a>
+                    </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
+    </main>
 
     <!-- Footer -->
     <footer>
@@ -96,26 +99,31 @@
         </div>
     </footer>
 
+        <!-- Botão Voltar ao Topo -->
+        <button id="scroll-to-top" class="scroll-to-top" aria-label="Voltar ao topo" title="Voltar ao topo">
+            ↑
+        </button>
+
     <!-- Modal de Produto -->
-    <div class="modal" id="product-modal">
+    <div class="modal" id="product-modal" role="dialog" aria-modal="true" aria-labelledby="modal-product-title">
         <div class="modal-content">
             <div class="modal-header">
                 <h2 id="modal-title">Detalhes do Produto</h2>
-                <span class="close-modal">&times;</span>
+                <button class="close-modal" aria-label="Fechar modal">&times;</button>
             </div>
             <div class="modal-body">
                 <div class="modal-gallery">
                     <div class="modal-main-image">
-                        <img id="modal-main-image" src="" alt="Produto">
+                        <img id="modal-main-image" src="" alt="Produto artesanal selecionado em visualização ampliada">
                     </div>
                     <div class="modal-thumbs" id="modal-thumbs"></div>
                 </div>
                 <div class="modal-info">
-                    <h2 id="modal-product-title">Produto</h2>
+                    <h3 id="modal-product-title">Produto</h3>
                     <div class="modal-price" id="modal-price"></div>
                     <p class="modal-description" id="modal-description"></p>
                     <div class="modal-actions">
-                        <a href="#" class="btn btn-buy" id="modal-buy-link" target="_blank">Comprar Agora</a>
+                        <a href="#" class="btn btn-buy" id="modal-buy-link" target="_blank" rel="noopener noreferrer">Comprar Agora</a>
                         <a href="#" class="btn btn-details" id="modal-details-link">Ver na Loja</a>
                     </div>
                 </div>
@@ -123,6 +131,7 @@
         </div>
     </div>
 
-    <script src="./src/js/main.js"></script>
+    <script src="./src/js/main.js" defer></script>
+    <script src="./src/js/header.js" defer></script>
 </body>
 </html>
