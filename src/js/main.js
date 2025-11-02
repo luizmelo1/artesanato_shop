@@ -319,7 +319,7 @@ const App = {
                 scrollToTop: document.getElementById('scroll-to-top')
             },
             hero: {
-                backgrounds: isIndexPage ? document.querySelectorAll('.hero-bg') : null
+                backgrounds: document.querySelectorAll('.hero-bg')
             }
         };
         

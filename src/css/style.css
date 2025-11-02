@@ -194,7 +194,12 @@ nav ul li a:hover::after,
     margin-bottom: var(--spacing-xl);
     overflow: hidden; /* Esconde partes das imagens que saem do container */
     min-height: 400px;
+    display: flex;              /* Centraliza verticalmente o conteúdo */
+    align-items: center;        /* Alinha ao centro vertical */
+    justify-content: center;    /* Garante centralização horizontal do container interno */
 }
+
+/* (Breadcrumb removido) */
 
 /* Overlay escuro sobre a imagem de fundo para melhorar legibilidade do texto */
 .hero::before {
