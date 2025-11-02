@@ -606,6 +606,11 @@ const App = {
         this.DOM.modal.container.style.visibility = 'visible';
         this.DOM.modal.container.classList.remove('closing');
         
+    // Impedir rolagem do fundo enquanto o modal estiver aberto (inclui mobile)
+    this.scrollLockY = window.scrollY || document.documentElement.scrollTop || 0;
+    document.body.style.top = `-${this.scrollLockY}px`;
+    document.body.classList.add('no-scroll');
+        
         // Ativar o modal com a animação
         requestAnimationFrame(() => {
             this.DOM.modal.container.classList.add('active');
@@ -704,6 +709,18 @@ const App = {
         this.DOM.modal.container.addEventListener('transitionend', () => {
             this.DOM.modal.container.classList.remove('closing');
             this.DOM.modal.container.style.visibility = 'hidden';
+            
+            // Reativar rolagem do fundo ao fechar o modal
+            document.body.classList.remove('no-scroll');
+            // Limpa o deslocamento aplicado e restaura a rolagem na posição anterior
+            if (typeof this.scrollLockY === 'number') {
+                const y = this.scrollLockY;
+                this.scrollLockY = null;
+                document.body.style.top = '';
+                window.scrollTo(0, y);
+            } else {
+                document.body.style.top = '';
+            }
             
             // Restaurar foco para o elemento que estava focado antes do modal abrir
             if (this.previouslyFocusedElement) {

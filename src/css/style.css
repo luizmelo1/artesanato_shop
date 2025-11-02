@@ -52,6 +52,18 @@ body {
     -moz-osx-font-smoothing: grayscale;  /* Suaviza fontes no Firefox */
 }
 
+/* Desativa rolagem do fundo quando o modal está aberto */
+body.no-scroll {
+    overflow: hidden;
+    touch-action: none; /* Evita gestos como pull-to-refresh em mobile */
+    position: fixed;    /* Trava a posição do body */
+    width: 100%;
+    left: 0;
+    right: 0;
+    /* top será definido inline via JS com o deslocamento atual (negativo) */
+    overscroll-behavior: contain; /* Evita overscroll em navegadores compatíveis */
+}
+
 /* Container responsivo centralizado */
 .container {
     width: 90%;
@@ -273,6 +285,39 @@ nav ul li a:hover::after,
     color: var(--dark);
     transform: translateY(-2px);
     box-shadow: var(--shadow-md);
+}
+
+/* Ajuste do botão da hero para combinar com os botões de products.html */
+.hero .btn {
+    background-color: var(--primary);
+    color: var(--light);
+    /* Um pouco maior que os botões da página de produtos para destacar o CTA */
+    padding: 1rem var(--spacing-lg);
+    font-size: clamp(1rem, 2.8vw, 1.1rem);
+    border-radius: 6px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Em telas menores, garantir presença com uma largura mínima confortável */
+@media (max-width: 600px) {
+    .hero .btn {
+        min-width: 220px;
+    }
+}
+
+@media (max-width: 360px) {
+    .hero .btn {
+        min-width: 180px;
+    }
+}
+
+.hero .btn:hover {
+    background-color: var(--dark);
+    color: var(--light);
+    transform: translateY(-2px);
+    box-shadow: 0 0 20px var(--primary);
 }
 
 /* ===== CATEGORIAS E TÍTULOS DE SEÇÃO ===== */
