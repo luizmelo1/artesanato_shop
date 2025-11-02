@@ -87,6 +87,8 @@ function openProductModal(productId) {
             if (modalMain) {
                 if (imgs.length) {
                     modalMain.src = imgs[0];
+                    // prevent native browser image drag which interferes with pointer dragging
+                    modalMain.draggable = false;
                     modalMain.alt = product.name;
                 } else {
                     modalMain.removeAttribute('src');
@@ -119,6 +121,13 @@ function openProductModal(productId) {
 
 // Fechar modal
 function closeProductModal() {
+    // reset zoom state if present
+    const container = document.querySelector('.modal-main-image');
+    const img = document.getElementById('modal-main-image');
+    if (container && container.classList.contains('zoomed')) {
+        container.classList.remove('zoomed');
+        if (img) img.style.transform = '';
+    }
     modal.style.display = 'none';
 }
 
@@ -147,11 +156,138 @@ window.addEventListener('click', function(e) {
 });
 
 // Fechar modal com ESC
-document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape' && modal.style.display === 'block') {
-        closeProductModal();
+// Zoom / pan for modal main image
+(function(){
+    const container = document.querySelector('.modal-main-image');
+    const img = document.getElementById('modal-main-image');
+    if (!container || !img) return; // nothing to do if modal not present
+
+    let isZoomed = false;
+    const scale = 2; // zoom level
+    let tx = 0, ty = 0; // current translate
+    let startX = 0, startY = 0; // pointer start
+    let startTx = 0, startTy = 0;
+    let pointerId = null;
+    let moved = false;
+
+    function applyTransform() {
+        img.style.transform = `translate(${tx}px, ${ty}px) scale(${isZoomed ? scale : 1})`;
     }
-});
+
+    function clampOffsets(x, y) {
+        // use layout sizes (offsetWidth) which are not affected by CSS transforms
+        const cW = container.clientWidth;
+        const cH = container.clientHeight;
+        const iW = img.offsetWidth;
+        const iH = img.offsetHeight;
+        const scaledW = iW * (isZoomed ? scale : 1);
+        const scaledH = iH * (isZoomed ? scale : 1);
+        const overflowX = Math.max(0, scaledW - cW);
+        const overflowY = Math.max(0, scaledH - cH);
+        const minX = -overflowX / 2;
+        const maxX = overflowX / 2;
+        const minY = -overflowY / 2;
+        const maxY = overflowY / 2;
+        return [Math.min(maxX, Math.max(minX, x)), Math.min(maxY, Math.max(minY, y))];
+    }
+
+    function enableZoom(centerX, centerY) {
+        isZoomed = true;
+        container.classList.add('zoomed');
+        // center on click position: compute relative offsets
+        const cRect = container.getBoundingClientRect();
+        const iRect = img.getBoundingClientRect();
+        // click position relative to image center
+        const relX = (centerX - iRect.left) - iRect.width/2;
+        const relY = (centerY - iRect.top) - iRect.height/2;
+        // scale the relative amounts and clamp
+        tx = -relX * (scale - 1);
+        ty = -relY * (scale - 1);
+        [tx, ty] = clampOffsets(tx, ty);
+        applyTransform();
+    }
+
+    function disableZoom() {
+        isZoomed = false;
+        container.classList.remove('zoomed');
+        tx = 0; ty = 0;
+        img.style.transform = '';
+    }
+
+    function onPointerDown(e) {
+        // only react when zoomed
+        if (!isZoomed) return;
+        pointerId = e.pointerId;
+        startX = e.clientX; startY = e.clientY;
+        startTx = tx; startTy = ty;
+        moved = false;
+        container.setPointerCapture(pointerId);
+    }
+
+    function onPointerMove(e) {
+        if (pointerId === null || e.pointerId !== pointerId) return;
+        const dx = e.clientX - startX;
+        const dy = e.clientY - startY;
+        if (Math.abs(dx) > 3 || Math.abs(dy) > 3) moved = true;
+        tx = startTx + dx; ty = startTy + dy;
+        [tx, ty] = clampOffsets(tx, ty);
+        applyTransform();
+    }
+
+    function onPointerUp(e) {
+        if (pointerId === null || e.pointerId !== pointerId) return;
+        try { container.releasePointerCapture(pointerId); } catch (err) {}
+        pointerId = null;
+    }
+
+    // Toggle zoom on click (but not when the user dragged)
+    container.addEventListener('pointerdown', function(e){
+        // prevent default browser behaviors like image drag or touch scrolling while interacting
+        if (e.cancelable) e.preventDefault();
+        // start possible drag only when zoomed
+        if (isZoomed) onPointerDown(e);
+        // track for click toggling
+        startX = e.clientX; startY = e.clientY;
+        moved = false;
+    });
+
+    container.addEventListener('pointermove', function(e){
+        if (isZoomed) onPointerMove(e);
+        if (Math.abs(e.clientX - startX) > 3 || Math.abs(e.clientY - startY) > 3) moved = true;
+    });
+
+    container.addEventListener('pointerup', function(e){
+        if (isZoomed) onPointerUp(e);
+        // if it was a simple click (no move) toggle zoom
+        if (!moved) {
+            if (!isZoomed) enableZoom(e.clientX, e.clientY); else disableZoom();
+        }
+    });
+
+    // also support mouseleave to stop dragging
+    container.addEventListener('pointercancel', onPointerUp);
+    container.addEventListener('lostpointercapture', onPointerUp);
+
+    // If modal is closed, ensure zoom reset
+    const originalClose = closeProductModal;
+    // replace closeProductModal with wrapped version
+    window.closeProductModal = function(){
+        try { disableZoom(); } catch(e){}
+        originalClose();
+    }
+
+    // handle Escape key to exit zoom first, then close modal
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && modal.style.display === 'block') {
+            if (isZoomed) {
+                disableZoom();
+            } else {
+                closeProductModal();
+            }
+        }
+    });
+
+})();
 
 // Close modal when clicking the close button
 if (closeModal) closeModal.addEventListener('click', closeProductModal);

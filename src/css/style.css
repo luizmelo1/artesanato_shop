@@ -399,6 +399,28 @@ nav ul li a:hover::after {
     display: block;
 }
 
+/* Zoom / pan styles for product images */
+.modal-main-image {
+    overflow: hidden;
+    position: relative;
+    touch-action: none; /* allow pointer dragging without browser panning */
+}
+
+.modal-main-image img {
+    transition: transform 0.18s ease;
+    transform-origin: center center;
+    cursor: zoom-in;
+    will-change: transform;
+}
+
+.modal-main-image.zoomed img {
+    cursor: grab;
+}
+
+.modal-main-image.zoomed img:active {
+    cursor: grabbing;
+}
+
 .modal-thumbs {
     display: flex;
     gap: 0.5rem;
