@@ -6,19 +6,6 @@
     box-sizing: border-box; /* Inclui padding e border no cálculo da largura/altura */
 }
 
-/* Apenas para leitores de tela (oculta visualmente, mantém acessível) */
-.sr-only {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-    border: 0;
-}
-
 /* Variáveis CSS globais para manutenção centralizada do tema */
 :root {
     /* Paleta de cores */
@@ -368,8 +355,6 @@ nav ul li a:hover::after,
     flex-wrap: wrap; /* Permite quebra de linha quando necessário */
     gap: var(--spacing-sm);
     margin-bottom: var(--spacing-xl);
-    border: 0; /* Remove borda padrão do fieldset (quando aplicável) */
-    padding: 0; /* Remove padding padrão do fieldset */
 }
 
 /* Botão individual de categoria - semântico e acessível */
@@ -657,14 +642,6 @@ nav ul li a:hover::after,
     backdrop-filter: blur(3px);
 }
 
-/* Compatibilidade com <dialog>: quando aberto, aplicar o mesmo estado ativo */
-.modal[open] {
-    visibility: visible;
-    opacity: 1;
-    background-color: rgba(var(--black-rgb), 0.7);
-    backdrop-filter: blur(3px);
-}
-
 /* Conteúdo centralizado do modal */
 .modal-content {
     background-color: var(--light);
@@ -680,12 +657,6 @@ nav ul li a:hover::after,
 
 /* Animação de entrada do modal */
 .modal.active .modal-content {
-    transform: scale(1) translateY(0); /* Cresce e desce */
-    opacity: 1;
-}
-
-/* Compatibilidade com <dialog>: animação de entrada quando aberto */
-.modal[open] .modal-content {
     transform: scale(1) translateY(0); /* Cresce e desce */
     opacity: 1;
 }
@@ -764,6 +735,7 @@ nav ul li a:hover::after,
     border-radius: 8px; /* Cantos arredondados */
     touch-action: none; /* Desabilita gestos de toque padrão para implementar zoom */
 }
+
 
 /* Imagem principal do produto */
 .modal-main-image img {

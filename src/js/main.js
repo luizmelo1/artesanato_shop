@@ -43,7 +43,7 @@ const Utils = {
     // Cache do localStorage com versionamento
     cache: {
         CACHE_KEY: 'artesanato_products',
-        CACHE_VERSION: '1.0', // Incrementar quando houver mudanças nos produtos
+    CACHE_VERSION: '1.2', // Incrementar quando houver mudanças nos produtos
         CACHE_DURATION: 24 * 60 * 60 * 1000, // 24 horas em milissegundos
 
         /**
@@ -204,7 +204,9 @@ const ImageZoomHelpers = {
      * @param {number} moveY
      */
     applyZoomTransform(image, moveX, moveY) {
-        image.style.transform = `scale(2) translate(${50 - moveX}%, ${50 - moveY}%)`;
+        // Define o nível de zoom de forma adaptativa
+        const scale = window.innerWidth < 600 ? 1.5 : 2;
+        image.style.transform = `scale(${scale}) translate(${50 - moveX}%, ${50 - moveY}%)`;
     },
 
     /**
@@ -227,7 +229,7 @@ const GlobalEventHandlers = {
         return (e) => {
             if (e.key === 'Escape') {
                 // Se modal estiver aberto
-                if (app.DOM.modal.container?.open) {
+                if (app.DOM.modal.container.classList.contains('active')) {
                     // Se zoom estiver ativo, desativa o zoom primeiro
                     if (app.DOM.modal.imageContainer?.classList.contains('zoomed')) {
                         app.DOM.modal.imageContainer.classList.remove('zoomed');
@@ -600,21 +602,22 @@ const App = {
         // Armazenar elemento que tinha foco antes do modal abrir
         this.previouslyFocusedElement = document.activeElement;
 
-        // Abrir modal nativo <dialog>
-        if (typeof this.DOM.modal.container.showModal === 'function') {
-            this.DOM.modal.container.showModal();
-        } else {
-            // Fallback para navegadores sem <dialog>
-            this.DOM.modal.container.setAttribute('open', '');
-        }
+        // Resetar o estado do modal
+        this.DOM.modal.container.style.visibility = 'visible';
+        this.DOM.modal.container.classList.remove('closing');
         
-        // Focar no botão de fechar após a animação inicial
-        setTimeout(() => {
-            const closeButton = this.DOM.modal.container.querySelector('.close-modal');
-            if (closeButton) {
-                closeButton.focus();
-            }
-        }, 100);
+        // Ativar o modal com a animação
+        requestAnimationFrame(() => {
+            this.DOM.modal.container.classList.add('active');
+            
+            // Focar no botão de fechar após a animação inicial
+            setTimeout(() => {
+                const closeButton = this.DOM.modal.container.querySelector('.close-modal');
+                if (closeButton) {
+                    closeButton.focus();
+                }
+            }, 100);
+        });
         
         this.DOM.modal.productTitle.textContent = product.name;
         this.DOM.modal.price.textContent = `R$ ${product.price.toFixed(2)}`;
@@ -694,23 +697,20 @@ const App = {
             this.DOM.modal.imageContainer.classList.remove('zoomed');
             ImageZoomHelpers.resetTransform(this.DOM.modal.mainImage);
         }
-
-        // Animação de saída antes de fechar o <dialog>
+        
         this.DOM.modal.container.classList.add('closing');
-        setTimeout(() => {
-            if (typeof this.DOM.modal.container.close === 'function') {
-                this.DOM.modal.container.close();
-            } else {
-                this.DOM.modal.container.removeAttribute('open');
-            }
+        this.DOM.modal.container.classList.remove('active');
+        
+        this.DOM.modal.container.addEventListener('transitionend', () => {
             this.DOM.modal.container.classList.remove('closing');
-
+            this.DOM.modal.container.style.visibility = 'hidden';
+            
             // Restaurar foco para o elemento que estava focado antes do modal abrir
             if (this.previouslyFocusedElement) {
                 this.previouslyFocusedElement.focus();
                 this.previouslyFocusedElement = null;
             }
-        }, 300); // Tempo alinhado com a transição CSS
+        }, { once: true });
     },
 
     // Configurar event listeners
@@ -832,9 +832,8 @@ const App = {
         // Delegação de eventos para o modal e suas interações
         if (this.DOM.modal.container) {
             this.DOM.modal.container.addEventListener('click', (e) => {
-                // Fecha modal ao clicar no backdrop/fora do conteúdo
-                const clickedOutside = e.target === this.DOM.modal.container && !e.target.closest('.modal-content');
-                if (clickedOutside) {
+                // Fecha modal ao clicar na área externa
+                if (e.target === this.DOM.modal.container) {
                     this.closeModal();
                     return;
                 }
@@ -865,12 +864,6 @@ const App = {
                 if (this.DOM.modal.imageContainer?.classList.contains('zoomed')) {
                     this.handleImageZoom(e);
                 }
-            });
-
-            // Fecha com evento 'cancel' do <dialog> (ESC)
-            this.DOM.modal.container.addEventListener('cancel', (e) => {
-                e.preventDefault(); // Impede fechamento abrupto para manter animação
-                this.closeModal();
             });
 
             // Delegação de eventos para as miniaturas de imagem
