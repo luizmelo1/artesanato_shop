@@ -119,13 +119,38 @@ nav ul li a:hover::after,
     display: none;
     font-size: 1.5rem;
     cursor: pointer;
-    padding: var(--spacing-xs);
-    transition: transform var(--transition-fast);
+    padding: calc(var(--spacing-xs) * 0.8) var(--spacing-sm);
+    border-radius: 12px;
+    border: 1px solid rgba(var(--light-rgb), 0.25);
+    color: var(--light);
+    background: linear-gradient(
+        to bottom,
+        rgba(var(--primary-rgb), 0.28),
+        rgba(var(--primary-rgb), 0.42)
+    );
+    box-shadow: 0 4px 12px rgba(var(--black-rgb), 0.15);
+    transition: transform var(--transition-fast), box-shadow var(--transition-normal), background var(--transition-normal);
 }
 
 /* Efeito de escala no hover do menu mobile */
 .mobile-menu:hover {
-    transform: scale(1.1);
+    transform: scale(1.05);
+    background: rgba(var(--primary-rgb), 0.55);
+    box-shadow: 0 6px 16px rgba(var(--black-rgb), 0.2);
+}
+
+/* Estado focado visível para teclado - acessibilidade */
+.mobile-menu:focus-visible {
+    outline: 2px solid rgba(var(--light-rgb), 0.9);
+    outline-offset: 2px;
+}
+
+/* Estado ativo/aberto do menu (aria-expanded=true) com destaque inverso */
+.mobile-menu[aria-expanded="true"] {
+    background: var(--light);
+    color: var(--primary);
+    border-color: rgba(var(--light-rgb), 0.75);
+    box-shadow: 0 8px 20px rgba(var(--black-rgb), 0.22);
 }
 
 /* ===== FOOTER ===== */

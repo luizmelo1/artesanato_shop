@@ -242,6 +242,9 @@ const GlobalEventHandlers = {
                 // Fecha menu mobile se estiver aberto
                 if (app.DOM.nav.container?.classList.contains('active')) {
                     app.DOM.nav.container.classList.remove('active');
+                    if (app.DOM.nav.mobileMenu) {
+                        app.DOM.nav.mobileMenu.setAttribute('aria-expanded', 'false');
+                    }
                 }
             }
         };
@@ -264,6 +267,9 @@ const GlobalEventHandlers = {
             // Fecha menu mobile ao aumentar a tela
             if (window.innerWidth > 768 && app.DOM.nav.container?.classList.contains('active')) {
                 app.DOM.nav.container.classList.remove('active');
+                if (app.DOM.nav.mobileMenu) {
+                    app.DOM.nav.mobileMenu.setAttribute('aria-expanded', 'false');
+                }
             }
         };
     }
@@ -361,7 +367,12 @@ const App = {
         } catch (error) {
             console.error('Erro na inicialização:', error);
             if (this.DOM.products.container) {
-                this.DOM.products.container.innerHTML = '<p>Não foi possível carregar os produtos.</p>';
+                this.DOM.products.container.replaceChildren();
+                const p = document.createElement('p');
+                p.className = 'no-results';
+                p.setAttribute('role', 'alert');
+                p.textContent = 'Não foi possível carregar os produtos.';
+                this.DOM.products.container.appendChild(p);
             }
         }
     },
@@ -371,21 +382,45 @@ const App = {
      */
     async fetchProducts() {
         console.log('Buscando produtos da API...');
-        const response = await fetch('./src/db/products.json');
-        if (!response.ok) throw new Error('Falha ao carregar produtos');
-        
-        this.products = await response.json();
-        console.log('Produtos carregados da API:', this.products.length, 'itens');
-        
-        // Salva no cache para próximas visitas
-        Utils.cache.set(this.products);
-        
-        if (this.DOM.products.container) {
-            this.loadProducts('all');
-            this.setupEventListeners();
+        try {
+            // Indica carregamento (acessível)
+            if (this.DOM.products.loader) {
+                this.DOM.products.loader.classList.remove('hidden');
+                this.DOM.products.loader.setAttribute('aria-busy', 'true');
+            }
+
+            const response = await fetch('./src/db/products.json');
+            if (!response.ok) throw new Error('Falha ao carregar produtos');
+
+            this.products = await response.json();
+            console.log('Produtos carregados da API:', this.products.length, 'itens');
+
+            // Salva no cache para próximas visitas
+            Utils.cache.set(this.products);
+
+            if (this.DOM.products.container) {
+                this.loadProducts('all');
+                this.setupEventListeners();
+            }
+
+            this.initHeroSlideshow();
+        } catch (err) {
+            console.error('Erro ao buscar produtos:', err);
+            if (this.DOM.products.container) {
+                // Mensagem de erro acessível
+                this.DOM.products.container.replaceChildren();
+                const alert = document.createElement('p');
+                alert.className = 'no-results';
+                alert.setAttribute('role', 'alert');
+                alert.textContent = 'Não foi possível carregar os produtos no momento. Tente novamente mais tarde.';
+                this.DOM.products.container.appendChild(alert);
+            }
+        } finally {
+            if (this.DOM.products.loader) {
+                this.DOM.products.loader.classList.add('hidden');
+                this.DOM.products.loader.setAttribute('aria-busy', 'false');
+            }
         }
-        
-        this.initHeroSlideshow();
     },
 
     /**
@@ -463,52 +498,36 @@ const App = {
      * @param {string} filterCategory - Categoria para filtrar.
      */
     renderProducts(filterCategory) {
-        // Mostra o loader
+        // Mostra o loader (acessível)
         if (this.DOM.products.loader) {
             this.DOM.products.loader.classList.remove('hidden');
+            this.DOM.products.loader.setAttribute('aria-busy', 'true');
         }
-        
+
         // Limpa o container antes de adicionar novos produtos
-        this.DOM.products.container.innerHTML = '';
-        
+        this.DOM.products.container.replaceChildren();
+
         // Pequeno delay para transição mais suave
         setTimeout(() => {
             // Filtra produtos pela categoria selecionada
-            const filteredProducts = filterCategory === 'all' 
-                ? this.products 
+            const filteredProducts = filterCategory === 'all'
+                ? this.products
                 : this.products.filter(product => product.category === filterCategory);
-            
+
             console.log('Produtos filtrados:', filteredProducts);
-            
+
             // Cria e adiciona os cards de produtos com animação escalonada
             filteredProducts.forEach((product, index) => {
-                const productCard = document.createElement('div');
-                productCard.style.animation = `fadeIn 0.5s ease forwards ${index * 0.08}s`;
-                productCard.className = 'product-card';
-                
-                productCard.innerHTML = `
-                    <div class="product-image">
-                        <img src="${product.image}" alt="${product.name}" loading="lazy">
-                    </div>
-                    <div class="product-info">
-                        <h3 class="product-title">${product.name}</h3>
-                        <p class="product-description">${product.description.substring(0, 80)}...</p>
-                        <div class="product-price">R$ ${product.price.toFixed(2)}</div>
-                        <div class="product-actions">
-                            <a href="#" class="btn-details" data-id="${product.id}">Ver Detalhes</a>
-                            <a href="${product.link}" class="btn-buy" target="_blank" rel="noopener noreferrer">Comprar</a>
-                        </div>
-                    </div>
-                `;
-                
+                const productCard = this.createProductCard(product, index);
                 this.DOM.products.container.appendChild(productCard);
             });
-            
+
             // Esconde o loader após renderizar
             if (this.DOM.products.loader) {
                 this.DOM.products.loader.classList.add('hidden');
+                this.DOM.products.loader.setAttribute('aria-busy', 'false');
             }
-            
+
             console.log('Produtos carregados com sucesso');
         }, 200); // 200ms de delay para UX mais suave
     },
@@ -544,50 +563,103 @@ const App = {
          * @param {Array} products - Array de produtos para renderizar.
          */
         renderFilteredProducts(products) {
-            // Mostra o loader
+            // Mostra o loader (acessível)
             if (this.DOM.products.loader) {
                 this.DOM.products.loader.classList.remove('hidden');
+                this.DOM.products.loader.setAttribute('aria-busy', 'true');
             }
-        
+
             // Limpa container
-            this.DOM.products.container.innerHTML = '';
-        
+            this.DOM.products.container.replaceChildren();
+
             setTimeout(() => {
                 if (products.length === 0) {
                     // Exibe mensagem quando não há resultados
-                    this.DOM.products.container.innerHTML = '<p class="no-results">Nenhum produto encontrado.</p>';
+                    const p = document.createElement('p');
+                    p.className = 'no-results';
+                    p.textContent = 'Nenhum produto encontrado.';
+                    this.DOM.products.container.appendChild(p);
                 } else {
                     // Renderiza produtos encontrados
                     products.forEach((product, index) => {
-                        const productCard = document.createElement('div');
-                        productCard.style.animation = `fadeIn 0.5s ease forwards ${index * 0.08}s`;
-                        productCard.className = 'product-card';
-                    
-                        productCard.innerHTML = `
-                            <div class="product-image">
-                                <img src="${product.image}" alt="${product.name}" loading="lazy">
-                            </div>
-                            <div class="product-info">
-                                <h3 class="product-title">${product.name}</h3>
-                                <p class="product-description">${product.description.substring(0, 80)}...</p>
-                                <div class="product-price">R$ ${product.price.toFixed(2)}</div>
-                                <div class="product-actions">
-                                    <a href="#" class="btn-details" data-id="${product.id}">Ver Detalhes</a>
-                                    <a href="${product.link}" class="btn-buy" target="_blank" rel="noopener noreferrer">Comprar</a>
-                                </div>
-                            </div>
-                        `;
-                    
+                        const productCard = this.createProductCard(product, index);
                         this.DOM.products.container.appendChild(productCard);
                     });
                 }
-            
+
                 // Esconde loader
                 if (this.DOM.products.loader) {
                     this.DOM.products.loader.classList.add('hidden');
+                    this.DOM.products.loader.setAttribute('aria-busy', 'false');
                 }
             }, 200);
         },
+
+    /**
+     * Cria o elemento de card de produto de forma segura (sem innerHTML).
+     * @param {object} product
+     * @param {number} index - usado para animar entrada escalonada
+     * @returns {HTMLDivElement}
+     */
+    createProductCard(product, index = 0) {
+        const card = document.createElement('div');
+        card.className = 'product-card';
+        card.style.animation = `fadeIn 0.5s ease forwards ${index * 0.08}s`;
+
+        // Imagem
+        const imageWrap = document.createElement('div');
+        imageWrap.className = 'product-image';
+        const img = document.createElement('img');
+        img.loading = 'lazy';
+        img.src = product.image;
+        img.alt = product.name;
+        imageWrap.appendChild(img);
+
+        // Info
+        const info = document.createElement('div');
+        info.className = 'product-info';
+
+        const title = document.createElement('h3');
+        title.className = 'product-title';
+        title.textContent = product.name;
+
+        const desc = document.createElement('p');
+        desc.className = 'product-description';
+        const short = (product.description || '').slice(0, 80) + '...';
+        desc.textContent = short;
+
+        const price = document.createElement('div');
+        price.className = 'product-price';
+        price.textContent = `R$ ${Number(product.price).toFixed(2)}`;
+
+        const actions = document.createElement('div');
+        actions.className = 'product-actions';
+
+        const details = document.createElement('a');
+        details.href = '#';
+        details.className = 'btn-details';
+        details.dataset.id = String(product.id);
+        details.textContent = 'Ver Detalhes';
+
+        const buy = document.createElement('a');
+        buy.href = product.link;
+        buy.className = 'btn-buy';
+        buy.target = '_blank';
+        buy.rel = 'noopener noreferrer';
+        buy.textContent = 'Comprar';
+
+        actions.appendChild(details);
+        actions.appendChild(buy);
+
+        info.appendChild(title);
+        info.appendChild(desc);
+        info.appendChild(price);
+        info.appendChild(actions);
+
+        card.appendChild(imageWrap);
+        card.appendChild(info);
+        return card;
+    },
 
     /**
      * Abre o modal para um produto específico.
@@ -824,12 +896,7 @@ const App = {
             });
         }
 
-        // Toggle do menu mobile (hambúrguer)
-        if (this.DOM.nav.mobileMenu) {
-            this.DOM.nav.mobileMenu.addEventListener('click', () => {
-                this.DOM.nav.container.classList.toggle('active');
-            });
-        }
+        // Toggle do menu mobile removido daqui (centralizado em header.js para evitar duplicidade)
 
         // Delegação de eventos para links do footer (scroll suave para âncoras)
         if (this.DOM.footer.container) {
