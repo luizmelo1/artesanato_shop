@@ -4,32 +4,36 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-        <!-- Meta Tags SEO -->
-    <title>Produtos - Ateliê Arte Criativa</title>
-        <meta name="description" content="Navegue por nossa coleção de artesanatos personalizados: Funko Pop custom, quadros decorativos, peças artesanais únicas. Entrega em todo Brasil.">
-        <meta name="keywords" content="comprar artesanato, funko pop personalizado, quadros decorativos, peças artesanais online, decoração artesanal, artesanato brasileiro">
-        <meta name="author" content="Ismênia - Ateliê Arte Criativa">
-        <meta name="robots" content="index, follow">
+    <!-- Meta Tags SEO -->
+    <title>Produtos Artesanais - Funko Pop, Quadros e Decoração | Ateliê Arte Criativa</title>
+    <meta name="description" content="Navegue por nossa coleção de artesanatos personalizados: Funko Pop custom, quadros decorativos, peças artesanais únicas. Entrega em todo Brasil.">
+    <meta name="keywords" content="comprar artesanato, funko pop personalizado, quadros decorativos, peças artesanais online, decoração artesanal, artesanato brasileiro">
+    <meta name="author" content="Ismênia - Ateliê Arte Criativa">
+    <meta name="robots" content="index, follow">
     
-        
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://luizmelo1.github.io/artesanato_shop/products.html">
     
     <link rel="icon" type="image/jpeg" href="./src/img/icons/logo.jpg">
     <link rel="stylesheet" href="./src/css/style.css">
 </head>
 <body>
+    <!-- Skip Link para Acessibilidade -->
+    <a href="#main-content" class="skip-link">Pular para o conteúdo principal</a>
+    
     <!-- Header -->
-    <header>
+    <header role="banner">
         <div class="container">
             <div class="header-content">
-                <div class="logo">
-                    <span class="logo-icon">🎨</span>
+                <a href="index.html" class="logo" aria-label="Ateliê Arte Criativa - Ir para página inicial">
+                    <span class="logo-icon" aria-hidden="true">🎨</span>
                     <span>Ateliê Arte Criativa</span>
-                </div>
-                <div class="mobile-menu">☰</div>
-                <nav>
+                </a>
+                <button class="mobile-menu" aria-label="Abrir menu de navegação" aria-expanded="false" aria-controls="main-navigation">☰</button>
+                <nav id="main-navigation" aria-label="Navegação principal">
                     <ul>
                         <li><a href="index.html#home">Início</a></li>
-                        <li><a href="products.html">Produtos</a></li>
+                        <li><a href="products.html" aria-current="page">Produtos</a></li>
                         <li><a href="index.html#about">Sobre</a></li>
                         <li><a href="index.html#contact">Contato</a></li>
                     </ul>
@@ -39,14 +43,14 @@
     </header>
 
     <!-- Categorias e Produtos -->
-    <main>
+    <main id="main-content">
         <!-- Seção de Destaque (Hero) -->
-        <section class="hero" id="home">
-            <div class="hero-bg active" style="background-image: url('https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=1920&q=80')"></div>
-            <div class="hero-bg" style="background-image: url('https://images.unsplash.com/photo-1596571210530-a65ea9fda0e3?auto=format&fit=crop&w=1920&q=80')"></div>
-            <div class="hero-bg" style="background-image: url('https://images.unsplash.com/photo-1528484786961-e60836ce769a?auto=format&fit=crop&w=1920&q=80')"></div>
+        <section class="hero" id="home" aria-labelledby="hero-title">
+            <div class="hero-bg active" style="background-image: url('https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=1920&q=80')" aria-hidden="true"></div>
+            <div class="hero-bg" style="background-image: url('https://images.unsplash.com/photo-1596571210530-a65ea9fda0e3?auto=format&fit=crop&w=1920&q=80')" aria-hidden="true"></div>
+            <div class="hero-bg" style="background-image: url('https://images.unsplash.com/photo-1528484786961-e60836ce769a?auto=format&fit=crop&w=1920&q=80')" aria-hidden="true"></div>
             <div class="container">
-                <h1>Nossos Produtos Artesanais</h1>
+                <h1 id="hero-title">Nossos Produtos Artesanais</h1>
                 <p>Peças únicas feitas à mão para presentear e decorar.</p>
             </div>
         </section>
@@ -54,8 +58,8 @@
         
 
         <!-- Categorias -->
-        <section class="container">
-            <h2 class="section-title">Categorias</h2>
+        <section class="container" aria-labelledby="categories-title">
+            <h2 class="section-title" id="categories-title">Categorias</h2>
             
             <!-- Barra de Busca -->
             <div class="search-bar">
@@ -68,7 +72,7 @@
                 <span class="search-icon" aria-hidden="true">🔍</span>
             </div>
             
-            <div class="categories" role="group" aria-label="Filtrar produtos por categoria">
+            <div class="categories" aria-label="Filtrar produtos por categoria">
                 <button class="category active" data-category="all" aria-pressed="true">Todos</button>
                 <button class="category" data-category="decoracao" aria-pressed="false">Decoração</button>
                 <button class="category" data-category="personalizados" aria-pressed="false">Personalizados</button>
@@ -78,12 +82,12 @@
         </section>
 
         <!-- Produtos -->
-        <section class="container" id="products">
-            <h2 class="section-title">Todos os Produtos</h2>
+        <section class="container" id="products" aria-labelledby="products-title">
+            <h2 class="section-title" id="products-title">Todos os Produtos</h2>
             
             <!-- Loader de carregamento -->
-            <div class="products-loader" id="products-loader">
-                <div class="loader-spinner"></div>
+            <div class="products-loader" id="products-loader" aria-live="polite" aria-busy="true">
+                <div class="loader-spinner" aria-hidden="true"></div>
                 <p>Carregando produtos...</p>
             </div>
             
@@ -94,16 +98,18 @@
     </main>
 
     <!-- Footer -->
-    <footer>
+    <footer role="contentinfo">
         <div class="container">
             <div class="footer-content">
                 <div class="footer-logo">Ateliê Arte Criativa</div>
-                <div class="footer-links">
-                    <a href="index.html#home">Início</a>
-                    <a href="products.html">Produtos</a>
-                    <a href="index.html#about">Sobre</a>
-                    <a href="index.html#contact">Contato</a>
-                </div>
+                <nav aria-label="Navegação do rodapé">
+                    <div class="footer-links">
+                        <a href="index.html#home">Início</a>
+                        <a href="products.html">Produtos</a>
+                        <a href="index.html#about">Sobre</a>
+                        <a href="index.html#contact">Contato</a>
+                    </div>
+                </nav>
                 <div class="copyright">
                     &copy; 2025 Ateliê Arte Criativa. Todos os direitos reservados.
                 </div>

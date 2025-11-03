@@ -40,6 +40,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // Toggle do menu mobile (hambúrguer)
     if (mobileMenu && nav) {
         mobileMenu.addEventListener('click', () => {
+            const isExpanded = mobileMenu.getAttribute('aria-expanded') === 'true';
+            mobileMenu.setAttribute('aria-expanded', !isExpanded);
             nav.classList.toggle('active');
         });
     }
@@ -51,6 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
             link.addEventListener('click', () => {
                 if (window.innerWidth <= 768) {
                     nav.classList.remove('active');
+                    mobileMenu.setAttribute('aria-expanded', 'false');
                 }
             });
         });

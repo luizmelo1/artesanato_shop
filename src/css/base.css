@@ -66,3 +66,23 @@ body.no-scroll {
     /* top será definido inline via JS com o deslocamento atual (negativo) */
     overscroll-behavior: contain; /* Evita overscroll em navegadores compatíveis */
 }
+
+/* ===== SKIP LINK - ACESSIBILIDADE ===== */
+/* Link "pular para conteúdo" para leitores de tela e navegação por teclado */
+.skip-link {
+    position: absolute;
+    top: -40px;
+    left: 0;
+    background: var(--primary);
+    color: var(--light);
+    padding: var(--spacing-xs) var(--spacing-md);
+    text-decoration: none;
+    font-weight: 600;
+    z-index: 9999;
+    border-radius: 0 0 4px 0;
+}
+
+/* Mostra skip link quando recebe foco (Tab) */
+.skip-link:focus {
+    top: 0;
+}

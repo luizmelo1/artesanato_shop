@@ -4,31 +4,35 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-        <!-- Meta Tags SEO -->
-    <title>Ateliê Arte Criativa - Portfólio</title>
-        <meta name="description" content="Descubra peças artesanais únicas feitas à mão por Ismênia. Funko Pop personalizados, quadros decorativos e artesanato exclusivo com carinho e dedicação.">
-        <meta name="keywords" content="artesanato, artesanato personalizado, funko pop custom, quadros decorativos, peças artesanais, arte criativa, ismênia artesã">
-        <meta name="author" content="Ismênia - Ateliê Arte Criativa">
-        <meta name="robots" content="index, follow">
+    <!-- Meta Tags SEO -->
+    <title>Ateliê Arte Criativa - Artesanato Feito à Mão | Funko Pop e Decoração</title>
+    <meta name="description" content="Descubra peças artesanais únicas feitas à mão por Ismênia. Funko Pop personalizados, quadros decorativos e artesanato exclusivo com carinho e dedicação.">
+    <meta name="keywords" content="artesanato, artesanato personalizado, funko pop custom, quadros decorativos, peças artesanais, arte criativa, ismênia artesã">
+    <meta name="author" content="Ismênia - Ateliê Arte Criativa">
+    <meta name="robots" content="index, follow">
     
-        
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://luizmelo1.github.io/artesanato_shop/">
     
     <link rel="icon" type="image/jpeg" href="./src/img/icons/logo.jpg">
     <link rel="stylesheet" href="./src/css/style.css">
 </head>
 <body>
+    <!-- Skip Link para Acessibilidade -->
+    <a href="#main-content" class="skip-link">Pular para o conteúdo principal</a>
+    
     <!-- Header -->
-    <header>
+    <header role="banner">
         <div class="container">
             <div class="header-content">
-                <div class="logo">
-                    <span class="logo-icon">🎨</span>
+                <a href="index.html" class="logo" aria-label="Ateliê Arte Criativa - Ir para página inicial">
+                    <span class="logo-icon" aria-hidden="true">🎨</span>
                     <span>Ateliê Arte Criativa</span>
-                </div>
-                <div class="mobile-menu">☰</div>
-                <nav>
+                </a>
+                <button class="mobile-menu" aria-label="Abrir menu de navegação" aria-expanded="false" aria-controls="main-navigation">☰</button>
+                <nav id="main-navigation" aria-label="Navegação principal">
                     <ul>
-                        <li><a href="#home">Início</a></li>
+                        <li><a href="#home" aria-current="page">Início</a></li>
                         <li><a href="products.html">Produtos</a></li>
                         <li><a href="#about">Sobre</a></li>
                         <li><a href="#contact">Contato</a></li>
@@ -38,14 +42,14 @@
         </div>
     </header>
 
-    <main>
+    <main id="main-content">
         <!-- Hero Section -->
-        <section class="hero" id="home">
-            <div class="hero-bg active" style="background-image: url('https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=1920&q=80')"></div>
-            <div class="hero-bg" style="background-image: url('https://images.unsplash.com/photo-1596571210530-a65ea9fda0e3?auto=format&fit=crop&w=1920&q=80')"></div>
-            <div class="hero-bg" style="background-image: url('https://images.unsplash.com/photo-1528484786961-e60836ce769a?auto=format&fit=crop&w=1920&q=80')"></div>
+        <section class="hero" id="home" aria-labelledby="hero-title">
+            <div class="hero-bg active" style="background-image: url('https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=1920&q=80')" aria-hidden="true"></div>
+            <div class="hero-bg" style="background-image: url('https://images.unsplash.com/photo-1596571210530-a65ea9fda0e3?auto=format&fit=crop&w=1920&q=80')" aria-hidden="true"></div>
+            <div class="hero-bg" style="background-image: url('https://images.unsplash.com/photo-1528484786961-e60836ce769a?auto=format&fit=crop&w=1920&q=80')" aria-hidden="true"></div>
             <div class="container">
-                <h1>Artesanatos Únicos e Especiais</h1>
+                <h1 id="hero-title">Artesanatos Únicos e Especiais</h1>
                 <p>Descubra peças feitas à mão com carinho e dedicação. Cada item conta uma história especial.</p>
                 <a href="products.html" class="btn">Ver Produtos</a>
             </div>
@@ -54,34 +58,33 @@
 
 
         <!-- Sobre -->
-        <section class="about" id="about">
-        <div class="container">
-            <div class="about-content">
-                <div class="about-image">
-                    <img src="./src/img/icons/logo.jpg" alt="Ismênia, artesã do Ateliê Arte Criativa, segurando peças artesanais">
-                </div>
-                <div class="about-text">
-                    <h2 class="section-title">Sobre a Artesã</h2>
-                    <p>Olá! Meu nome é Ismênia e sou apaixonada por criar peças únicas e especiais. Cada trabalho é feito com muito carinho e atenção aos detalhes, transformando materiais simples em verdadeiras obras de arte.</p>
-                    <br>
-                    <p>Minha jornada no artesanato começou há [X] anos e desde então venho me dedicando a aprender novas técnicas e explorar minha criatividade. Espero que você encontre algo especial aqui que toque seu coração!</p>
+        <section class="about" id="about" aria-labelledby="about-title">
+            <div class="container">
+                <div class="about-content">
+                    <div class="about-image">
+                        <img src="./src/img/icons/logo.jpg" alt="Ismênia, artesã do Ateliê Arte Criativa, segurando peças artesanais" width="200" height="200">
+                    </div>
+                    <div class="about-text">
+                        <h2 class="section-title" id="about-title">Sobre a Artesã</h2>
+                        <p>Olá! Meu nome é Ismênia e sou apaixonada por criar peças únicas e especiais. Cada trabalho é feito com muito carinho e atenção aos detalhes, transformando materiais simples em verdadeiras obras de arte.</p>
+                        <p>Minha jornada no artesanato começou há [X] anos e desde então venho me dedicando a aprender novas técnicas e explorar minha criatividade. Espero que você encontre algo especial aqui que toque seu coração!</p>
+                    </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
         <!-- Contato -->
-        <section class="contact" id="contact">
+        <section class="contact" id="contact" aria-labelledby="contact-title">
             <div class="container">
                 <div class="contact-content">
-                    <h2 class="section-title">Entre em Contato</h2>
+                    <h2 class="section-title" id="contact-title">Entre em Contato</h2>
                     <p>Fique à vontade para entrar em contato através do Instagram ou enviar um e-mail.</p>
                     <div class="social-links">
                         <a href="https://www.instagram.com/_atelieartecriativa/" target="_blank" rel="noopener noreferrer" aria-label="Visite nosso Instagram">
-                            <img src="./src/img/icons/instagram.png" alt="Ícone do Instagram - Siga o Ateliê Arte Criativa para ver nossos produtos artesanais" class="social-media-icon">
+                            <img src="./src/img/icons/instagram.png" alt="" class="social-media-icon" width="32" height="32">
                         </a>
                         <a href="mailto:atelieartecriativa083@gmail.com" aria-label="Envie um e-mail">
-                            <img src="./src/img/icons/email.png" alt="Ícone de e-mail - Entre em contato com o Ateliê Arte Criativa" class="social-media-icon">
+                            <img src="./src/img/icons/email.png" alt="" class="social-media-icon" width="32" height="32">
                         </a>
                     </div>
                 </div>
@@ -90,16 +93,18 @@
     </main>
 
     <!-- Footer -->
-    <footer>
+    <footer role="contentinfo">
         <div class="container">
             <div class="footer-content">
                 <div class="footer-logo">Ateliê Arte Criativa</div>
-                <div class="footer-links">
-                    <a href="#home">Início</a>
-                    <a href="products.html">Produtos</a>
-                    <a href="#about">Sobre</a>
-                    <a href="#contact">Contato</a>
-                </div>
+                <nav aria-label="Navegação do rodapé">
+                    <div class="footer-links">
+                        <a href="#home">Início</a>
+                        <a href="products.html">Produtos</a>
+                        <a href="#about">Sobre</a>
+                        <a href="#contact">Contato</a>
+                    </div>
+                </nav>
                 <div class="copyright">
                     &copy; 2025 Ateliê Arte Criativa. Todos os direitos reservados.
                 </div>
