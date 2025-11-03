@@ -2,9 +2,13 @@
  * Comportamento do header: aplica a classe "scrolled" quando o usuário rola a página
  * além de um determinado limiar. Usa requestAnimationFrame para evitar custo alto
  * em eventos de scroll (pattern semelhante a throttle).
+ * 
+ * Também gerencia a abertura/fechamento do menu mobile.
  */
 document.addEventListener('DOMContentLoaded', () => {
     const header = document.querySelector('header');
+    const nav = document.querySelector('nav');
+    const mobileMenu = document.querySelector('.mobile-menu');
     const scrollThreshold = 100;
 
     /**
@@ -32,4 +36,23 @@ document.addEventListener('DOMContentLoaded', () => {
             ticking = true;
         }
     });
+
+    // Toggle do menu mobile (hambúrguer)
+    if (mobileMenu && nav) {
+        mobileMenu.addEventListener('click', () => {
+            nav.classList.toggle('active');
+        });
+    }
+
+    // Fecha menu mobile ao clicar em um link
+    if (nav) {
+        const navLinks = nav.querySelectorAll('a');
+        navLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                if (window.innerWidth <= 768) {
+                    nav.classList.remove('active');
+                }
+            });
+        });
+    }
 });
