@@ -1,0 +1,241 @@
+/* ===== LAYOUT.CSS ===== */
+/* Estrutura geral: container, header, footer, grid */
+
+/* Container responsivo centralizado */
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+/* ===== HEADER ===== */
+/* Header fixo no topo com efeito de vidro (backdrop-filter) */
+header {
+    background-color: rgba(var(--primary-rgb), 0.85); /* Fundo semi-transparente */
+    color: var(--light);
+    padding: var(--spacing-sm) 0;
+    position: sticky;  /* Fixa no topo ao rolar */
+    top: 0;
+    z-index: 100;      /* Fica acima de outros elementos */
+    backdrop-filter: blur(10px); /* Efeito de desfoque no fundo */
+    box-shadow: var(--shadow-sm);
+    transition: all var(--transition-normal);
+    will-change: transform, background-color; /* Otimiza performance de animação */
+}
+
+/* Estado do header quando a página é rolada */
+header.scrolled {
+    background-color: rgba(var(--primary-rgb), 0.95); /* Mais opaco ao rolar */
+    padding: 0.8rem 0; /* Padding reduzido */
+    box-shadow: 0 4px 20px rgba(var(--primary-rgb), 0.25); /* Sombra mais intensa */
+}
+
+/* Layout flexbox do conteúdo do header */
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Logo com ícone e texto */
+.logo {
+    font-size: 1.8rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Lista de navegação horizontal */
+nav ul {
+    display: flex;
+    list-style: none;
+    gap: var(--spacing-md);
+}
+
+/* Links de navegação e footer - estilos compartilhados */
+nav ul li a,
+.footer-links a {
+    color: var(--light);
+    text-decoration: none;
+    font-weight: 500;
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-radius: 20px;
+    transition: all var(--transition-normal);
+    position: relative; /* Necessário para o pseudo-elemento ::after */
+    background: transparent;
+    transform: translateZ(0); /* Ativa aceleração de hardware */
+    will-change: transform, background; /* Otimiza hover */
+}
+
+/* Específico para navegação no header */
+nav ul li a {
+    display: block;
+}
+
+/* Efeito hover compartilhado - fundo claro e elevação */
+nav ul li a:hover,
+.footer-links a:hover {
+    background: rgba(var(--light-rgb), 0.1);
+    box-shadow: 0 4px 15px rgba(var(--black-rgb), 0.1);
+    transform: translateY(-2px); /* Eleva o link */
+}
+
+/* Ajuste do box-shadow para footer (mais intenso) */
+.footer-links a:hover {
+    box-shadow: 0 4px 15px rgba(var(--black-rgb), 0.2);
+}
+
+/* Sublinhado animado compartilhado - cresce do centro */
+nav ul li a::after,
+.footer-links a::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 0;
+    height: 2px;
+    background-color: var(--light);
+    transition: width var(--transition-normal);
+    transform: translateX(-50%); /* Centraliza a partir do meio */
+}
+
+/* Expande o sublinhado no hover */
+nav ul li a:hover::after,
+.footer-links a:hover::after {
+    width: 70%;
+}
+
+/* Menu hambúrguer para mobile - escondido por padrão */
+.mobile-menu {
+    display: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: var(--spacing-xs);
+    transition: transform var(--transition-fast);
+}
+
+/* Efeito de escala no hover do menu mobile */
+.mobile-menu:hover {
+    transform: scale(1.1);
+}
+
+/* ===== FOOTER ===== */
+/* Rodapé com fundo laranja escuro */
+footer {
+    background-color: var(--dark);
+    color: var(--light);
+    padding: var(--spacing-xl) 0;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Linha decorativa no topo do footer */
+footer::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px; /* Linha fina */
+    background: linear-gradient(to right, transparent, rgba(var(--light-rgb), 0.3), transparent); /* Gradiente que some nas laterais */
+}
+
+/* Layout do conteúdo do footer */
+.footer-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative; /* Para ficar acima do ::before */
+    z-index: 1;
+}
+
+/* Logo no footer */
+.footer-logo {
+    font-size: 1.8rem;
+    margin-bottom: var(--spacing-md);
+    font-weight: 700;
+}
+
+/* Container dos links do footer */
+.footer-links {
+    display: flex;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-md);
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+/* Texto de copyright com fundo sutil */
+.copyright {
+    font-size: 0.9rem;
+    color: rgba(var(--light-rgb), 0.7);
+    padding: var(--spacing-sm);
+    border-radius: 30px;
+    background: rgba(var(--light-rgb), 0.05); /* Fundo levemente branco */
+    backdrop-filter: blur(5px); /* Desfoque do fundo */
+    transition: all var(--transition-normal);
+}
+
+/* Hover no copyright - fica mais visível */
+.copyright:hover {
+    background: rgba(var(--light-rgb), 0.1);
+    color: rgba(var(--light-rgb), 0.9);
+}
+
+/* ===== RESPONSIVIDADE - LAYOUT ===== */
+/* Tablets e telas médias (até 768px) */
+@media (max-width: 768px) {
+    /* Header em coluna no mobile */
+    .header-content {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    /* Navegação com quebra de linha */
+    nav ul {
+        margin-top: var(--spacing-sm);
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+}
+
+/* Smartphones (até 576px) */
+@media (max-width: 576px) {
+    /* Reduz espaçamentos em telas pequenas */
+    :root {
+        --spacing-xl: 2rem;
+        --spacing-lg: 1.5rem;
+    }
+
+    /* Mostra menu hambúrguer */
+    .mobile-menu {
+        display: block;
+    }
+    
+    /* Navegação mobile com transição suave */
+    nav {
+        width: 100%;
+        margin-top: var(--spacing-sm);
+        max-height: 0;
+        opacity: 0;
+        visibility: hidden;
+        overflow: hidden;
+        transition: max-height 0.4s ease, opacity 0.3s ease, visibility 0.3s ease;
+    }
+    
+    /* Mostra navegação quando ativa com animação suave */
+    nav.active {
+        max-height: 500px; /* Altura suficiente para o menu completo */
+        opacity: 1;
+        visibility: visible;
+    }
+    
+    /* Menu vertical no mobile */
+    nav ul {
+        flex-direction: column;
+        gap: var(--spacing-xs);
+    }
+}

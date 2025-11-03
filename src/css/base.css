@@ -1,0 +1,68 @@
+/* ===== BASE.CSS ===== */
+/* Resets, variáveis, fontes e cores */
+
+/* Reset e estilos gerais */
+/* Remove margens e paddings padrão do navegador */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box; /* Inclui padding e border no cálculo da largura/altura */
+}
+
+/* Variáveis CSS globais para manutenção centralizada do tema */
+:root {
+    /* Paleta de cores */
+    --primary: #E65D1E;               /* Cor principal (laranja) */
+    --primary-rgb: 230, 93, 30;       /* RGB da cor principal para uso com rgba() */
+    --secondary: #7CC0FF;             /* Cor secundária (azul) */
+    --accent: #E65D1E;                /* Cor de destaque */
+    --light: #FFFFFF;                 /* Branco */
+    --light-rgb: 255, 255, 255;       /* RGB do branco para uso com rgba() */
+    --dark: #D45519;                  /* Laranja escuro */
+    --text: #333333;                  /* Cor do texto principal */
+    --gray-light: #f5f5f5;            /* Cinza claro para backgrounds */
+    --gray-lighter: #f0f0f0;          /* Cinza mais claro para botões */
+    --gray-medium: #666;              /* Cinza médio */
+    --gray-dark: #999;                /* Cinza escuro */
+    --border-light: #eee;             /* Cor de bordas suaves */
+    --black-rgb: 0, 0, 0;             /* RGB do preto para uso com rgba() */
+    
+    /* Transições - durações padronizadas */
+    --transition-fast: 0.18s ease;    /* Transições rápidas (hover, etc) */
+    --transition-normal: 0.3s ease;   /* Transições normais */
+    --transition-slow: 0.5s ease;     /* Transições lentas (animações complexas) */
+    
+    /* Sombras - níveis de elevação */
+    --shadow-sm: 0 3px 10px rgba(0,0,0,0.1);    /* Sombra pequena */
+    --shadow-md: 0 5px 15px rgba(0,0,0,0.15);   /* Sombra média */
+    --shadow-lg: 0 8px 20px rgba(0,0,0,0.15);   /* Sombra grande */
+    
+    /* Espaçamentos - sistema de escala consistente */
+    --spacing-xs: 0.5rem;   /* Extra pequeno (8px) */
+    --spacing-sm: 1rem;     /* Pequeno (16px) */
+    --spacing-md: 1.5rem;   /* Médio (24px) */
+    --spacing-lg: 2rem;     /* Grande (32px) */
+    --spacing-xl: 3rem;     /* Extra grande (48px) */
+}
+
+/* Estilos base do body */
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    background-color: var(--light);
+    color: var(--text);
+    line-height: 1.6; /* Melhora legibilidade */
+    -webkit-font-smoothing: antialiased; /* Suaviza fontes no Safari/Chrome */
+    -moz-osx-font-smoothing: grayscale;  /* Suaviza fontes no Firefox */
+}
+
+/* Desativa rolagem do fundo quando o modal está aberto */
+body.no-scroll {
+    overflow: hidden;
+    touch-action: none; /* Evita gestos como pull-to-refresh em mobile */
+    position: fixed;    /* Trava a posição do body */
+    width: 100%;
+    left: 0;
+    right: 0;
+    /* top será definido inline via JS com o deslocamento atual (negativo) */
+    overscroll-behavior: contain; /* Evita overscroll em navegadores compatíveis */
+}

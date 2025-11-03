@@ -1,0 +1,207 @@
+/* ===== PAGES/HOME.CSS ===== */
+/* Estilos específicos da página inicial (index.html) */
+
+/* ===== SEÇÃO HERO ===== */
+/* Hero com slideshow de fundo */
+.hero {
+    position: relative;
+    color: var(--light);
+    text-align: center;
+    padding: 5rem var(--spacing-sm);
+    margin-bottom: var(--spacing-xl);
+    overflow: hidden; /* Esconde partes das imagens que saem do container */
+    min-height: 400px;
+    display: flex;              /* Centraliza verticalmente o conteúdo */
+    align-items: center;        /* Alinha ao centro vertical */
+    justify-content: center;    /* Garante centralização horizontal do container interno */
+}
+
+/* Overlay escuro sobre a imagem de fundo para melhorar legibilidade do texto */
+.hero::before {
+    content: '';
+    position: absolute;
+    inset: 0; /* Equivalente a top: 0; right: 0; bottom: 0; left: 0; */
+    background: linear-gradient(
+        to bottom,
+        rgba(var(--black-rgb), 0.5),
+        rgba(var(--black-rgb), 0.7)
+    );
+    z-index: 1; /* Fica entre a imagem e o texto */
+    pointer-events: none; /* Permite cliques passarem através do overlay */
+}
+
+/* Imagens de fundo do slideshow */
+.hero-bg {
+    position: absolute;
+    inset: 0;
+    background-size: cover;      /* Cobre toda a área */
+    background-position: center;
+    background-repeat: no-repeat;
+    opacity: 0; /* Escondida por padrão */
+    transition: opacity 1.5s ease-in-out; /* Transição suave e lenta entre imagens */
+    will-change: opacity; /* Otimiza performance da animação */
+    transform: translateZ(0); /* Ativa aceleração de hardware para transições fluidas */
+}
+
+/* Imagem ativa no slideshow - fade in suave */
+.hero-bg.active {
+    opacity: 1;
+    animation: fadeInHero 1.5s ease-in-out;
+}
+
+/* Animação de fade in para entrada suave das imagens */
+@keyframes fadeInHero {
+    from {
+        opacity: 0;
+        transform: scale(1.05); /* Leve zoom para efeito cinematic */
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Conteúdo do hero fica acima do overlay */
+.hero .container {
+    position: relative;
+    z-index: 2;
+}
+
+/* Título responsivo usando clamp() */
+.hero h1 {
+    font-size: clamp(2rem, 5vw, 2.5rem); /* Min: 2rem, Ideal: 5vw, Max: 2.5rem */
+    margin-bottom: var(--spacing-sm);
+    font-weight: 700;
+    text-shadow: 2px 2px 8px rgba(var(--black-rgb), 0.8); /* Sombra para melhorar legibilidade */
+}
+
+/* Parágrafo responsivo e centralizado */
+.hero p {
+    font-size: clamp(1rem, 3vw, 1.2rem);
+    max-width: 700px;
+    margin: 0 auto 4rem; /* Aumentado para 4rem (64px) */
+    text-shadow: 1px 1px 6px rgba(var(--black-rgb), 0.7); /* Sombra para melhorar legibilidade */
+}
+
+/* Botão CTA destacado do hero */
+.hero .btn {
+    background-color: var(--primary);
+    color: var(--light);
+    /* Reduzido padding para botão menor */
+    padding: 0.8rem var(--spacing-md);
+    font-size: 1rem;
+    border-radius: 5px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Hover do botão do hero */
+.hero .btn:hover {
+    background-color: var(--dark);
+    color: var(--light);
+    transform: translateY(-2px);
+    box-shadow: 0 0 20px var(--primary);
+}
+
+/* ===== SEÇÃO SOBRE ===== */
+.about {
+    padding: var(--spacing-xl) 0;
+    background-color: var(--light);
+    margin-bottom: var(--spacing-xl);
+    border-radius: 8px;
+    box-shadow: var(--shadow-sm);
+}
+
+.about-content {
+    max-width: 800px;
+    margin: 0 auto; /* Centraliza o conteúdo */
+    display: flex;
+    flex-wrap: wrap; /* Permite quebra de linha em telas pequenas */
+    align-items: center;
+    gap: var(--spacing-lg);
+    text-align: left;
+}
+
+.about-image {
+    flex-shrink: 0; /* Não encolhe quando não há espaço */
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+}
+
+.about-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Preenche mantendo proporção */
+}
+
+.about-text {
+    flex: 1; /* Ocupa espaço restante */
+}
+
+.about-text p {
+    line-height: 1.8;
+    color: var(--text);
+}
+
+/* ===== SEÇÃO CONTATO ===== */
+.contact {
+    padding: var(--spacing-xl) 0;
+    background-color: var(--light);
+    margin-bottom: var(--spacing-xl);
+    border-radius: 8px;
+    box-shadow: var(--shadow-sm);
+}
+
+.contact-content {
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.contact p {
+    margin-bottom: var(--spacing-lg);
+    font-size: 1.1rem;
+    color: var(--text);
+}
+
+.social-links {
+    display: flex;
+    justify-content: center;
+    gap: var(--spacing-md);
+    margin-top: var(--spacing-md);
+}
+
+/* ===== RESPONSIVIDADE - HOME ===== */
+/* Em telas menores, garantir presença com uma largura mínima confortável */
+@media (max-width: 600px) {
+    .hero .btn {
+        min-width: 220px;
+    }
+}
+
+@media (max-width: 360px) {
+    .hero .btn {
+        min-width: 180px;
+    }
+}
+
+@media (max-width: 768px) {
+    /* Hero responsivo */
+    .hero {
+        padding: var(--spacing-xl) var(--spacing-sm);
+    }
+
+    /* Sobre em coluna no mobile */
+    .about-content {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .about-image {
+        margin: 0 auto var(--spacing-md);
+    }
+}
