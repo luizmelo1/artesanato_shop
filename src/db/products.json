@@ -93,4 +93,18 @@
         ],
         "link": "https://exemplo.com/quadro1"
     }
+    ,
+    {
+        "id": 10,
+        "name": "Buquê Artesanal de Flores",
+        "category": "buques",
+        "price": 0.00,
+        "description": "Buquê artesanal feito à mão, ideal para presentes e decoração. Item de template para a categoria Buquês.",
+        "image": "https://via.placeholder.com/400x300",
+        "images": [
+            "https://via.placeholder.com/400x300",
+            "https://via.placeholder.com/400x300?text=Buqu%C3%AA+2"
+        ],
+        "link": "https://exemplo.com/buque1"
+    }
 ]

@@ -98,8 +98,8 @@ export async function forceRefresh(dom, state) {
  * @param {Array} products - Lista de produtos
  * @param {string} [filterCategory='all'] - Categoria alvo (ou 'all' para todas).
  */
-export function loadProducts(dom, products, filterCategory = 'all') {
-    console.log('Carregando produtos para categoria:', filterCategory);
+export function loadProducts(dom, products, filter = 'all') {
+    console.log('Carregando produtos para filtro:', filter);
     
     if (!dom.products.container) {
         console.log('Container de produtos não encontrado');
@@ -117,11 +117,11 @@ export function loadProducts(dom, products, filterCategory = 'all') {
         
         // Aguarda animação de saída completar (300ms)
         setTimeout(() => {
-            renderProducts(dom, products, filterCategory);
+            renderProducts(dom, products, filter);
         }, 300);
     } else {
         // Primeira carga ou sem produtos: renderiza diretamente
-        renderProducts(dom, products, filterCategory);
+        renderProducts(dom, products, filter);
     }
 }
 
@@ -131,7 +131,7 @@ export function loadProducts(dom, products, filterCategory = 'all') {
  * @param {Array} products - Lista de produtos
  * @param {string} filterCategory - Categoria para filtrar.
  */
-function renderProducts(dom, products, filterCategory) {
+function renderProducts(dom, products, filter) {
     // Mostra o loader (acessível)
     if (dom.products.loader) {
         dom.products.loader.classList.remove('hidden');
@@ -144,9 +144,12 @@ function renderProducts(dom, products, filterCategory) {
     // Pequeno delay para transição mais suave
     setTimeout(() => {
         // Filtra produtos pela categoria selecionada
-        const filteredProducts = filterCategory === 'all'
-            ? products
-            : products.filter(product => product.category === filterCategory);
+        let filteredProducts = products;
+        if (Array.isArray(filter)) {
+            filteredProducts = products.filter(p => filter.includes(p.category));
+        } else if (filter !== 'all') {
+            filteredProducts = products.filter(p => p.category === filter);
+        }
 
         console.log('Produtos filtrados:', filteredProducts);
 
@@ -177,9 +180,26 @@ export function filterProductsBySearch(dom, products, searchTerm) {
 
     // Se busca está vazia, mostra todos os produtos da categoria ativa
     if (!searchTerm) {
-        const activeCategory = document.querySelector('.category.active');
-        const category = activeCategory ? activeCategory.dataset.category : 'all';
-        loadProducts(dom, products, category);
+        const selected = Array.from(document.querySelectorAll('.category.active'))
+            .map(c => c.dataset.category)
+            .filter(cat => cat !== 'all');
+        const allBtn = document.querySelector('.category[data-category="all"]');
+        const isAllActive = allBtn ? allBtn.classList.contains('active') : false;
+        if (selected.length === 0 && !isAllActive) {
+            // Sem filtros (e 'Todos' inativo) e sem busca: não exibe produtos
+            if (dom.products.section) {
+                dom.products.section.classList.add('hidden-until-interaction');
+                dom.products.section.setAttribute('aria-hidden', 'true');
+            }
+            dom.products.container.replaceChildren();
+            if (dom.products.loader) {
+                dom.products.loader.classList.add('hidden');
+                dom.products.loader.setAttribute('aria-busy', 'false');
+            }
+            return;
+        }
+        const filterParam = selected.length ? selected : 'all';
+        loadProducts(dom, products, filterParam);
         return;
     }
 
@@ -210,7 +230,13 @@ function renderFilteredProducts(dom, products) {
     dom.products.container.replaceChildren();
 
     setTimeout(() => {
-        if (products.length === 0) {
+        // Aplica filtros de categoria ativos também, se houver
+        const selected = Array.from(document.querySelectorAll('.category.active'))
+            .map(c => c.dataset.category)
+            .filter(cat => cat !== 'all');
+        const byCategory = selected.length ? products.filter(p => selected.includes(p.category)) : products;
+
+        if (byCategory.length === 0) {
             // Exibe mensagem quando não há resultados
             const p = document.createElement('p');
             p.className = 'no-results';
@@ -218,7 +244,7 @@ function renderFilteredProducts(dom, products) {
             dom.products.container.appendChild(p);
         } else {
             // Renderiza produtos encontrados
-            products.forEach((product, index) => {
+            byCategory.forEach((product, index) => {
                 const productCard = createProductCard(product, index);
                 dom.products.container.appendChild(productCard);
             });
