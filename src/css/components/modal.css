@@ -6,12 +6,19 @@
     background-color: transparent;
     border: none;
     padding: 0;
+    margin: 0;
     max-width: 100vw;
     max-height: 100vh;
+    width: 100vw;
+    height: 100vh;
     overflow-y: auto;
     opacity: 0; /* Transparente inicialmente */
     transition: all var(--transition-normal);
     backdrop-filter: blur(0);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none; /* Não bloqueia cliques quando fechado */
 }
 
 /* Backdrop do dialog (::backdrop é o fundo nativo do <dialog>) */
@@ -26,6 +33,7 @@
     opacity: 1;
     background-color: rgba(var(--black-rgb), 0.7);
     backdrop-filter: blur(3px);
+    pointer-events: auto; /* Permite cliques quando aberto */
 }
 
 .modal.active::backdrop {
@@ -44,6 +52,7 @@
     transform: scale(0.95) translateY(-30px); /* Começa menor e acima */
     opacity: 0;
     transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+    position: relative;
 }
 
 /* Animação de entrada do modal */
@@ -206,6 +215,17 @@
 
 /* ===== RESPONSIVIDADE - MODAL ===== */
 @media (max-width: 768px) {
+    /* Modal ocupa mais espaço vertical em mobile */
+    .modal {
+        align-items: flex-start;
+        padding: var(--spacing-md) 0;
+    }
+    
+    .modal-content {
+        margin: 0 auto;
+        width: 95%;
+    }
+    
     /* Modal em coluna única (imagem em cima, info embaixo) */
     .modal-body {
         grid-template-columns: 1fr;
