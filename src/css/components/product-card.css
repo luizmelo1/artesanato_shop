@@ -1,0 +1,144 @@
+/* ===== CARDS DE PRODUTO ===== */
+/* Grid responsivo de produtos - ajusta automaticamente as colunas */
+.products-grid {
+    display: grid; /* Layout em grade */
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); /* Colunas flexíveis */
+    gap: var(--spacing-lg);
+    margin-bottom: var(--spacing-xl);
+}
+
+/* Animação de fade-in para produtos (entrada) */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Animação de fade-out para produtos (saída) */
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+}
+
+/* Classe para animar saída de produtos ao trocar categoria */
+.product-card.fade-out {
+    animation: fadeOut 0.3s ease forwards;
+}
+
+/* Card individual de produto */
+.product-card {
+    background-color: var(--light);
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    transition: all var(--transition-normal);
+    opacity: 0;
+    transform: translateZ(0); /* Ativa aceleração de hardware */
+    will-change: transform, opacity, box-shadow; /* Otimiza performance de animações */
+}
+
+/* Efeito hover no card - eleva e aumenta sombra */
+.product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-md);
+}
+
+/* Container da imagem do produto */
+.product-image {
+    height: 200px;
+    background-color: var(--gray-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+}
+
+/* Overlay sutil de gradiente na imagem */
+.product-image::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at center, transparent 60%, rgba(var(--black-rgb), 0.03) 100%);
+    opacity: 0;
+    transition: opacity var(--transition-slow);
+    pointer-events: none;
+}
+
+/* Imagem do produto com filtro sutil */
+.product-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: all var(--transition-slow);
+    filter: brightness(0.97); /* Leve escurecimento para destaque no hover */
+    transform: translateZ(0); /* Ativa aceleração de hardware */
+    will-change: transform, filter; /* Otimiza zoom e filtros */
+}
+
+/* Efeito hover na imagem - zoom sutil e iluminação */
+.product-card:hover .product-image img {
+    transform: scale(1.08); /* Zoom de 8% */
+    filter: brightness(1.03);
+}
+
+/* Mostra o overlay no hover */
+.product-card:hover .product-image::after {
+    opacity: 1;
+}
+
+/* Informações do produto (título, descrição, preço) */
+.product-info {
+    padding: var(--spacing-md);
+}
+
+/* Título do produto */
+.product-title {
+    font-size: 1.2rem;
+    margin-bottom: var(--spacing-xs);
+    color: var(--dark);
+    font-weight: 600;
+}
+
+/* Descrição curta do produto */
+.product-description {
+    color: var(--gray-medium);
+    margin-bottom: var(--spacing-sm);
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+/* Preço destacado em laranja */
+.product-price {
+    font-weight: 700;
+    color: var(--primary);
+    font-size: 1.2rem;
+    margin-bottom: var(--spacing-sm);
+}
+
+/* Container dos botões de ação do produto */
+.product-actions {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--spacing-xs);
+}
+
+/* ===== RESPONSIVIDADE - PRODUCT CARD ===== */
+@media (max-width: 576px) {
+    /* Grid de uma coluna no mobile */
+    .products-grid {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-md);
+    }
+}

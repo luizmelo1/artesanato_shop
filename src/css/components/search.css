@@ -1,0 +1,47 @@
+/* ===== BUSCA E FILTROS ===== */
+/* Barra de busca de produtos */
+.search-bar {
+    position: relative;
+    max-width: 600px;
+    margin: 0 auto var(--spacing-lg);
+}
+
+/* Input de busca */
+.search-bar input[type="search"] {
+    width: 100%;
+    padding: var(--spacing-sm) var(--spacing-md);
+    padding-right: 50px; /* Espaço para o ícone */
+    border: 2px solid var(--gray-lighter);
+    border-radius: 50px; /* Arredondado estilo moderno */
+    font-size: 1rem;
+    font-family: inherit;
+    transition: all var(--transition-normal);
+    background-color: var(--light);
+}
+
+/* Foco no input de busca */
+.search-bar input[type="search"]:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(var(--primary-rgb), 0.1);
+}
+
+/* Ícone de busca */
+.search-bar .search-icon {
+    position: absolute;
+    right: var(--spacing-md);
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.2rem;
+    pointer-events: none; /* Não interfere no input */
+    opacity: 0.5;
+}
+
+/* Mensagem quando não há resultados de busca */
+.no-results {
+    text-align: center;
+    padding: var(--spacing-xl);
+    color: var(--gray-dark);
+    font-size: 1.1rem;
+    grid-column: 1 / -1;
+}

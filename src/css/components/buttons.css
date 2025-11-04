@@ -1,0 +1,107 @@
+/* ===== BOTÕES ===== */
+/* Botão padrão usado em todo o site */
+.btn {
+    display: inline-block;
+    background-color: var(--dark);
+    color: var(--light);
+    padding: 0.8rem var(--spacing-md);
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all var(--transition-fast);
+    border: none;
+    cursor: pointer;
+    transform: translateZ(0); /* Ativa aceleração de hardware */
+    will-change: transform, background-color; /* Otimiza animações */
+}
+
+/* Efeito hover do botão - muda cor e eleva */
+.btn:hover {
+    background-color: var(--secondary);
+    color: var(--dark);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+/* Classe base para botões de produto - estilos compartilhados */
+.btn-details, 
+.btn-buy {
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-radius: 4px;
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: all var(--transition-normal);
+    position: relative;
+    overflow: hidden;
+    font-weight: 500;
+    text-align: center;
+    flex: 1;
+    transform: translateZ(0); /* Ativa aceleração de hardware */
+    will-change: transform, background-color, box-shadow; /* Otimiza hover */
+}
+
+/* Botão "Ver Detalhes" - fundo cinza claro */
+.btn-details {
+    background-color: var(--gray-lighter);
+    color: var(--dark);
+}
+
+/* Hover do botão Ver Detalhes - muda para azul */
+.btn-details:hover {
+    background-color: var(--secondary);
+    color: var(--dark);
+    box-shadow: 0 0 15px var(--secondary);
+    transform: translateY(-2px);
+}
+
+/* Botão "Comprar" - fundo laranja */
+.btn-buy {
+    background-color: var(--primary);
+    color: var(--light);
+}
+
+/* Hover do botão Comprar - muda para laranja escuro */
+.btn-buy:hover {
+    background-color: var(--dark);
+    color: var(--light);
+    box-shadow: 0 0 20px var(--primary);
+    transform: translateY(-2px);
+}
+
+/* ===== BOTÃO VOLTAR AO TOPO ===== */
+.scroll-to-top {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: none;
+    background: var(--dark);
+    color: var(--light);
+    font-size: 1.25rem;
+    display: grid;
+    place-items: center;
+    box-shadow: var(--shadow-md);
+    cursor: pointer;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(10px) translateZ(0);
+    transition: opacity var(--transition-fast), transform var(--transition-fast), visibility var(--transition-fast);
+    z-index: 1000;
+}
+
+.scroll-to-top.visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0) translateZ(0);
+}
+
+.scroll-to-top:hover {
+    background: var(--primary);
+}
+
+.scroll-to-top:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+}

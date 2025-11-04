@@ -1,0 +1,11 @@
+/* ===== UTILITÁRIOS ===== */
+/* Performance: reduzir animações em dispositivos de baixa potência */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;      /* Animações quase instantâneas */
+        animation-iteration-count: 1 !important;    /* Executa apenas uma vez */
+        transition-duration: 0.01ms !important;     /* Transições quase instantâneas */
+    }
+}

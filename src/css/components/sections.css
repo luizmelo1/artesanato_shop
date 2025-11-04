@@ -1,0 +1,80 @@
+/* ===== TÍTULOS E SEÇÕES ===== */
+/* Título de seção centralizado com linha decorativa */
+.section-title {
+    text-align: center;
+    margin-bottom: var(--spacing-lg);
+    color: var(--dark);
+    position: relative;
+    padding-bottom: 10px;
+    font-size: clamp(1.5rem, 4vw, 2rem);
+    font-weight: 700;
+}
+
+.section-title::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 3px;
+    background-color: var(--secondary);
+}
+
+/* ===== SEÇÃO SOBRE ===== */
+.about {
+    padding: var(--spacing-xl) 0;
+    background-color: var(--gray-light);
+}
+
+.about-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-xl);
+    align-items: center;
+}
+
+.about-image img {
+    width: 100%;
+    border-radius: 8px;
+    box-shadow: var(--shadow-md);
+}
+
+.about-text p {
+    line-height: 1.8;
+    color: var(--text);
+}
+
+/* ===== SEÇÃO CONTATO ===== */
+.contact {
+    padding: var(--spacing-xl) 0;
+}
+
+.contact-content {
+    text-align: center;
+}
+
+.contact p {
+    margin-bottom: var(--spacing-lg);
+}
+
+.social-links {
+    display: flex;
+    justify-content: center;
+    gap: var(--spacing-md);
+}
+
+/* Ícones de redes sociais */
+.social-media-icon {
+    width: 32px;
+    height: 32px;
+    cursor: pointer;
+    transition: transform var(--transition-normal);
+    transform: translateZ(0); /* Ativa aceleração de hardware */
+    will-change: transform; /* Otimiza escala e rotação */
+}
+
+/* Efeito hover nos ícones - escala e rotação */
+.social-media-icon:hover {
+    transform: scale(1.2) rotate(5deg);
+}

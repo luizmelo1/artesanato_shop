@@ -1,0 +1,212 @@
+/* ===== MODAL ===== */
+/* Modal overlay - cobre toda a tela */
+.modal {
+    visibility: hidden; /* Escondido por padrão */
+    position: fixed;
+    inset: 0;
+    background-color: transparent;
+    z-index: 1000;
+    overflow-y: auto;
+    opacity: 0; /* Transparente inicialmente */
+    transition: all var(--transition-normal);
+    backdrop-filter: blur(0);
+}
+
+/* Estado ativo do modal - visível com fundo escuro desfocado */
+.modal.active {
+    visibility: visible;
+    opacity: 1;
+    background-color: rgba(var(--black-rgb), 0.7);
+    backdrop-filter: blur(3px);
+}
+
+/* Conteúdo centralizado do modal */
+.modal-content {
+    background-color: var(--light);
+    margin: var(--spacing-lg) auto;
+    width: 90%;
+    max-width: 800px;
+    border-radius: 8px;
+    overflow: hidden;
+    transform: scale(0.95) translateY(-30px); /* Começa menor e acima */
+    opacity: 0;
+    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+/* Animação de entrada do modal */
+.modal.active .modal-content {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+}
+
+/* Header do modal */
+.modal-header {
+    background-color: var(--gray-light);
+    padding: var(--spacing-md);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-header h2 {
+    color: var(--dark);
+    font-size: 1.5rem;
+}
+
+/* Botão fechar modal */
+.close-modal {
+    background: transparent;
+    border: none;
+    font-size: 2rem;
+    cursor: pointer;
+    color: var(--gray-dark);
+    transition: color var(--transition-fast), transform var(--transition-fast);
+    padding: 0;
+    width: 32px;
+    height: 32px;
+    display: grid;
+    place-items: center;
+}
+
+.close-modal:hover {
+    color: var(--primary);
+    transform: rotate(90deg);
+}
+
+.close-modal:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+    border-radius: 4px;
+}
+
+/* Corpo do modal */
+.modal-body {
+    padding: var(--spacing-lg);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-lg);
+}
+
+/* Galeria de imagens do produto */
+.modal-gallery {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+}
+
+/* Container da imagem principal com suporte a zoom */
+.modal-main-image {
+    overflow: hidden;
+    position: relative;
+    border-radius: 8px;
+    background-color: var(--gray-light);
+    cursor: zoom-in;
+    user-select: none;
+    touch-action: pan-x pan-y pinch-zoom;
+}
+
+/* Imagem principal do produto */
+.modal-main-image img {
+    width: 100%;
+    height: auto;
+    display: block;
+    transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    transform-origin: center center;
+    will-change: transform;
+}
+
+/* Estado com zoom ativado */
+.modal-main-image.zoomed {
+    cursor: move;
+    cursor: grab;
+}
+
+/* Cursor quando está arrastando em modo zoom */
+.modal-main-image.zoomed:active {
+    cursor: grabbing;
+}
+
+/* Remove a transição durante o movimento do zoom para mais responsividade */
+.modal-main-image.zoomed img {
+    transition: none;
+}
+
+/* Container das miniaturas */
+.modal-thumbs {
+    display: flex;
+    gap: var(--spacing-xs);
+    align-items: center;
+}
+
+/* Miniaturas individuais */
+.modal-thumbs img {
+    width: 72px;
+    height: 72px;
+    object-fit: cover;
+    cursor: pointer;
+    border-radius: 6px;
+    border: 2px solid transparent; /* Borda invisível (muda ao selecionar) */
+    transition: all 0.12s ease;
+    transform: translateZ(0); /* Ativa aceleração de hardware */
+    will-change: transform; /* Otimiza elevação no hover */
+}
+
+/* Hover nas miniaturas */
+.modal-thumbs img:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-sm);
+}
+
+/* Miniatura ativa */
+.modal-thumbs img.active {
+    border-color: var(--primary);
+}
+
+/* Informações do produto no modal */
+.modal-info {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+}
+
+.modal-info h3 {
+    color: var(--dark);
+    font-size: 1.8rem;
+}
+
+.modal-price {
+    color: var(--primary);
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.modal-description {
+    color: var(--text);
+    line-height: 1.8;
+}
+
+.modal-actions {
+    display: flex;
+    gap: var(--spacing-sm);
+    margin-top: auto;
+}
+
+/* ===== RESPONSIVIDADE - MODAL ===== */
+@media (max-width: 768px) {
+    /* Modal em coluna única (imagem em cima, info embaixo) */
+    .modal-body {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-md);
+    }
+    
+    /* Botões do modal empilhados verticalmente */
+    .modal-actions {
+        flex-direction: column;
+    }
+    
+    /* Botões ocupam largura total */
+    .modal-actions .btn {
+        text-align: center;
+        width: 100%;
+    }
+}

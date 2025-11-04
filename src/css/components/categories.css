@@ -1,0 +1,62 @@
+/* ===== CATEGORIAS ===== */
+/* Container dos botões de categoria */
+.categories {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap; /* Permite quebra de linha quando necessário */
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-xl);
+}
+
+/* Botão individual de categoria - semântico e acessível */
+.category {
+    background-color: var(--light);
+    border: 2px solid transparent; /* Borda transparente para manter tamanho consistente */
+    border-radius: 8px;
+    padding: var(--spacing-sm) var(--spacing-md);
+    box-shadow: var(--shadow-sm);
+    cursor: pointer;
+    transition: all var(--transition-normal);
+    font-weight: 500;
+    font-size: 1rem;
+    font-family: inherit; /* Herda fonte do body */
+    color: var(--dark);
+    user-select: none; /* Impede seleção de texto ao clicar */
+    transform: translateZ(0); /* Ativa aceleração de hardware */
+    will-change: transform, box-shadow; /* Otimiza animações */
+}
+
+/* Efeito hover nas categorias - eleva o botão */
+.category:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--primary); /* Borda laranja no hover */
+}
+
+/* Foco visível para navegação por teclado */
+.category:focus-visible {
+    outline: 3px solid var(--primary);
+    outline-offset: 3px;
+}
+
+/* Estado ativo da categoria selecionada (aria-pressed="true") */
+.category.active,
+.category[aria-pressed="true"] {
+    background-color: var(--dark);
+    color: var(--light);
+    border-color: var(--dark);
+}
+
+/* ===== RESPONSIVIDADE - CATEGORIAS ===== */
+@media (max-width: 576px) {
+    /* Reduz espaçamento entre categorias */
+    .categories {
+        gap: var(--spacing-xs);
+    }
+    
+    /* Botões de categoria menores */
+    .category {
+        padding: 0.75rem var(--spacing-sm);
+        font-size: 0.9rem;
+    }
+}
