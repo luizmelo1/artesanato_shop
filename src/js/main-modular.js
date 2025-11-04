@@ -1,0 +1,143 @@
+/**
+ * Artesanato Shop - Aplicação Principal
+ * Ponto de entrada modular da aplicação
+ */
+
+// Importações de módulos
+import { initializeDOM } from './app/dom.js';
+import * as ProductsModule from './app/products.js';
+import * as ModalModule from './app/modal.js';
+import * as EventsModule from './app/events.js';
+import * as SlideshowModule from './app/slideshow.js';
+import { cache } from './utils/cache.js';
+
+/**
+ * Classe principal da aplicação
+ */
+class ArtesanatoShop {
+    constructor() {
+        // Estado da aplicação
+        this.state = {
+            products: [],
+            previouslyFocusedElement: null,
+            scrollLockY: null
+        };
+
+        // Referências DOM
+        this.DOM = null;
+    }
+
+    /**
+     * Inicializa a aplicação
+     */
+    async initialize() {
+        console.log('Inicializando Artesanato Shop...');
+
+        // Inicializa referências DOM
+        this.DOM = initializeDOM();
+
+        // Tenta carregar do cache primeiro
+        const cachedProducts = cache.get();
+        
+        if (cachedProducts && cache.isValid()) {
+            console.log('Produtos carregados do cache:', cachedProducts.length, 'itens');
+            this.state.products = cachedProducts;
+            
+            if (this.DOM.products.container) {
+                ProductsModule.loadProducts(this.DOM, this.state.products, 'all');
+                this.setupEventListeners();
+            }
+
+            SlideshowModule.initHeroSlideshow(this.DOM);
+            
+            // Verifica atualizações em background
+            ProductsModule.updateCacheInBackground(this.state.products);
+        } else {
+            // Sem cache válido, busca da API
+            try {
+                await ProductsModule.fetchProducts(this.DOM, this.state);
+                
+                if (this.DOM.products.container) {
+                    ProductsModule.loadProducts(this.DOM, this.state.products, 'all');
+                    this.setupEventListeners();
+                }
+
+                SlideshowModule.initHeroSlideshow(this.DOM);
+            } catch (error) {
+                console.error('Erro ao inicializar aplicação:', error);
+            }
+        }
+
+        console.log('Aplicação inicializada com sucesso!');
+    }
+
+    /**
+     * Configura todos os event listeners da aplicação
+     */
+    setupEventListeners() {
+        // Callbacks para os eventos
+        const callbacks = {
+            // Produtos e busca
+            onSearch: (searchTerm) => {
+                ProductsModule.filterProductsBySearch(this.DOM, this.state.products, searchTerm);
+            },
+            
+            onCategoryChange: (category) => {
+                ProductsModule.loadProducts(this.DOM, this.state.products, category);
+            },
+
+            // Modal
+            onOpenModal: (productId) => {
+                ModalModule.openModal(this.DOM, this.state.products, productId, this.state);
+            },
+
+            onCloseModal: () => {
+                ModalModule.closeModal(this.DOM, this.state);
+            },
+
+            // Zoom
+            onImageZoom: (e) => {
+                ModalModule.handleImageZoom(this.DOM, e);
+            },
+
+            onToggleZoom: (e) => {
+                ModalModule.toggleImageZoom(this.DOM, e);
+            },
+
+            // Touch events
+            onTouchStart: (e) => {
+                ModalModule.handleTouchStart(this.DOM, e);
+            },
+
+            onTouchMove: (e) => {
+                ModalModule.handleTouchMove(this.DOM, e);
+            },
+
+            onTouchEnd: (e) => {
+                ModalModule.handleTouchEnd(this.DOM, e);
+            }
+        };
+
+        // Configura os listeners com delegação de eventos
+        EventsModule.setupEventListeners(this.DOM, callbacks);
+    }
+
+    /**
+     * Força atualização dos produtos
+     */
+    async forceRefresh() {
+        await ProductsModule.forceRefresh(this.DOM, this.state);
+    }
+}
+
+// Instância global da aplicação
+const app = new ArtesanatoShop();
+
+// Inicializar quando o DOM estiver pronto
+document.addEventListener('DOMContentLoaded', () => {
+    console.log('DOM Content Loaded');
+    app.initialize();
+});
+
+// Exporta a instância para uso em console/debug
+export default app;

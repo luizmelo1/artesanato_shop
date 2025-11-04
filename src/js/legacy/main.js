@@ -1,4 +1,23 @@
 /**
+ *  ARQUIVO LEGADO - NÃO USAR 
+ * 
+ * Este arquivo foi substituído pela estrutura modular em:
+ * - main-modular.js (entry point)
+ * - app/* (módulos de funcionalidades)
+ * - handlers/* (event handlers)
+ * - helpers/* (funções auxiliares)
+ * - utils/* (utilitários)
+ * 
+ * MANTIDO APENAS COMO BACKUP E REFERÊNCIA.
+ * Para código atual, veja: main-modular.js
+ * 
+ * Data da refatoração: 04/11/2025
+ * Documentação: MODULARIZACAO_JS.md
+ * 
+ * ============================================================
+ * CÓDIGO ORIGINAL ABAIXO (1245 linhas)
+ * ============================================================
+ * 
  * Arquivo principal de funcionalidades do site.
  *
  * Este módulo centraliza:
