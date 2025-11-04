@@ -345,9 +345,11 @@
 .modal-main-image {
     overflow: hidden;
     position: relative;
-    border-radius: 8px; /* Cantos arredondados */
-    touch-action: none; /* Desabilita gestos de toque padrão para implementar zoom */
-
+    border-radius: 8px;
+    background-color: var(--gray-light);
+    cursor: zoom-in;
+    user-select: none;
+    touch-action: pan-x pan-y pinch-zoom;
 }
 
 /* Imagem principal do produto */
@@ -355,21 +357,25 @@
     width: 100%;
     height: auto;
     display: block;
-    transition: transform var(--transition-fast);
+    transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     transform-origin: center center;
-    cursor: zoom-in; /* Indica que pode dar zoom */
-    transform: translateZ(0); /* Ativa aceleração de hardware */
-    will-change: transform; /* Otimiza performance do zoom */
+    will-change: transform;
 }
 
-/* Cursor quando está em modo zoom */
-.modal-main-image.zoomed img {
-    cursor: grab; /* Indica que pode arrastar */
+/* Estado com zoom ativado */
+.modal-main-image.zoomed {
+    cursor: move;
+    cursor: grab;
 }
 
 /* Cursor quando está arrastando em modo zoom */
-.modal-main-image.zoomed img:active {
-    cursor: grabbing; /* Indica que está arrastando */
+.modal-main-image.zoomed:active {
+    cursor: grabbing;
+}
+
+/* Remove a transição durante o movimento do zoom para mais responsividade */
+.modal-main-image.zoomed img {
+    transition: none;
 }
 
 /* Container das miniaturas */

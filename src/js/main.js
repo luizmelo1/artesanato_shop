@@ -183,30 +183,114 @@ const Utils = {
 
 // Funções auxiliares para o zoom de imagem do modal
 const ImageZoomHelpers = {
-    /**
-     * Calcula a posição relativa do mouse dentro do container de imagem.
-     * @param {MouseEvent} e
-     * @param {DOMRect} containerRect - BoundingClientRect do container.
-     * @returns {{moveX:number, moveY:number}} Percentuais de deslocamento.
-     */
-    calculateZoomPosition(e, containerRect) {
-        const x = e.clientX - containerRect.left;
-        const y = e.clientY - containerRect.top;
-        const moveX = (x / containerRect.width) * 100;
-        const moveY = (y / containerRect.height) * 100;
-        return { moveX, moveY };
+    // Estado do zoom por toque (mobile)
+    touchZoomState: {
+        initialDistance: 0,
+        currentScale: 1,
+        lastPosX: 0,
+        lastPosY: 0,
+        isZooming: false
     },
 
     /**
-     * Aplica transformação CSS de zoom e translate na imagem principal do modal.
-     * @param {HTMLImageElement} image
-     * @param {number} moveX
-     * @param {number} moveY
+     * Calcula a distância entre dois toques (pinch gesture).
+     * @param {Touch} touch1 
+     * @param {Touch} touch2 
+     * @returns {number} Distância em pixels
      */
-    applyZoomTransform(image, moveX, moveY) {
-        // Define o nível de zoom de forma adaptativa
-        const scale = window.innerWidth < 600 ? 1.5 : 2;
-        image.style.transform = `scale(${scale}) translate(${50 - moveX}%, ${50 - moveY}%)`;
+    getTouchDistance(touch1, touch2) {
+        const dx = touch1.clientX - touch2.clientX;
+        const dy = touch1.clientY - touch2.clientY;
+        return Math.sqrt(dx * dx + dy * dy);
+    },
+
+    /**
+     * Calcula o ponto central entre dois toques.
+     * @param {Touch} touch1 
+     * @param {Touch} touch2 
+     * @returns {{x: number, y: number}}
+     */
+    getTouchCenter(touch1, touch2) {
+        return {
+            x: (touch1.clientX + touch2.clientX) / 2,
+            y: (touch1.clientY + touch2.clientY) / 2
+        };
+    },
+
+    /**
+     * Calcula a posição do zoom baseada na posição do mouse.
+     * Usa coordenadas relativas à imagem para um zoom mais natural.
+     * @param {MouseEvent} e
+     * @param {DOMRect} containerRect - BoundingClientRect do container.
+     * @param {number} scale - Nível de zoom aplicado
+     * @returns {{x: number, y: number}} Coordenadas de transformação em pixels.
+     */
+    calculateZoomPosition(e, containerRect, scale) {
+        // Posição do mouse relativa ao container
+        const x = e.clientX - containerRect.left;
+        const y = e.clientY - containerRect.top;
+        
+        // Converte para porcentagem (0-1)
+        const relativeX = x / containerRect.width;
+        const relativeY = y / containerRect.height;
+        
+        // Calcula quanto a imagem pode se mover (metade da diferença entre tamanho ampliado e original)
+        const maxMoveX = (containerRect.width * (scale - 1)) / 2;
+        const maxMoveY = (containerRect.height * (scale - 1)) / 2;
+        
+        // Calcula o deslocamento baseado na posição do mouse
+        // Centralizado (0.5) = sem movimento, nas bordas = movimento máximo
+        const translateX = (0.5 - relativeX) * maxMoveX * 2;
+        const translateY = (0.5 - relativeY) * maxMoveY * 2;
+        
+        // Limita o movimento para não ultrapassar as bordas
+        const clampedX = Math.max(-maxMoveX, Math.min(maxMoveX, translateX));
+        const clampedY = Math.max(-maxMoveY, Math.min(maxMoveY, translateY));
+        
+        return { x: clampedX, y: clampedY };
+    },
+
+    /**
+     * Calcula a posição do zoom para dispositivos móveis (touch).
+     * @param {number} centerX - Posição X do centro do gesto
+     * @param {number} centerY - Posição Y do centro do gesto
+     * @param {DOMRect} containerRect - BoundingClientRect do container
+     * @param {number} scale - Nível de zoom aplicado
+     * @returns {{x: number, y: number}}
+     */
+    calculateTouchZoomPosition(centerX, centerY, containerRect, scale) {
+        // Posição do toque relativa ao container
+        const x = centerX - containerRect.left;
+        const y = centerY - containerRect.top;
+        
+        // Converte para porcentagem (0-1)
+        const relativeX = x / containerRect.width;
+        const relativeY = y / containerRect.height;
+        
+        // Calcula quanto a imagem pode se mover
+        const maxMoveX = (containerRect.width * (scale - 1)) / 2;
+        const maxMoveY = (containerRect.height * (scale - 1)) / 2;
+        
+        // Calcula o deslocamento baseado na posição do toque
+        const translateX = (0.5 - relativeX) * maxMoveX * 2;
+        const translateY = (0.5 - relativeY) * maxMoveY * 2;
+        
+        // Limita o movimento para não ultrapassar as bordas
+        const clampedX = Math.max(-maxMoveX, Math.min(maxMoveX, translateX));
+        const clampedY = Math.max(-maxMoveY, Math.min(maxMoveY, translateY));
+        
+        return { x: clampedX, y: clampedY };
+    },
+
+    /**
+     * Aplica transformação de zoom suave na imagem.
+     * @param {HTMLImageElement} image
+     * @param {number} x - Deslocamento horizontal em pixels
+     * @param {number} y - Deslocamento vertical em pixels
+     * @param {number} scale - Nível de zoom
+     */
+    applyZoomTransform(image, x, y, scale) {
+        image.style.transform = `translate(${x}px, ${y}px) scale(${scale})`;
     },
 
     /**
@@ -215,6 +299,13 @@ const ImageZoomHelpers = {
      */
     resetTransform(image) {
         image.style.transform = '';
+        this.touchZoomState = {
+            initialDistance: 0,
+            currentScale: 1,
+            lastPosX: 0,
+            lastPosY: 0,
+            isZooming: false
+        };
     }
 };
 
@@ -742,8 +833,101 @@ const App = {
         if (!imageContainer || !image || !imageContainer.classList.contains('zoomed')) return;
 
         const rect = imageContainer.getBoundingClientRect();
-        const { moveX, moveY } = ImageZoomHelpers.calculateZoomPosition(e, rect);
-        ImageZoomHelpers.applyZoomTransform(image, moveX, moveY);
+        const scale = window.innerWidth < 600 ? 1.5 : 2.5; // Zoom maior para melhor visualização
+        const { x, y } = ImageZoomHelpers.calculateZoomPosition(e, rect, scale);
+        ImageZoomHelpers.applyZoomTransform(image, x, y, scale);
+    },
+
+    /**
+     * Inicia o zoom por toque (pinch-to-zoom) em dispositivos móveis.
+     * @param {TouchEvent} e
+     */
+    handleTouchStart(e) {
+        const imageContainer = this.DOM.modal.imageContainer;
+        const image = this.DOM.modal.mainImage;
+        
+        if (!imageContainer || !image) return;
+        
+        // Verifica se há dois toques (pinch gesture)
+        if (e.touches.length === 2) {
+            e.preventDefault();
+            
+            const touch1 = e.touches[0];
+            const touch2 = e.touches[1];
+            
+            ImageZoomHelpers.touchZoomState.initialDistance = 
+                ImageZoomHelpers.getTouchDistance(touch1, touch2);
+            ImageZoomHelpers.touchZoomState.isZooming = true;
+            
+            // Marca o container como zoomed
+            imageContainer.classList.add('zoomed');
+        }
+    },
+
+    /**
+     * Processa o movimento do zoom por toque.
+     * @param {TouchEvent} e
+     */
+    handleTouchMove(e) {
+        const imageContainer = this.DOM.modal.imageContainer;
+        const image = this.DOM.modal.mainImage;
+        
+        if (!imageContainer || !image || !ImageZoomHelpers.touchZoomState.isZooming) return;
+        
+        if (e.touches.length === 2) {
+            e.preventDefault();
+            
+            const touch1 = e.touches[0];
+            const touch2 = e.touches[1];
+            
+            // Calcula a nova distância entre os toques
+            const currentDistance = ImageZoomHelpers.getTouchDistance(touch1, touch2);
+            
+            // Calcula o nível de zoom baseado na mudança de distância
+            const scale = currentDistance / ImageZoomHelpers.touchZoomState.initialDistance;
+            
+            // Limita o zoom entre 1x e 3x
+            const clampedScale = Math.max(1, Math.min(3, scale));
+            
+            // Calcula o ponto central entre os dois toques
+            const center = ImageZoomHelpers.getTouchCenter(touch1, touch2);
+            const rect = imageContainer.getBoundingClientRect();
+            
+            // Calcula a posição do zoom
+            const { x, y } = ImageZoomHelpers.calculateTouchZoomPosition(
+                center.x, center.y, rect, clampedScale
+            );
+            
+            // Armazena o estado atual
+            ImageZoomHelpers.touchZoomState.currentScale = clampedScale;
+            ImageZoomHelpers.touchZoomState.lastPosX = x;
+            ImageZoomHelpers.touchZoomState.lastPosY = y;
+            
+            // Aplica o zoom
+            ImageZoomHelpers.applyZoomTransform(image, x, y, clampedScale);
+        }
+    },
+
+    /**
+     * Finaliza o zoom por toque.
+     * @param {TouchEvent} e
+     */
+    handleTouchEnd(e) {
+        const imageContainer = this.DOM.modal.imageContainer;
+        const image = this.DOM.modal.mainImage;
+        
+        if (!imageContainer || !image) return;
+        
+        // Se ainda há um toque (um dedo levantado, outro ainda na tela)
+        if (e.touches.length < 2) {
+            // Se o zoom foi pequeno (próximo de 1), reseta completamente
+            if (ImageZoomHelpers.touchZoomState.currentScale < 1.2) {
+                imageContainer.classList.remove('zoomed');
+                ImageZoomHelpers.resetTransform(image);
+            }
+            
+            ImageZoomHelpers.touchZoomState.isZooming = false;
+        }
     },
 
     /**
@@ -949,6 +1133,21 @@ const App = {
                     this.handleImageZoom(e);
                 }
             });
+
+            // Eventos de toque para zoom em dispositivos móveis
+            if (this.DOM.modal.imageContainer) {
+                this.DOM.modal.imageContainer.addEventListener('touchstart', (e) => {
+                    this.handleTouchStart(e);
+                }, { passive: false });
+
+                this.DOM.modal.imageContainer.addEventListener('touchmove', (e) => {
+                    this.handleTouchMove(e);
+                }, { passive: false });
+
+                this.DOM.modal.imageContainer.addEventListener('touchend', (e) => {
+                    this.handleTouchEnd(e);
+                }, { passive: false });
+            }
 
             // Delegação de eventos para as miniaturas de imagem
             if (this.DOM.modal.thumbs) {
