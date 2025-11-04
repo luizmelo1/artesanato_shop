@@ -36,6 +36,12 @@ class ArtesanatoShop {
         // Inicializa referências DOM
         this.DOM = initializeDOM();
 
+        // Na página de produtos: esconder seção de produtos até interação do usuário
+        if (this.DOM?.products?.section) {
+            this.DOM.products.section.classList.add('hidden-until-interaction');
+            this.DOM.products.section.setAttribute('aria-hidden', 'true');
+        }
+
         // Tenta carregar do cache primeiro
         const cachedProducts = cache.get();
         
@@ -82,8 +88,8 @@ class ArtesanatoShop {
                 ProductsModule.filterProductsBySearch(this.DOM, this.state.products, searchTerm);
             },
             
-            onCategoryChange: (category) => {
-                ProductsModule.loadProducts(this.DOM, this.state.products, category);
+            onCategoryChange: (categories) => {
+                ProductsModule.loadProducts(this.DOM, this.state.products, categories);
             },
 
             // Modal

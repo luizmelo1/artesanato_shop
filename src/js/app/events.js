@@ -18,11 +18,80 @@ import * as GlobalHandlers from '../handlers/global-events.js';
  */
 export function setupEventListeners(dom, callbacks) {
     console.log('Configurando event listeners...');
+    const revealIfHidden = () => {
+        const section = dom.products?.section;
+        if (section && section.classList.contains('hidden-until-interaction')) {
+            section.classList.remove('hidden-until-interaction');
+            section.removeAttribute('aria-hidden');
+            // dispara animação de entrada
+            section.classList.add('fade-in-reveal');
+            // remove a classe após a animação para evitar efeitos colaterais
+            setTimeout(() => section.classList.remove('fade-in-reveal'), 600);
+
+            // Reaplica animação de entrada nos cards, caso já tenham sido renderidos em background
+            const cards = section.querySelectorAll('.product-card');
+            if (cards.length) {
+                cards.forEach((card, idx) => {
+                    card.style.animation = 'none';
+                    // força reflow para reiniciar animação
+                    // eslint-disable-next-line no-unused-expressions
+                    card.offsetHeight;
+                    card.style.animation = `fadeIn 0.5s ease forwards ${idx * 0.08}s`;
+                });
+            }
+        }
+    };
+
+    const hideIfNoSelection = () => {
+        const section = dom.products?.section;
+        if (section && !section.classList.contains('hidden-until-interaction')) {
+            section.classList.add('hidden-until-interaction');
+            section.setAttribute('aria-hidden', 'true');
+        }
+        if (dom.products?.container) {
+            dom.products.container.replaceChildren();
+        }
+        if (dom.products?.loader) {
+            dom.products.loader.classList.add('hidden');
+            dom.products.loader.setAttribute('aria-busy', 'false');
+        }
+    };
+
+    const updateClearBtnVisibility = () => {
+        const container = document.querySelector('.categories');
+        if (!container) return;
+        const clearBtn = container.querySelector('.clear-filters');
+        if (!clearBtn) return;
+
+        const activeCats = dom.products?.categories
+            ? Array.from(dom.products.categories).filter(c => c.classList.contains('active') && c.dataset.category !== 'all')
+            : [];
+        const hasActiveCats = activeCats.length > 0;
+        const hasSearch = !!(dom.products?.searchInput && dom.products.searchInput.value.trim());
+        if (hasActiveCats || hasSearch) {
+            clearBtn.classList.remove('hidden');
+        } else {
+            clearBtn.classList.add('hidden');
+        }
+
+        // Atualiza o contador de filtros ativos (apenas categorias)
+        const badge = clearBtn.querySelector('.filters-count');
+        if (badge) {
+            if (activeCats.length > 0) {
+                badge.textContent = `(${activeCats.length})`;
+                badge.style.display = '';
+            } else {
+                badge.style.display = 'none';
+            }
+        }
+    };
     
     // Event listener para busca de produtos
     if (dom.products.searchInput) {
         dom.products.searchInput.addEventListener('input', Utils.debounce((e) => {
             const searchTerm = e.target.value.trim().toLowerCase();
+            revealIfHidden();
+            updateClearBtnVisibility();
             callbacks.onSearch(searchTerm);
         }, 300));
     }
@@ -44,23 +113,83 @@ export function setupEventListeners(dom, callbacks) {
     if (categoriesContainer) {
         console.log('Configurando eventos das categorias com delegação');
         categoriesContainer.addEventListener('click', (e) => {
-            const categoryButton = e.target.closest('.category');
-            if (categoryButton) {
-                console.log('Categoria clicada:', categoryButton.dataset.category);
-                
-                // Remove classe active e aria-pressed de todas as categorias
+            // Limpar filtros
+            const clearBtn = e.target.closest('.clear-filters');
+            if (clearBtn) {
+                // Desmarca todas as categorias
                 dom.products.categories.forEach(c => {
                     c.classList.remove('active');
                     c.setAttribute('aria-pressed', 'false');
                 });
-                
-                // Adiciona active e aria-pressed na categoria clicada
-                categoryButton.classList.add('active');
-                categoryButton.setAttribute('aria-pressed', 'true');
-                
-                // Recarrega produtos filtrados
-                callbacks.onCategoryChange(categoryButton.dataset.category);
+                // Limpa busca sem disparar input programático (somente valor)
+                if (dom.products.searchInput) dom.products.searchInput.value = '';
+
+                // Sem filtros e sem busca: esconder seção e não mostrar produtos
+                hideIfNoSelection();
+                updateClearBtnVisibility();
+                return;
             }
+
+            const btn = e.target.closest('.category');
+            if (!btn) return;
+
+            revealIfHidden();
+
+            const clickedCat = btn.dataset.category;
+            const isAll = clickedCat === 'all';
+
+            if (isAll) {
+                // Alterna 'Todos': se ativar, desativa os demais
+                const nowActive = !btn.classList.contains('active');
+                dom.products.categories.forEach(c => {
+                    c.classList.remove('active');
+                    c.setAttribute('aria-pressed', 'false');
+                });
+                if (nowActive) {
+                    btn.classList.add('active');
+                    btn.setAttribute('aria-pressed', 'true');
+                }
+            } else {
+                // Ao selecionar categorias específicas, desativa 'Todos'
+                dom.products.categories.forEach(c => {
+                    if (c.dataset.category === 'all') {
+                        c.classList.remove('active');
+                        c.setAttribute('aria-pressed', 'false');
+                    }
+                });
+
+                // Toggle da categoria clicada
+                const willActivate = !btn.classList.contains('active');
+                btn.classList.toggle('active');
+                btn.setAttribute('aria-pressed', willActivate ? 'true' : 'false');
+            }
+
+            // Coleta categorias ativas (exceto 'all')
+            const selected = Array.from(dom.products.categories)
+                .filter(c => c.classList.contains('active') && c.dataset.category !== 'all')
+                .map(c => c.dataset.category);
+
+            // Se nada selecionado, considera 'all'
+            const hasSearch = !!(dom.products?.searchInput && dom.products.searchInput.value.trim());
+            const isAllActive = Array.from(dom.products.categories).some(c => c.dataset.category === 'all' && c.classList.contains('active'));
+            if (selected.length === 0 && !hasSearch) {
+                if (isAllActive) {
+                    // 'Todos' ativo sem busca: mostrar todos
+                    revealIfHidden();
+                    callbacks.onCategoryChange('all');
+                    updateClearBtnVisibility();
+                    return;
+                }
+                // Nenhum filtro (nem 'Todos') e nenhuma busca: não exibir produtos
+                hideIfNoSelection();
+                updateClearBtnVisibility();
+                return;
+            }
+            const filterParam = selected.length ? selected : 'all';
+            
+            // Recarrega produtos com múltiplas categorias
+            callbacks.onCategoryChange(filterParam);
+            updateClearBtnVisibility();
         });
 
         // Navegação por teclado entre categorias (setas esquerda/direita)
@@ -189,6 +318,9 @@ export function setupEventListeners(dom, callbacks) {
 
     // Registra eventos globais (teclado e redimensionamento)
     setupGlobalEvents(dom, callbacks);
+
+    // Estado inicial do botão limpar filtros
+    updateClearBtnVisibility();
 }
 
 /**

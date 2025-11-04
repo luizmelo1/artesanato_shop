@@ -17,6 +17,7 @@ export function initializeDOM() {
     
     return {
         products: {
+            section: document.getElementById('products'),
             container: document.getElementById('products-container'),
             loader: document.getElementById('products-loader'),
             searchInput: document.getElementById('product-search'),

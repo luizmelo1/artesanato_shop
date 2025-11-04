@@ -87,6 +87,33 @@
     padding: var(--spacing-xl) 0;
 }
 
+/* Esconde a seção de produtos até o usuário interagir (busca ou filtro) */
+.hidden-until-interaction {
+    display: none !important;
+}
+
+/* Animação suave quando a seção de produtos aparece após interação */
+@keyframes sectionFadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in-reveal {
+    animation: sectionFadeIn 0.4s ease-out both;
+}
+
+/* Esconde o botão limpar filtros quando inativo */
+.clear-filters.hidden {
+    display: none;
+}
+
+/* Contador discreto no botão de limpar filtros */
+.clear-filters .filters-count {
+    margin-left: 6px;
+    font-weight: 600;
+    color: var(--gray-medium);
+}
+
 /* ===== RESPONSIVIDADE - PRODUCTS ===== */
 @media (max-width: 768px) {
     .hero {
