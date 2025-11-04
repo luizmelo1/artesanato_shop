@@ -1,22 +1,35 @@
 /* ===== MODAL ===== */
-/* Modal overlay - cobre toda a tela */
+/* Modal overlay - cobre toda a tela usando elemento <dialog> nativo */
 .modal {
-    visibility: hidden; /* Escondido por padrão */
     position: fixed;
     inset: 0;
     background-color: transparent;
-    z-index: 1000;
+    border: none;
+    padding: 0;
+    max-width: 100vw;
+    max-height: 100vh;
     overflow-y: auto;
     opacity: 0; /* Transparente inicialmente */
     transition: all var(--transition-normal);
     backdrop-filter: blur(0);
 }
 
+/* Backdrop do dialog (::backdrop é o fundo nativo do <dialog>) */
+.modal::backdrop {
+    background-color: transparent;
+    backdrop-filter: blur(0);
+    transition: all var(--transition-normal);
+}
+
 /* Estado ativo do modal - visível com fundo escuro desfocado */
 .modal.active {
-    visibility: visible;
     opacity: 1;
     background-color: rgba(var(--black-rgb), 0.7);
+    backdrop-filter: blur(3px);
+}
+
+.modal.active::backdrop {
+    background-color: rgba(var(--black-rgb), 0.3);
     backdrop-filter: blur(3px);
 }
 

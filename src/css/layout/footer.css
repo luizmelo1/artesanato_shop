@@ -1,0 +1,63 @@
+/* ===== FOOTER ===== */
+/* Rodapé com fundo laranja escuro */
+footer {
+    background-color: var(--dark);
+    color: var(--light);
+    padding: var(--spacing-xl) 0;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Linha decorativa no topo do footer */
+footer::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px; /* Linha fina */
+    background: linear-gradient(to right, transparent, rgba(var(--light-rgb), 0.3), transparent); /* Gradiente que some nas laterais */
+}
+
+/* Layout do conteúdo do footer */
+.footer-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative; /* Para ficar acima do ::before */
+    z-index: 1;
+}
+
+/* Logo no footer */
+.footer-logo {
+    font-size: 1.8rem;
+    margin-bottom: var(--spacing-md);
+    font-weight: 700;
+}
+
+/* Container dos links do footer */
+.footer-links {
+    display: flex;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-md);
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+/* Texto de copyright com fundo sutil */
+.copyright {
+    font-size: 0.9rem;
+    color: rgba(var(--light-rgb), 0.7);
+    padding: var(--spacing-sm);
+    border-radius: 30px;
+    background: rgba(var(--light-rgb), 0.05); /* Fundo levemente branco */
+    backdrop-filter: blur(5px); /* Desfoque do fundo */
+    transition: all var(--transition-normal);
+}
+
+/* Hover no copyright - fica mais visível */
+.copyright:hover {
+    background: rgba(var(--light-rgb), 0.1);
+    color: rgba(var(--light-rgb), 0.9);
+}

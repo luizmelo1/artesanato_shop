@@ -1,0 +1,142 @@
+/* ===== NAVEGAÇÃO ===== */
+/* Lista de navegação horizontal */
+nav ul {
+    display: flex;
+    list-style: none;
+    gap: var(--spacing-md);
+}
+
+/* Links de navegação e footer - estilos compartilhados */
+nav ul li a,
+.footer-links a {
+    color: var(--light);
+    text-decoration: none;
+    font-weight: 500;
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-radius: 20px;
+    transition: all var(--transition-normal);
+    position: relative; /* Necessário para o pseudo-elemento ::after */
+    background: transparent;
+    transform: translateZ(0); /* Ativa aceleração de hardware */
+    will-change: transform, background; /* Otimiza hover */
+}
+
+/* Específico para navegação no header */
+nav ul li a {
+    display: block;
+}
+
+/* Efeito hover compartilhado - fundo claro e elevação */
+nav ul li a:hover,
+.footer-links a:hover {
+    background: rgba(var(--light-rgb), 0.1);
+    box-shadow: 0 4px 15px rgba(var(--black-rgb), 0.1);
+    transform: translateY(-2px); /* Eleva o link */
+}
+
+/* Ajuste do box-shadow para footer (mais intenso) */
+.footer-links a:hover {
+    box-shadow: 0 4px 15px rgba(var(--black-rgb), 0.2);
+}
+
+/* Sublinhado animado compartilhado - cresce do centro */
+nav ul li a::after,
+.footer-links a::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 0;
+    height: 2px;
+    background-color: var(--light);
+    transition: width var(--transition-normal);
+    transform: translateX(-50%); /* Centraliza a partir do meio */
+}
+
+/* Expande o sublinhado no hover */
+nav ul li a:hover::after,
+.footer-links a:hover::after {
+    width: 70%;
+}
+
+/* Menu hambúrguer para mobile - escondido por padrão */
+.mobile-menu {
+    display: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: calc(var(--spacing-xs) * 0.8) var(--spacing-sm);
+    border-radius: 12px;
+    border: 1px solid rgba(var(--light-rgb), 0.25);
+    color: var(--light);
+    background: linear-gradient(
+        to bottom,
+        rgba(var(--primary-rgb), 0.28),
+        rgba(var(--primary-rgb), 0.42)
+    );
+    box-shadow: 0 4px 12px rgba(var(--black-rgb), 0.15);
+    transition: transform var(--transition-fast), box-shadow var(--transition-normal), background var(--transition-normal);
+}
+
+/* Efeito de escala no hover do menu mobile */
+.mobile-menu:hover {
+    transform: scale(1.05);
+    background: rgba(var(--primary-rgb), 0.55);
+    box-shadow: 0 6px 16px rgba(var(--black-rgb), 0.2);
+}
+
+/* Estado focado visível para teclado - acessibilidade */
+.mobile-menu:focus-visible {
+    outline: 2px solid rgba(var(--light-rgb), 0.9);
+    outline-offset: 2px;
+}
+
+/* Estado ativo/aberto do menu (aria-expanded=true) com destaque inverso */
+.mobile-menu[aria-expanded="true"] {
+    background: var(--light);
+    color: var(--primary);
+    border-color: rgba(var(--light-rgb), 0.75);
+    box-shadow: 0 8px 20px rgba(var(--black-rgb), 0.22);
+}
+
+/* ===== RESPONSIVIDADE - NAVEGAÇÃO ===== */
+/* Tablets e telas médias (até 768px) */
+@media (max-width: 768px) {
+    /* Navegação com quebra de linha */
+    nav ul {
+        margin-top: var(--spacing-sm);
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+}
+
+/* Smartphones (até 576px) */
+@media (max-width: 576px) {
+    /* Mostra menu hambúrguer */
+    .mobile-menu {
+        display: block;
+    }
+    
+    /* Navegação mobile com transição suave */
+    nav {
+        width: 100%;
+        margin-top: var(--spacing-sm);
+        max-height: 0;
+        opacity: 0;
+        visibility: hidden;
+        overflow: hidden;
+        transition: max-height 0.4s ease, opacity 0.3s ease, visibility 0.3s ease;
+    }
+    
+    /* Mostra navegação quando ativa com animação suave */
+    nav.active {
+        max-height: 500px; /* Altura suficiente para o menu completo */
+        opacity: 1;
+        visibility: visible;
+    }
+    
+    /* Menu vertical no mobile */
+    nav ul {
+        flex-direction: column;
+        gap: var(--spacing-xs);
+    }
+}

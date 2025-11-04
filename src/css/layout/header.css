@@ -1,0 +1,54 @@
+/* ===== HEADER ===== */
+/* Header fixo no topo com efeito de vidro (backdrop-filter) */
+header {
+    background-color: rgba(var(--primary-rgb), 0.85); /* Fundo semi-transparente */
+    color: var(--light);
+    padding: var(--spacing-sm) 0;
+    position: sticky;  /* Fixa no topo ao rolar */
+    top: 0;
+    z-index: 100;      /* Fica acima de outros elementos */
+    backdrop-filter: blur(10px); /* Efeito de desfoque no fundo */
+    box-shadow: var(--shadow-sm);
+    transition: all var(--transition-normal);
+    will-change: transform, background-color; /* Otimiza performance de animação */
+}
+
+/* Estado do header quando a página é rolada */
+header.scrolled {
+    background-color: rgba(var(--primary-rgb), 0.95); /* Mais opaco ao rolar */
+    padding: 0.8rem 0; /* Padding reduzido */
+    box-shadow: 0 4px 20px rgba(var(--primary-rgb), 0.25); /* Sombra mais intensa */
+}
+
+/* Layout flexbox do conteúdo do header */
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Logo com ícone e texto */
+.logo {
+    font-size: 1.8rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--light);
+    text-decoration: none;
+    transition: opacity var(--transition-fast);
+}
+
+.logo:hover {
+    opacity: 0.9;
+}
+
+/* ===== RESPONSIVIDADE - HEADER ===== */
+/* Tablets e telas médias (até 768px) */
+@media (max-width: 768px) {
+    /* Header em coluna no mobile */
+    .header-content {
+        flex-direction: column;
+        text-align: center;
+    }
+}

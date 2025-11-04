@@ -1,0 +1,9 @@
+/* ===== RESPONSIVIDADE - LAYOUT ===== */
+/* Smartphones (até 576px) */
+@media (max-width: 576px) {
+    /* Reduz espaçamentos em telas pequenas */
+    :root {
+        --spacing-xl: 2rem;
+        --spacing-lg: 1.5rem;
+    }
+}

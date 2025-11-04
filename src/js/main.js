@@ -766,15 +766,17 @@ const App = {
         this.previouslyFocusedElement = document.activeElement;
 
         // Resetar o estado do modal
-        this.DOM.modal.container.style.visibility = 'visible';
         this.DOM.modal.container.classList.remove('closing');
         
-    // Impedir rolagem do fundo enquanto o modal estiver aberto (inclui mobile)
-    this.scrollLockY = window.scrollY || document.documentElement.scrollTop || 0;
-    document.body.style.top = `-${this.scrollLockY}px`;
-    document.body.classList.add('no-scroll');
+        // Impedir rolagem do fundo enquanto o modal estiver aberto (inclui mobile)
+        this.scrollLockY = window.scrollY || document.documentElement.scrollTop || 0;
+        document.body.style.top = `-${this.scrollLockY}px`;
+        document.body.classList.add('no-scroll');
         
-        // Ativar o modal com a animação
+        // Abrir o modal usando o método nativo do <dialog>
+        this.DOM.modal.container.showModal();
+        
+        // Ativar a classe active para animação
         requestAnimationFrame(() => {
             this.DOM.modal.container.classList.add('active');
             
@@ -964,7 +966,9 @@ const App = {
         
         this.DOM.modal.container.addEventListener('transitionend', () => {
             this.DOM.modal.container.classList.remove('closing');
-            this.DOM.modal.container.style.visibility = 'hidden';
+            
+            // Fechar o modal usando o método nativo do <dialog>
+            this.DOM.modal.container.close();
             
             // Reativar rolagem do fundo ao fechar o modal
             document.body.classList.remove('no-scroll');
