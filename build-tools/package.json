@@ -1,0 +1,12 @@
+{
+  "name": "artesanato_shop",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Static site tools for image conversion",
+  "scripts": {
+    "convert:instagram": "node tools/convert-instagram.js"
+  },
+  "devDependencies": {
+    "sharp": "^0.34.4"
+  }
+}

@@ -3,7 +3,6 @@
  * Carrega, filtra, renderiza e cria cards de produtos
  */
 
-import * as Utils from '../utils/functions.js';
 import { cache } from '../utils/cache.js';
 
 /**

@@ -9,13 +9,12 @@
     text-decoration: none;
     font-weight: 600;
     transition: all var(--transition-fast);
-    border: none;
     cursor: pointer;
     transform: translateZ(0); /* Ativa aceleração de hardware */
     will-change: transform, background; /* Otimiza animações */
     /* Glassmorphism effect */
-    backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.18);
     box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
 }
@@ -44,8 +43,8 @@
     transform: translateZ(0); /* Ativa aceleração de hardware */
     will-change: transform, background-color, box-shadow; /* Otimiza hover */
     /* Glassmorphism effect */
-    backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.18);
 }
 
@@ -99,8 +98,8 @@
     transition: opacity var(--transition-fast), transform var(--transition-fast), visibility var(--transition-fast);
     z-index: 1000;
     /* Glassmorphism effect */
-    backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
 }
 
 .scroll-to-top.visible {
