@@ -4,6 +4,7 @@
  */
 
 import * as ZoomHelpers from '../helpers/zoom.js';
+import { debugLog } from '../utils/debug.js';
 
 /**
  * Abre o modal para um produto específico.
@@ -14,7 +15,7 @@ import * as ZoomHelpers from '../helpers/zoom.js';
  * @param {object} state - Estado da aplicação (para guardar elemento focado)
  */
 export function openModal(dom, products, productId, state) {
-    console.log('Abrindo modal para produto:', productId);
+    debugLog('Abrindo modal para produto:', productId);
     const product = products.find(p => p.id === productId);
     if (!product) return;
 
@@ -68,7 +69,8 @@ export function openModal(dom, products, productId, state) {
         dom.modal.thumbs.innerHTML = '';
         dom.modal.thumbs.style.display = imgs.length > 1 ? '' : 'none';
         
-        imgs.forEach((src, idx) => {
+        let idx = 0;
+        for (const src of imgs) {
             const thumb = document.createElement('img');
             thumb.src = src;
             thumb.dataset.src = src;
@@ -77,7 +79,8 @@ export function openModal(dom, products, productId, state) {
             thumb.loading = 'lazy';
             if (idx === 0) thumb.classList.add('active');
             dom.modal.thumbs.appendChild(thumb);
-        });
+            idx++;
+        }
     }
     
     // Configurar links
@@ -214,12 +217,12 @@ export function toggleImageZoom(dom, e) {
     
     if (!imageContainer || !image) return;
 
-    if (!imageContainer.classList.contains('zoomed')) {
-        imageContainer.classList.add('zoomed');
-        handleImageZoom(dom, e);
-    } else {
+    if (imageContainer.classList.contains('zoomed')) {
         imageContainer.classList.remove('zoomed');
         ZoomHelpers.resetTransform(image);
+    } else {
+        imageContainer.classList.add('zoomed');
+        handleImageZoom(dom, e);
     }
 }
 

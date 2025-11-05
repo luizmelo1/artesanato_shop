@@ -10,6 +10,7 @@ import * as ModalModule from './app/modal.js';
 import * as EventsModule from './app/events.js';
 import * as SlideshowModule from './app/slideshow.js';
 import { cache } from './utils/cache.js';
+import { debugLog, debugError } from './utils/debug.js';
 
 /**
  * Classe principal da aplicação
@@ -31,7 +32,7 @@ class ArtesanatoShop {
      * Inicializa a aplicação
      */
     async initialize() {
-        console.log('Inicializando Artesanato Shop...');
+        debugLog('Inicializando Artesanato Shop...');
 
         // Inicializa referências DOM
         this.DOM = initializeDOM();
@@ -46,7 +47,7 @@ class ArtesanatoShop {
         const cachedProducts = cache.get();
         
         if (cachedProducts && cache.isValid()) {
-            console.log('Produtos carregados do cache:', cachedProducts.length, 'itens');
+            debugLog('Produtos carregados do cache:', cachedProducts.length, 'itens');
             this.state.products = cachedProducts;
             
             if (this.DOM.products.container) {
@@ -70,11 +71,11 @@ class ArtesanatoShop {
 
                 SlideshowModule.initHeroSlideshow(this.DOM);
             } catch (error) {
-                console.error('Erro ao inicializar aplicação:', error);
+                debugError('Erro ao inicializar aplicação:', error);
             }
         }
 
-        console.log('Aplicação inicializada com sucesso!');
+        debugLog('Aplicação inicializada com sucesso!');
     }
 
     /**
@@ -141,7 +142,7 @@ const app = new ArtesanatoShop();
 
 // Inicializar quando o DOM estiver pronto
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('DOM Content Loaded');
+    debugLog('DOM Content Loaded');
     app.initialize();
 });
 

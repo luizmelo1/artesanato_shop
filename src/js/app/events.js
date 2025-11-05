@@ -5,6 +5,7 @@
 
 import * as Utils from '../utils/functions.js';
 import * as GlobalHandlers from '../handlers/global-events.js';
+import { debugLog } from '../utils/debug.js';
 
 /**
  * Registra listeners com delegação de eventos para reduzir custos de performance.
@@ -17,10 +18,10 @@ import * as GlobalHandlers from '../handlers/global-events.js';
  * @param {object} callbacks - Funções de callback para eventos
  */
 export function setupEventListeners(dom, callbacks) {
-    console.log('Configurando event listeners...');
+    debugLog('Configurando event listeners...');
     const revealIfHidden = () => {
         const section = dom.products?.section;
-        if (section && section.classList.contains('hidden-until-interaction')) {
+        if (section?.classList.contains('hidden-until-interaction')) {
             section.classList.remove('hidden-until-interaction');
             section.removeAttribute('aria-hidden');
             // dispara animação de entrada
@@ -31,13 +32,15 @@ export function setupEventListeners(dom, callbacks) {
             // Reaplica animação de entrada nos cards, caso já tenham sido renderidos em background
             const cards = section.querySelectorAll('.product-card');
             if (cards.length) {
-                cards.forEach((card, idx) => {
+                let idx = 0;
+                for (const card of cards) {
                     card.style.animation = 'none';
                     // força reflow para reiniciar animação
                     // eslint-disable-next-line no-unused-expressions
                     card.offsetHeight;
                     card.style.animation = `fadeIn 0.5s ease forwards ${idx * 0.08}s`;
-                });
+                    idx++;
+                }
             }
         }
     };
@@ -67,7 +70,7 @@ export function setupEventListeners(dom, callbacks) {
             ? Array.from(dom.products.categories).filter(c => c.classList.contains('active') && c.dataset.category !== 'all')
             : [];
         const hasActiveCats = activeCats.length > 0;
-        const hasSearch = !!(dom.products?.searchInput && dom.products.searchInput.value.trim());
+        const hasSearch = !!(dom.products?.searchInput?.value.trim());
         if (hasActiveCats || hasSearch) {
             clearBtn.classList.remove('hidden');
         } else {
@@ -102,29 +105,65 @@ export function setupEventListeners(dom, callbacks) {
             const detailsButton = e.target.closest('.btn-details');
             if (detailsButton) {
                 e.preventDefault();
-                const productId = parseInt(detailsButton.dataset.id);
+                const productId = Number.parseInt(detailsButton.dataset.id, 10);
                 callbacks.onOpenModal(productId);
             }
         });
     }
 
+    // === Funções auxiliares para categorias ===
+    const clearAllCategories = () => {
+        for (const c of dom.products.categories) {
+            c.classList.remove('active');
+            c.setAttribute('aria-pressed', 'false');
+        }
+    };
+
+    const deactivateAllCategory = () => {
+        for (const c of dom.products.categories) {
+            if (c.dataset.category === 'all') {
+                c.classList.remove('active');
+                c.setAttribute('aria-pressed', 'false');
+            }
+        }
+    };
+
+    const handleAllCategoryClick = (btn) => {
+        const nowActive = !btn.classList.contains('active');
+        clearAllCategories();
+        if (nowActive) {
+            btn.classList.add('active');
+            btn.setAttribute('aria-pressed', 'true');
+        }
+    };
+
+    const handleSpecificCategoryClick = (btn) => {
+        deactivateAllCategory();
+        const willActivate = !btn.classList.contains('active');
+        btn.classList.toggle('active');
+        btn.setAttribute('aria-pressed', willActivate ? 'true' : 'false');
+    };
+
+    const getActiveCategories = () => {
+        return Array.from(dom.products.categories)
+            .filter(c => c.classList.contains('active') && c.dataset.category !== 'all')
+            .map(c => c.dataset.category);
+    };
+
+    const isAllCategoryActive = () => {
+        return Array.from(dom.products.categories).some(c => c.dataset.category === 'all' && c.classList.contains('active'));
+    };
+
     // Delegação de eventos para os botões de categoria
     const categoriesContainer = document.querySelector('.categories');
     if (categoriesContainer) {
-        console.log('Configurando eventos das categorias com delegação');
+        debugLog('Configurando eventos das categorias com delegação');
         categoriesContainer.addEventListener('click', (e) => {
             // Limpar filtros
             const clearBtn = e.target.closest('.clear-filters');
             if (clearBtn) {
-                // Desmarca todas as categorias
-                dom.products.categories.forEach(c => {
-                    c.classList.remove('active');
-                    c.setAttribute('aria-pressed', 'false');
-                });
-                // Limpa busca sem disparar input programático (somente valor)
+                clearAllCategories();
                 if (dom.products.searchInput) dom.products.searchInput.value = '';
-
-                // Sem filtros e sem busca: esconder seção e não mostrar produtos
                 hideIfNoSelection();
                 updateClearBtnVisibility();
                 return;
@@ -139,41 +178,18 @@ export function setupEventListeners(dom, callbacks) {
             const isAll = clickedCat === 'all';
 
             if (isAll) {
-                // Alterna 'Todos': se ativar, desativa os demais
-                const nowActive = !btn.classList.contains('active');
-                dom.products.categories.forEach(c => {
-                    c.classList.remove('active');
-                    c.setAttribute('aria-pressed', 'false');
-                });
-                if (nowActive) {
-                    btn.classList.add('active');
-                    btn.setAttribute('aria-pressed', 'true');
-                }
+                handleAllCategoryClick(btn);
             } else {
-                // Ao selecionar categorias específicas, desativa 'Todos'
-                dom.products.categories.forEach(c => {
-                    if (c.dataset.category === 'all') {
-                        c.classList.remove('active');
-                        c.setAttribute('aria-pressed', 'false');
-                    }
-                });
-
-                // Toggle da categoria clicada
-                const willActivate = !btn.classList.contains('active');
-                btn.classList.toggle('active');
-                btn.setAttribute('aria-pressed', willActivate ? 'true' : 'false');
+                handleSpecificCategoryClick(btn);
             }
 
             // Coleta categorias ativas (exceto 'all')
-            const selected = Array.from(dom.products.categories)
-                .filter(c => c.classList.contains('active') && c.dataset.category !== 'all')
-                .map(c => c.dataset.category);
+            const selected = getActiveCategories();
 
             // Se nada selecionado, considera 'all'
-            const hasSearch = !!(dom.products?.searchInput && dom.products.searchInput.value.trim());
-            const isAllActive = Array.from(dom.products.categories).some(c => c.dataset.category === 'all' && c.classList.contains('active'));
+            const hasSearch = !!(dom.products?.searchInput?.value.trim());
             if (selected.length === 0 && !hasSearch) {
-                if (isAllActive) {
+                if (isAllCategoryActive()) {
                     // 'Todos' ativo sem busca: mostrar todos
                     revealIfHidden();
                     callbacks.onCategoryChange('all');
@@ -233,7 +249,7 @@ export function setupEventListeners(dom, callbacks) {
     if (dom.footer.container) {
         dom.footer.container.addEventListener('click', (e) => {
             const footerLink = e.target.closest('a');
-            if (footerLink && footerLink.getAttribute('href').startsWith('#')) {
+            if (footerLink?.getAttribute('href')?.startsWith('#')) {
                 e.preventDefault();
                 const targetId = footerLink.getAttribute('href').substring(1);
                 const targetElement = document.getElementById(targetId);
@@ -261,7 +277,7 @@ export function setupEventListeners(dom, callbacks) {
 
             // Fecha modal ao clicar em "Ver na Loja"
             const actionButton = e.target.closest('.modal-actions .btn');
-            if (actionButton && actionButton.classList.contains('btn-details')) {
+            if (actionButton?.classList.contains('btn-details')) {
                 e.preventDefault();
                 callbacks.onCloseModal();
                 return;
@@ -308,8 +324,9 @@ export function setupEventListeners(dom, callbacks) {
                     // Atualiza imagem principal
                     dom.modal.mainImage.src = thumb.dataset.src;
                     // Atualiza estado das miniaturas
-                    dom.modal.thumbs.querySelectorAll('img')
-                        .forEach(img => img.classList.remove('active'));
+                    for (const img of dom.modal.thumbs.querySelectorAll('img')) {
+                        img.classList.remove('active');
+                    }
                     thumb.classList.add('active');
                 }
             });
