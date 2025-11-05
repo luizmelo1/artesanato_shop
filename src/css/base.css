@@ -14,11 +14,13 @@
     /* Paleta de cores */
     --primary: #E65D1E;               /* Cor principal (laranja) */
     --primary-rgb: 230, 93, 30;       /* RGB da cor principal para uso com rgba() */
+    --primary-light: #FF7A3D;         /* Laranja claro */
     --secondary: #7CC0FF;             /* Cor secundária (azul) */
     --accent: #E65D1E;                /* Cor de destaque */
     --light: #FFFFFF;                 /* Branco */
     --light-rgb: 255, 255, 255;       /* RGB do branco para uso com rgba() */
     --dark: #D45519;                  /* Laranja escuro */
+    --dark-deep: #B8460F;             /* Laranja mais escuro */
     --text: #333333;                  /* Cor do texto principal */
     --gray-light: #f5f5f5;            /* Cinza claro para backgrounds */
     --gray-lighter: #f0f0f0;          /* Cinza mais claro para botões */
@@ -26,6 +28,12 @@
     --gray-dark: #999;                /* Cinza escuro */
     --border-light: #eee;             /* Cor de bordas suaves */
     --black-rgb: 0, 0, 0;             /* RGB do preto para uso com rgba() */
+    
+    /* Gradientes suaves */
+    --gradient-primary: linear-gradient(135deg, var(--primary-light) 0%, var(--primary) 50%, var(--dark) 100%);
+    --gradient-primary-soft: linear-gradient(135deg, var(--primary) 0%, var(--dark) 100%);
+    --gradient-dark: linear-gradient(135deg, var(--dark) 0%, var(--dark-deep) 100%);
+    --gradient-hover: linear-gradient(135deg, var(--primary-light) 0%, var(--primary) 100%);
     
     /* Transições - durações padronizadas */
     --transition-fast: 0.18s ease;    /* Transições rápidas (hover, etc) */

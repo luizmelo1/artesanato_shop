@@ -58,6 +58,9 @@ export function openModal(dom, products, productId, state) {
         dom.modal.mainImage.src = imgs[0];
         dom.modal.mainImage.alt = product.name;
         dom.modal.mainImage.draggable = false;
+        dom.modal.mainImage.loading = 'eager'; // Eager para imagem do modal (já visível)
+        dom.modal.mainImage.width = 800;
+        dom.modal.mainImage.height = 600;
     }
     
     // Configurar miniaturas
@@ -69,6 +72,9 @@ export function openModal(dom, products, productId, state) {
             const thumb = document.createElement('img');
             thumb.src = src;
             thumb.dataset.src = src;
+            thumb.width = 72;
+            thumb.height = 72;
+            thumb.loading = 'lazy';
             if (idx === 0) thumb.classList.add('active');
             dom.modal.thumbs.appendChild(thumb);
         });

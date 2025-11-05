@@ -1,8 +1,8 @@
 /* ===== BOTÕES ===== */
-/* Botão padrão usado em todo o site */
+/* Botão padrão usado em todo o site com efeito glassmorphism */
 .btn {
     display: inline-block;
-    background-color: var(--dark);
+    background: var(--gradient-dark);
     color: var(--light);
     padding: 0.8rem var(--spacing-md);
     border-radius: 5px;
@@ -12,7 +12,12 @@
     border: none;
     cursor: pointer;
     transform: translateZ(0); /* Ativa aceleração de hardware */
-    will-change: transform, background-color; /* Otimiza animações */
+    will-change: transform, background; /* Otimiza animações */
+    /* Glassmorphism effect */
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
 }
 
 /* Efeito hover do botão - muda cor e eleva */
@@ -20,7 +25,7 @@
     background-color: var(--secondary);
     color: var(--dark);
     transform: translateY(-2px);
-    box-shadow: var(--shadow-md);
+    box-shadow: 0 12px 40px 0 rgba(31, 38, 135, 0.25);
 }
 
 /* Classe base para botões de produto - estilos compartilhados */
@@ -38,31 +43,35 @@
     flex: 1;
     transform: translateZ(0); /* Ativa aceleração de hardware */
     will-change: transform, background-color, box-shadow; /* Otimiza hover */
+    /* Glassmorphism effect */
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.18);
 }
 
-/* Botão "Ver Detalhes" - fundo cinza claro */
+/* Botão "Ver Detalhes" - fundo cinza claro com glass effect */
 .btn-details {
-    background-color: var(--gray-lighter);
+    background-color: rgba(240, 240, 240, 0.7);
     color: var(--dark);
 }
 
 /* Hover do botão Ver Detalhes - muda para azul */
 .btn-details:hover {
-    background-color: var(--secondary);
+    background-color: rgba(124, 192, 255, 0.8);
     color: var(--dark);
     box-shadow: 0 0 15px var(--secondary);
     transform: translateY(-2px);
 }
 
-/* Botão "Comprar" - fundo laranja */
+/* Botão "Comprar" - fundo laranja com glass effect */
 .btn-buy {
-    background-color: var(--primary);
+    background: linear-gradient(135deg, rgba(212, 85, 25, 0.9) 0%, rgba(184, 70, 15, 0.9) 100%);
     color: var(--light);
 }
 
 /* Hover do botão Comprar - muda para laranja escuro */
 .btn-buy:hover {
-    background-color: var(--dark);
+    background: linear-gradient(135deg, rgba(230, 93, 30, 0.95) 0%, rgba(212, 85, 25, 0.95) 100%);
     color: var(--light);
     box-shadow: 0 0 20px var(--primary);
     transform: translateY(-2px);
@@ -76,19 +85,22 @@
     width: 44px;
     height: 44px;
     border-radius: 50%;
-    border: none;
-    background: var(--dark);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    background: var(--gradient-dark);
     color: var(--light);
     font-size: 1.25rem;
     display: grid;
     place-items: center;
-    box-shadow: var(--shadow-md);
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
     cursor: pointer;
     opacity: 0;
     visibility: hidden;
     transform: translateY(10px) translateZ(0);
     transition: opacity var(--transition-fast), transform var(--transition-fast), visibility var(--transition-fast);
     z-index: 1000;
+    /* Glassmorphism effect */
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
 }
 
 .scroll-to-top.visible {
@@ -98,7 +110,8 @@
 }
 
 .scroll-to-top:hover {
-    background: var(--primary);
+    background: var(--gradient-primary-soft);
+    box-shadow: 0 8px 32px 0 rgba(230, 93, 30, 0.5);
 }
 
 .scroll-to-top:focus-visible {

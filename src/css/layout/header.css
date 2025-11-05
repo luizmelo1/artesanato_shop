@@ -1,7 +1,7 @@
 /* ===== HEADER ===== */
 /* Header fixo no topo com efeito de vidro (backdrop-filter) */
 header {
-    background-color: rgba(var(--primary-rgb), 0.85); /* Fundo semi-transparente */
+    background: linear-gradient(135deg, rgba(230, 93, 30, 0.9) 0%, rgba(212, 85, 25, 0.85) 100%);
     color: var(--light);
     padding: var(--spacing-sm) 0;
     position: sticky;  /* Fixa no topo ao rolar */
@@ -10,12 +10,12 @@ header {
     backdrop-filter: blur(10px); /* Efeito de desfoque no fundo */
     box-shadow: var(--shadow-sm);
     transition: all var(--transition-normal);
-    will-change: transform, background-color; /* Otimiza performance de animação */
+    will-change: transform, background; /* Otimiza performance de animação */
 }
 
 /* Estado do header quando a página é rolada */
 header.scrolled {
-    background-color: rgba(var(--primary-rgb), 0.95); /* Mais opaco ao rolar */
+    background: linear-gradient(135deg, rgba(230, 93, 30, 0.98) 0%, rgba(212, 85, 25, 0.95) 100%);
     padding: 0.8rem 0; /* Padding reduzido */
     box-shadow: 0 4px 20px rgba(var(--primary-rgb), 0.25); /* Sombra mais intensa */
 }

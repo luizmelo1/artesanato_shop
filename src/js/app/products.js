@@ -276,6 +276,8 @@ export function createProductCard(product, index = 0) {
     img.loading = 'lazy';
     img.src = product.image;
     img.alt = product.name;
+    img.width = 400;
+    img.height = 300;
     imageWrap.appendChild(img);
 
     // Info
