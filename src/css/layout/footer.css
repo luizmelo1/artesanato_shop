@@ -1,7 +1,7 @@
 /* ===== FOOTER ===== */
-/* Rodapé com fundo laranja escuro */
+/* Rodapé com gradiente escuro */
 footer {
-    background-color: var(--dark);
+    background: var(--gradient-dark);
     color: var(--light);
     padding: var(--spacing-xl) 0;
     text-align: center;

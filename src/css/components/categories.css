@@ -42,9 +42,10 @@
 /* Estado ativo da categoria selecionada (aria-pressed="true") */
 .category.active,
 .category[aria-pressed="true"] {
-    background-color: var(--dark);
+    background: var(--gradient-primary-soft);
     color: var(--light);
     border-color: var(--dark);
+    box-shadow: 0 4px 15px rgba(var(--primary-rgb), 0.3);
 }
 
 /* ===== RESPONSIVIDADE - CATEGORIAS ===== */

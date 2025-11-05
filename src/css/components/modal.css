@@ -213,6 +213,23 @@
     margin-top: auto;
 }
 
+/* Sobrescreve gradiente do botão "Ver na Loja" no modal */
+.modal-actions .btn-details {
+    background-color: var(--light) !important;
+    background: var(--light) !important;
+    color: var(--primary) !important;
+    border: 2px solid var(--primary);
+}
+
+.modal-actions .btn-details:hover {
+    background-color: var(--secondary) !important;
+    background: var(--secondary) !important;
+    color: var(--dark) !important;
+    border-color: var(--secondary);
+    box-shadow: 0 0 15px var(--secondary);
+    transform: translateY(-2px);
+}
+
 /* ===== RESPONSIVIDADE - MODAL ===== */
 @media (max-width: 768px) {
     /* Modal ocupa mais espaço vertical em mobile */
