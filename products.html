@@ -26,6 +26,105 @@
     
     <link rel="icon" type="image/webp" href="./src/img/icons/logo.webp">
     <link rel="stylesheet" href="./src/css/style.css">
+    
+    <!-- Schema.org - ItemList (Catálogo de Produtos) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "ItemList",
+      "name": "Produtos Artesanais - Ateliê Arte Criativa",
+      "description": "Catálogo completo de artesanato feito à mão: Funko Pop, quadros, decoração e buquês.",
+      "url": "https://luizmelo1.github.io/artesanato_shop/products.html",
+      "numberOfItems": 10,
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "item": {
+            "@type": "Product",
+            "name": "Funko Pop - Edição Colecionável",
+            "description": "Funko Pop colecionável com acabamento exclusivo.",
+            "image": "https://luizmelo1.github.io/artesanato_shop/src/img/produtos/funkopop/funkopop_1.webp",
+            "category": "Funko Pop",
+            "brand": {
+              "@type": "Brand",
+              "name": "Ateliê Arte Criativa"
+            },
+            "offers": {
+              "@type": "Offer",
+              "availability": "https://schema.org/InStock",
+              "priceCurrency": "BRL",
+              "itemCondition": "https://schema.org/NewCondition"
+            }
+          }
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "item": {
+            "@type": "Product",
+            "name": "Quadro Decorativo Moderno",
+            "description": "Quadro decorativo moderno para ambientes sofisticados.",
+            "image": "https://luizmelo1.github.io/artesanato_shop/src/img/produtos/quadros/quadro_1.webp",
+            "category": "Quadros Decorativos",
+            "brand": {
+              "@type": "Brand",
+              "name": "Ateliê Arte Criativa"
+            },
+            "offers": {
+              "@type": "Offer",
+              "availability": "https://schema.org/InStock",
+              "priceCurrency": "BRL",
+              "itemCondition": "https://schema.org/NewCondition"
+            }
+          }
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "item": {
+            "@type": "Product",
+            "name": "Buquê Artesanal de Flores",
+            "description": "Buquê artesanal feito à mão, ideal para presentes e decoração.",
+            "image": "https://via.placeholder.com/400x300",
+            "category": "Buquês",
+            "brand": {
+              "@type": "Brand",
+              "name": "Ateliê Arte Criativa"
+            },
+            "offers": {
+              "@type": "Offer",
+              "availability": "https://schema.org/InStock",
+              "priceCurrency": "BRL",
+              "itemCondition": "https://schema.org/NewCondition"
+            }
+          }
+        }
+      ]
+    }
+    </script>
+    
+    <!-- Schema.org - BreadcrumbList -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Início",
+          "item": "https://luizmelo1.github.io/artesanato_shop/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Produtos",
+          "item": "https://luizmelo1.github.io/artesanato_shop/products.html"
+        }
+      ]
+    }
+    </script>
 </head>
 <body>
     <!-- Skip Link para Acessibilidade -->
