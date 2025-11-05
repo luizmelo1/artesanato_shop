@@ -141,34 +141,31 @@ function renderProducts(dom, products, filter) {
     // Limpa o container antes de adicionar novos produtos
     dom.products.container.replaceChildren();
 
-    // Pequeno delay para transição mais suave
-    setTimeout(() => {
-        // Filtra produtos pela categoria selecionada
-        let filteredProducts = products;
-        if (Array.isArray(filter)) {
-            filteredProducts = products.filter(p => filter.includes(p.category));
-        } else if (filter !== 'all') {
-            filteredProducts = products.filter(p => p.category === filter);
-        }
+    // Filtra produtos pela categoria selecionada
+    let filteredProducts = products;
+    if (Array.isArray(filter)) {
+        filteredProducts = products.filter(p => filter.includes(p.category));
+    } else if (filter !== 'all') {
+        filteredProducts = products.filter(p => p.category === filter);
+    }
 
-        debugLog('Produtos filtrados:', filteredProducts);
+    debugLog('Produtos filtrados:', filteredProducts);
 
-        // Cria e adiciona os cards de produtos com animação escalonada
-        let index = 0;
-        for (const product of filteredProducts) {
-            const productCard = createProductCard(product, index);
-            dom.products.container.appendChild(productCard);
-            index++;
-        }
+    // Cria e adiciona os cards de produtos com animação escalonada
+    let index = 0;
+    for (const product of filteredProducts) {
+        const productCard = createProductCard(product, index);
+        dom.products.container.appendChild(productCard);
+        index++;
+    }
 
-        // Esconde o loader após renderizar
-        if (dom.products.loader) {
-            dom.products.loader.classList.add('hidden');
-            dom.products.loader.setAttribute('aria-busy', 'false');
-        }
+    // Esconde o loader após renderizar
+    if (dom.products.loader) {
+        dom.products.loader.classList.add('hidden');
+        dom.products.loader.setAttribute('aria-busy', 'false');
+    }
 
-        debugLog('Produtos carregados com sucesso');
-    }, 200); // 200ms de delay para UX mais suave
+    debugLog('Produtos carregados com sucesso');
 }
 
 /**

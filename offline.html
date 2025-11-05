@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Offline - Ateliê Arte Criativa</title>
+    <link rel="icon" type="image/webp" href="./src/img/icons/logo.webp">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #C44D18 0%, #A13D12 100%);
+            color: #FFFFFF;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .offline-container {
+            max-width: 500px;
+            background: rgba(255, 255, 255, 0.1);
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+            padding: 3rem 2rem;
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        }
+
+        .offline-icon {
+            font-size: 5rem;
+            margin-bottom: 1.5rem;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.1);
+                opacity: 0.8;
+            }
+        }
+
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .btn-retry {
+            display: inline-block;
+            background: #FFFFFF;
+            color: #B34315;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-retry:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+            background: #F5F5F5;
+        }
+
+        .offline-tips {
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .offline-tips h2 {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .offline-tips ul {
+            list-style: none;
+            text-align: left;
+        }
+
+        .offline-tips li {
+            margin-bottom: 0.5rem;
+            padding-left: 1.5rem;
+            position: relative;
+            opacity: 0.9;
+        }
+
+        .offline-tips li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+        }
+
+        @media (max-width: 576px) {
+            h1 {
+                font-size: 1.5rem;
+            }
+
+            p {
+                font-size: 1rem;
+            }
+
+            .offline-icon {
+                font-size: 4rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="offline-container">
+        <div class="offline-icon">📡</div>
+        <h1>Você está offline</h1>
+        <p>Parece que você perdeu a conexão com a internet. Não se preocupe, você pode continuar navegando nas páginas já visitadas!</p>
+        
+        <button class="btn-retry" onclick="globalThis.location.reload()">
+            Tentar Novamente
+        </button>
+
+        <div class="offline-tips">
+            <h2>Enquanto isso:</h2>
+            <ul>
+                <li>Verifique sua conexão com a internet</li>
+                <li>Navegue pelas páginas já visitadas</li>
+                <li>Volte para a página inicial</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // Verifica conexão periodicamente
+        function checkConnection() {
+            if (navigator.onLine) {
+                globalThis.location.reload();
+            }
+        }
+
+        // Verifica a cada 3 segundos
+        setInterval(checkConnection, 3000);
+
+        // Também verifica quando a conexão volta
+        globalThis.addEventListener('online', () => {
+            globalThis.location.reload();
+        });
+    </script>
+</body>
+</html>
