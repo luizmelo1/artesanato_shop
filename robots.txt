@@ -1,0 +1,13 @@
+# robots.txt para Ateliê Arte Criativa
+# https://luizmelo1.github.io/artesanato_shop/
+
+# Permitir todos os bots
+User-agent: *
+Allow: /
+
+# Bloquear acesso a pastas de desenvolvimento/legado
+Disallow: /src/css/legacy/
+Disallow: /src/js/legacy/
+
+# Sitemap
+Sitemap: https://luizmelo1.github.io/artesanato_shop/sitemap.xml
