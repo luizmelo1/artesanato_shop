@@ -1,5 +1,7 @@
 # Node.js dependencies
+node_modules/
 build-tools/node_modules/
+package-lock.json
 
 # Logs
 *.log
