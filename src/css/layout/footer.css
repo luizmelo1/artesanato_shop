@@ -80,7 +80,7 @@ footer::before {
 
 /* Links das redes sociais no footer */
 .footer-social .social-links a {
-    display: inline-flex;
+    display: flex;
     align-items: center;
     justify-content: center;
     width: 40px;
@@ -91,6 +91,7 @@ footer::before {
     backdrop-filter: blur(10px);
     transition: all var(--transition-normal);
     padding: 0;
+    overflow: hidden;
 }
 
 /* Hover nos links sociais no footer */
@@ -104,8 +105,9 @@ footer::before {
 .footer-social .social-links img {
     width: 100%;
     height: 100%;
-    object-fit: contain;
+    object-fit: cover;
     transition: transform var(--transition-normal);
+    display: block;
 }
 
 /* Texto de copyright com fundo sutil */
