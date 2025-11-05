@@ -26,7 +26,7 @@
         rgba(var(--black-rgb), 0.5),
         rgba(var(--black-rgb), 0.7)
     );
-    z-index: 1; /* Fica entre a imagem e o texto */
+    z-index: var(--z-base); /* Fica entre a imagem e o texto */
     pointer-events: none; /* Permite cliques passarem através do overlay */
 }
 
@@ -77,7 +77,7 @@
 /* Conteúdo do hero fica acima do overlay */
 .hero .container {
     position: relative;
-    z-index: 2;
+    z-index: calc(var(--z-base) + 1);
 }
 
 /* Título responsivo usando clamp() */

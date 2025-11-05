@@ -45,6 +45,17 @@
     --shadow-md: 0 5px 15px rgba(0,0,0,0.15);   /* Sombra média */
     --shadow-lg: 0 8px 20px rgba(0,0,0,0.15);   /* Sombra grande */
     
+    /* Z-index - sistema de camadas */
+    --z-base: 1;           /* Elementos base */
+    --z-dropdown: 100;     /* Dropdowns e menus */
+    --z-sticky: 200;       /* Elementos sticky (header) */
+    --z-fixed: 300;        /* Elementos fixos (scroll-to-top) */
+    --z-modal-backdrop: 400;  /* Backdrop do modal */
+    --z-modal: 500;        /* Modal principal */
+    --z-popover: 600;      /* Popovers e tooltips */
+    --z-toast: 700;        /* Notificações toast */
+    --z-skip-link: 9999;   /* Skip link (acessibilidade) */
+    
     /* Espaçamentos - sistema de escala consistente */
     --spacing-xs: 0.5rem;   /* Extra pequeno (8px) */
     --spacing-sm: 1rem;     /* Pequeno (16px) */
@@ -86,7 +97,7 @@ body.no-scroll {
     padding: var(--spacing-xs) var(--spacing-md);
     text-decoration: none;
     font-weight: 600;
-    z-index: 9999;
+    z-index: var(--z-skip-link);
     border-radius: 0 0 4px 0;
 }
 

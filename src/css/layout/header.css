@@ -6,7 +6,7 @@ header {
     padding: var(--spacing-sm) 0;
     position: sticky;  /* Fixa no topo ao rolar */
     top: 0;
-    z-index: 100;      /* Fica acima de outros elementos */
+    z-index: var(--z-sticky);  /* Fica acima de outros elementos */
     -webkit-backdrop-filter: blur(10px); /* Efeito de desfoque no fundo */
     backdrop-filter: blur(10px); /* Efeito de desfoque no fundo */
     box-shadow: var(--shadow-sm);

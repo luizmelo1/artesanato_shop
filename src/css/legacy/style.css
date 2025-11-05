@@ -80,7 +80,8 @@ header {
     padding: var(--spacing-sm) 0;
     position: sticky;  /* Fixa no topo ao rolar */
     top: 0;
-    z-index: 100;      /* Fica acima de outros elementos */
+    z-index: var(--z-sticky);      /* Fica acima de outros elementos */
+    -webkit-backdrop-filter: blur(10px); /* Efeito de desfoque no fundo - Safari */
     backdrop-filter: blur(10px); /* Efeito de desfoque no fundo */
     box-shadow: var(--shadow-sm);
     transition: all var(--transition-normal);
@@ -211,7 +212,7 @@ nav ul li a:hover::after,
         rgba(var(--black-rgb), 0.5),
         rgba(var(--black-rgb), 0.7)
     );
-    z-index: 1; /* Fica entre a imagem e o texto */
+    z-index: var(--z-base); /* Fica entre a imagem e o texto */
     pointer-events: none; /* Permite cliques passarem através do overlay */
 }
 
@@ -249,7 +250,7 @@ nav ul li a:hover::after,
 /* Conteúdo do hero fica acima do overlay */
 .hero .container {
     position: relative;
-    z-index: 2;
+    z-index: calc(var(--z-base) + 1);
 }
 
 /* Título responsivo usando clamp() */
@@ -420,6 +421,7 @@ nav ul li a:hover::after,
     font-size: 1rem;
     font-family: inherit; /* Herda fonte do body */
     color: var(--dark);
+    -webkit-user-select: none; /* Impede seleção de texto ao clicar - Safari */
     user-select: none; /* Impede seleção de texto ao clicar */
     transform: translateZ(0); /* Ativa aceleração de hardware */
     will-change: transform, box-shadow; /* Otimiza animações */
@@ -561,7 +563,6 @@ nav ul li a:hover::after,
     background: radial-gradient(circle at center, transparent 60%, rgba(var(--black-rgb), 0.03) 100%);
     opacity: 0;
     transition: opacity var(--transition-slow);
-    pointer-events: none;
     pointer-events: none; /* Permite clicar através do overlay */
 }
 
@@ -677,10 +678,11 @@ nav ul li a:hover::after,
     position: fixed;
     inset: 0;
     background-color: transparent;
-    z-index: 1000;
+    z-index: var(--z-modal);
     overflow-y: auto;
     opacity: 0; /* Transparente inicialmente */
     transition: all var(--transition-normal);
+    -webkit-backdrop-filter: blur(0);
     backdrop-filter: blur(0);
 }
 
@@ -689,6 +691,7 @@ nav ul li a:hover::after,
     visibility: visible;
     opacity: 1;
     background-color: rgba(var(--black-rgb), 0.7);
+    -webkit-backdrop-filter: blur(3px);
     backdrop-filter: blur(3px);
 }
 
@@ -714,6 +717,7 @@ nav ul li a:hover::after,
 /* Estado de fechamento do modal */
 .modal.closing {
     opacity: 0;
+    -webkit-backdrop-filter: blur(0);
     backdrop-filter: blur(0);
 }
 
@@ -963,7 +967,7 @@ nav ul li a:hover::after,
     visibility: hidden;
     transform: translateY(10px) translateZ(0);
     transition: opacity var(--transition-fast), transform var(--transition-fast), visibility var(--transition-fast);
-    z-index: 1000;
+    z-index: var(--z-fixed);
 }
 
 .scroll-to-top.visible {
@@ -1003,22 +1007,6 @@ footer::before {
     background: linear-gradient(to right, transparent, rgba(var(--light-rgb), 0.3), transparent); /* Gradiente que some nas laterais */
 }
 
-/* Layout do conteúdo do footer */
-.footer-content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    position: relative; /* Para ficar acima do ::before */
-    z-index: 1;
-}
-
-/* Logo no footer */
-.footer-logo {
-    font-size: 1.8rem;
-    margin-bottom: var(--spacing-md);
-    font-weight: 700;
-}
-
 /* Container dos links do footer */
 .footer-links {
     display: flex;
@@ -1035,6 +1023,7 @@ footer::before {
     padding: var(--spacing-sm);
     border-radius: 30px;
     background: rgba(var(--light-rgb), 0.05); /* Fundo levemente branco */
+    -webkit-backdrop-filter: blur(5px); /* Desfoque do fundo - Safari */
     backdrop-filter: blur(5px); /* Desfoque do fundo */
     transition: all var(--transition-normal);
 }
