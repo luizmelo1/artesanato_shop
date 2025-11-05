@@ -2,11 +2,26 @@
   "name": "artesanato_shop",
   "version": "1.0.0",
   "private": true,
-  "description": "Static site tools for image conversion",
+  "type": "module",
+  "description": "Ateliê Arte Criativa - Artesanato Feito à Mão",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/luizmelo1/artesanato_shop.git"
+  },
+  "author": "Ismênia - Ateliê Arte Criativa",
+  "license": "UNLICENSED",
   "scripts": {
-    "convert:instagram": "node tools/convert-instagram.js"
+    "convert:instagram": "node build-tools/tools/convert-instagram.js",
+    "build:images": "node build-tools/tools/convert-instagram.js"
   },
   "devDependencies": {
     "sharp": "^0.34.4"
-  }
+  },
+  "keywords": [
+    "artesanato",
+    "pwa",
+    "e-commerce",
+    "handmade",
+    "static-site"
+  ]
 }
