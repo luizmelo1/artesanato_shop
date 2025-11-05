@@ -21,6 +21,7 @@
     font-size: 1rem;
     font-family: inherit; /* Herda fonte do body */
     color: var(--dark);
+    -webkit-user-select: none; /* Impede seleção de texto ao clicar */
     user-select: none; /* Impede seleção de texto ao clicar */
     transform: translateZ(0); /* Ativa aceleração de hardware */
     will-change: transform, box-shadow; /* Otimiza animações */
