@@ -1,7 +1,7 @@
 {
   "name": "Ateliê Arte Criativa",
   "short_name": "Arte Criativa",
-  "description": "Artesanato feito à mão com carinho e dedicação. Peças artesanais únicas e exclusivas.",
+  "description": "Há 10 anos, artesanato feito à mão com carinho e dedicação. Peças artesanais únicas e exclusivas.",
   "start_url": "/artesanato_shop/",
   "scope": "/artesanato_shop/",
   "display": "standalone",
