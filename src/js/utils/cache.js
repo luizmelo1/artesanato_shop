@@ -2,6 +2,9 @@
  * Módulo de Cache do LocalStorage
  * Gerencia cache de produtos com versionamento e expiração
  */
+
+import { debugLog, debugWarn } from './debug.js';
+
 export const cache = {
     CACHE_KEY: 'artesanato_products',
     CACHE_VERSION: '1.2', // Incrementar quando houver mudanças nos produtos
@@ -20,10 +23,10 @@ export const cache = {
                 timestamp: Date.now()
             };
             localStorage.setItem(this.CACHE_KEY, JSON.stringify(cacheData));
-            console.log('Produtos salvos no cache');
+            debugLog('Produtos salvos no cache');
             return true;
         } catch (error) {
-            console.warn('Erro ao salvar cache:', error);
+            debugWarn('Erro ao salvar cache:', error);
             return false;
         }
     },
@@ -37,7 +40,7 @@ export const cache = {
         try {
             const cached = localStorage.getItem(this.CACHE_KEY);
             if (!cached) {
-                console.log('Cache vazio');
+                debugLog('Cache vazio');
                 return null;
             }
 
@@ -46,22 +49,22 @@ export const cache = {
             
             // Verificar se a versão do cache está atualizada
             if (cacheData.version !== this.CACHE_VERSION) {
-                console.log('Versão do cache desatualizada');
+                debugLog('Versão do cache desatualizada');
                 this.clear();
                 return null;
             }
 
             // Verificar se o cache expirou
             if (now - cacheData.timestamp > this.CACHE_DURATION) {
-                console.log('Cache expirado');
+                debugLog('Cache expirado');
                 this.clear();
                 return null;
             }
 
-            console.log('Produtos carregados do cache');
+            debugLog('Produtos carregados do cache');
             return cacheData.data;
         } catch (error) {
-            console.warn('Erro ao ler cache:', error);
+            debugWarn('Erro ao ler cache:', error);
             this.clear();
             return null;
         }
@@ -72,7 +75,7 @@ export const cache = {
      */
     clear() {
         localStorage.removeItem(this.CACHE_KEY);
-        console.log('Cache limpo');
+        debugLog('Cache limpo');
     },
 
     /**

@@ -4,6 +4,7 @@
  */
 
 import { cache } from '../utils/cache.js';
+import { debugLog, debugWarn, debugError } from '../utils/debug.js';
 
 /**
  * Busca produtos do arquivo JSON (simulando API), salva no estado e no cache.
@@ -11,7 +12,7 @@ import { cache } from '../utils/cache.js';
  * @param {object} state - Estado da aplicação
  */
 export async function fetchProducts(dom, state) {
-    console.log('Buscando produtos da API...');
+    debugLog('Buscando produtos da API...');
     try {
         // Indica carregamento (acessível)
         if (dom.products.loader) {
@@ -23,14 +24,14 @@ export async function fetchProducts(dom, state) {
         if (!response.ok) throw new Error('Falha ao carregar produtos');
 
         state.products = await response.json();
-        console.log('Produtos carregados da API:', state.products.length, 'itens');
+        debugLog('Produtos carregados da API:', state.products.length, 'itens');
 
         // Salva no cache para próximas visitas
         cache.set(state.products);
 
         return state.products;
     } catch (err) {
-        console.error('Erro ao buscar produtos:', err);
+        debugError('Erro ao buscar produtos:', err);
         if (dom.products.container) {
             // Mensagem de erro acessível
             dom.products.container.replaceChildren();
@@ -56,21 +57,21 @@ export async function fetchProducts(dom, state) {
  */
 export async function updateCacheInBackground(currentProducts) {
     try {
-        console.log('Verificando atualizações em background...');
+        debugLog('Verificando atualizações em background...');
         const response = await fetch('./src/db/products.json');
         if (!response.ok) return;
         
         const newProducts = await response.json();
         
         // Compara produtos atuais com novos
-        if (JSON.stringify(newProducts) !== JSON.stringify(currentProducts)) {
-            console.log('Novos produtos disponíveis, atualizando cache...');
-            cache.set(newProducts);
+        if (JSON.stringify(newProducts) === JSON.stringify(currentProducts)) {
+            debugLog('Produtos estão atualizados');
         } else {
-            console.log('Produtos estão atualizados');
+            debugLog('Novos produtos disponíveis, atualizando cache...');
+            cache.set(newProducts);
         }
     } catch (error) {
-        console.warn('Não foi possível verificar atualizações:', error);
+        debugWarn('Não foi possível verificar atualizações:', error);
     }
 }
 
@@ -81,13 +82,13 @@ export async function updateCacheInBackground(currentProducts) {
  * @param {object} state - Estado da aplicação
  */
 export async function forceRefresh(dom, state) {
-    console.log('Forçando atualização...');
+    debugLog('Forçando atualização...');
     cache.clear();
     await fetchProducts(dom, state);
     if (dom.products.container) {
         loadProducts(dom, state.products, 'all');
     }
-    console.log('Produtos atualizados com sucesso!');
+    debugLog('Produtos atualizados com sucesso!');
 }
 
 /**
@@ -98,10 +99,10 @@ export async function forceRefresh(dom, state) {
  * @param {string} [filterCategory='all'] - Categoria alvo (ou 'all' para todas).
  */
 export function loadProducts(dom, products, filter = 'all') {
-    console.log('Carregando produtos para filtro:', filter);
+    debugLog('Carregando produtos para filtro:', filter);
     
     if (!dom.products.container) {
-        console.log('Container de produtos não encontrado');
+        debugLog('Container de produtos não encontrado');
         return;
     }
     
@@ -110,9 +111,9 @@ export function loadProducts(dom, products, filter = 'all') {
     
     // Se existem produtos, anima fade-out antes de remover
     if (currentProducts.length > 0) {
-        currentProducts.forEach(card => {
+        for (const card of currentProducts) {
             card.classList.add('fade-out');
-        });
+        }
         
         // Aguarda animação de saída completar (300ms)
         setTimeout(() => {
@@ -150,13 +151,15 @@ function renderProducts(dom, products, filter) {
             filteredProducts = products.filter(p => p.category === filter);
         }
 
-        console.log('Produtos filtrados:', filteredProducts);
+        debugLog('Produtos filtrados:', filteredProducts);
 
         // Cria e adiciona os cards de produtos com animação escalonada
-        filteredProducts.forEach((product, index) => {
+        let index = 0;
+        for (const product of filteredProducts) {
             const productCard = createProductCard(product, index);
             dom.products.container.appendChild(productCard);
-        });
+            index++;
+        }
 
         // Esconde o loader após renderizar
         if (dom.products.loader) {
@@ -164,7 +167,7 @@ function renderProducts(dom, products, filter) {
             dom.products.loader.setAttribute('aria-busy', 'false');
         }
 
-        console.log('Produtos carregados com sucesso');
+        debugLog('Produtos carregados com sucesso');
     }, 200); // 200ms de delay para UX mais suave
 }
 
@@ -243,10 +246,12 @@ function renderFilteredProducts(dom, products) {
             dom.products.container.appendChild(p);
         } else {
             // Renderiza produtos encontrados
-            byCategory.forEach((product, index) => {
+            let index = 0;
+            for (const product of byCategory) {
                 const productCard = createProductCard(product, index);
                 dom.products.container.appendChild(productCard);
-            });
+                index++;
+            }
         }
 
         // Esconde loader

@@ -5,7 +5,10 @@
 User-agent: *
 Allow: /
 
-# Bloquear acesso a pastas de desenvolvimento/legado
+# Bloquear acesso a pastas de desenvolvimento e legado
+Disallow: /build-tools/
+Disallow: /.git/
+Disallow: /node_modules/
 Disallow: /src/css/legacy/
 Disallow: /src/js/legacy/
 

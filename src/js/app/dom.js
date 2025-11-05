@@ -3,6 +3,8 @@
  * Coleta e organiza referências de elementos DOM
  */
 
+import { debugLog } from '../utils/debug.js';
+
 /**
  * Inicializa e guarda as referências a elementos do DOM usados pela aplicação.
  * Detecta a página atual para evitar erros com elementos não existentes.
@@ -13,7 +15,13 @@ export function initializeDOM() {
     const isProductsPage = document.getElementById('products-container') !== null;
     const isIndexPage = document.querySelector('.hero') !== null;
     
-    console.log('Página detectada:', isProductsPage ? 'products.html' : isIndexPage ? 'index.html' : 'desconhecida');
+    let pageName = 'desconhecida';
+    if (isProductsPage) {
+        pageName = 'products.html';
+    } else if (isIndexPage) {
+        pageName = 'index.html';
+    }
+    debugLog('Página detectada:', pageName);
     
     return {
         products: {

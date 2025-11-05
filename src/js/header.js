@@ -27,9 +27,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Adiciona o evento de scroll com throttle para melhor performance
     let ticking = false;
-    window.addEventListener('scroll', () => {
+    globalThis.addEventListener('scroll', () => {
         if (!ticking) {
-            window.requestAnimationFrame(() => {
+            globalThis.requestAnimationFrame(() => {
                 updateHeader();
                 ticking = false;
             });
@@ -49,13 +49,13 @@ document.addEventListener('DOMContentLoaded', () => {
     // Fecha menu mobile ao clicar em um link
     if (nav) {
         const navLinks = nav.querySelectorAll('a');
-        navLinks.forEach(link => {
+        for (const link of navLinks) {
             link.addEventListener('click', () => {
-                if (window.innerWidth <= 768) {
+                if (globalThis.innerWidth <= 768) {
                     nav.classList.remove('active');
                     mobileMenu.setAttribute('aria-expanded', 'false');
                 }
             });
-        });
+        }
     }
 });
