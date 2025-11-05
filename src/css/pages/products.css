@@ -26,7 +26,7 @@
         rgba(var(--black-rgb), 0.5),
         rgba(var(--black-rgb), 0.7)
     );
-    z-index: 1;
+    z-index: var(--z-base);
     pointer-events: none;
 }
 
@@ -64,7 +64,7 @@
 /* Conteúdo do hero fica acima do overlay */
 .hero .container {
     position: relative;
-    z-index: 2;
+    z-index: calc(var(--z-base) + 1);
 }
 
 /* Título do hero na página de produtos */

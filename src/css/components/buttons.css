@@ -96,7 +96,7 @@
     visibility: hidden;
     transform: translateY(10px) translateZ(0);
     transition: opacity var(--transition-fast), transform var(--transition-fast), visibility var(--transition-fast);
-    z-index: 1000;
+    z-index: var(--z-fixed);
     /* Glassmorphism effect */
     -webkit-backdrop-filter: blur(10px);
     backdrop-filter: blur(10px);
