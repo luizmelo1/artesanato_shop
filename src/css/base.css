@@ -7,6 +7,13 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box; /* Inclui padding e border no cálculo da largura/altura */
+    overflow-anchor: none; /* Desabilita scroll anchoring em todos os elementos */
+}
+
+/* Desabilita scroll anchoring para evitar ajustes de scroll indesejados */
+html,
+body {
+    overflow-anchor: none;
 }
 
 /* Variáveis CSS globais para manutenção centralizada do tema */

@@ -11,6 +11,7 @@ import * as EventsModule from './app/events.js';
 import * as SlideshowModule from './app/slideshow.js';
 import { cache } from './utils/cache.js';
 import { debugLog, debugError } from './utils/debug.js';
+import { initPWA } from './utils/pwa.js';
 
 /**
  * Classe principal da aplicação
@@ -144,6 +145,9 @@ const app = new ArtesanatoShop();
 document.addEventListener('DOMContentLoaded', () => {
     debugLog('DOM Content Loaded');
     app.initialize();
+    
+    // Inicializa PWA (Service Worker e funcionalidades)
+    initPWA();
 });
 
 // Exporta a instância para uso em console/debug
