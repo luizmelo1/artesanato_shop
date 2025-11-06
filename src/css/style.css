@@ -13,6 +13,3 @@
 /* 4. Pages - Estilos específicos de cada página */
 @import url('pages/home.css');
 @import url('pages/products.css');
-
-/* 5. Utils - Utilitários (PWA, animações, helpers) */
-@import url('utils/pwa.css');
