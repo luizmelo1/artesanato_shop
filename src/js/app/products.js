@@ -12,26 +12,34 @@ import { debugLog, debugWarn, debugError } from '../utils/debug.js';
  * @param {object} state - Estado da aplicação
  */
 export async function fetchProducts(dom, state) {
-    debugLog('Buscando produtos da API...');
+    debugLog('=== fetchProducts ===');
+    debugLog('Iniciando busca de produtos...');
     try {
         // Indica carregamento (acessível)
         if (dom.products.loader) {
             dom.products.loader.classList.remove('hidden');
             dom.products.loader.setAttribute('aria-busy', 'true');
+            debugLog('Loader ativado');
         }
 
+        debugLog('Fazendo fetch de ./src/db/products.json');
         const response = await fetch('./src/db/products.json');
+        debugLog('Response recebida:', response.status, response.statusText);
+        
         if (!response.ok) throw new Error('Falha ao carregar produtos');
 
         state.products = await response.json();
         debugLog('Produtos carregados da API:', state.products.length, 'itens');
+        debugLog('Primeiros 3 produtos:', state.products.slice(0, 3));
 
         // Salva no cache para próximas visitas
         cache.set(state.products);
+        debugLog('Produtos salvos no cache');
 
         return state.products;
     } catch (err) {
-        debugError('Erro ao buscar produtos:', err);
+        debugError('ERRO ao buscar produtos:', err);
+        debugError('Erro detalhado:', err.message, err.stack);
         if (dom.products.container) {
             // Mensagem de erro acessível
             dom.products.container.replaceChildren();
@@ -46,6 +54,7 @@ export async function fetchProducts(dom, state) {
         if (dom.products.loader) {
             dom.products.loader.classList.add('hidden');
             dom.products.loader.setAttribute('aria-busy', 'false');
+            debugLog('Loader desativado');
         }
     }
 }
@@ -99,7 +108,10 @@ export async function forceRefresh(dom, state) {
  * @param {string} [filterCategory='all'] - Categoria alvo (ou 'all' para todas).
  */
 export function loadProducts(dom, products, filter = 'all') {
-    debugLog('Carregando produtos para filtro:', filter);
+    debugLog('=== loadProducts ===');
+    debugLog('DOM:', dom);
+    debugLog('Products array length:', products.length);
+    debugLog('Filter:', filter);
     
     if (!dom.products.container) {
         debugLog('Container de produtos não encontrado');
@@ -108,6 +120,7 @@ export function loadProducts(dom, products, filter = 'all') {
     
     // Pega produtos atuais para animar saída
     const currentProducts = dom.products.container.querySelectorAll('.product-card');
+    debugLog('Current products to fade out:', currentProducts.length);
     
     // Se existem produtos, anima fade-out antes de remover
     if (currentProducts.length > 0) {
@@ -121,6 +134,7 @@ export function loadProducts(dom, products, filter = 'all') {
         }, 300);
     } else {
         // Primeira carga ou sem produtos: renderiza diretamente
+        debugLog('Primeira carga, renderizando diretamente');
         renderProducts(dom, products, filter);
     }
 }
@@ -132,6 +146,10 @@ export function loadProducts(dom, products, filter = 'all') {
  * @param {string} filterCategory - Categoria para filtrar.
  */
 function renderProducts(dom, products, filter) {
+    debugLog('=== renderProducts ===');
+    debugLog('Filter:', filter);
+    debugLog('Total products:', products.length);
+    
     // Mostra o loader (acessível)
     if (dom.products.loader) {
         dom.products.loader.classList.remove('hidden');
@@ -145,11 +163,13 @@ function renderProducts(dom, products, filter) {
     let filteredProducts = products;
     if (Array.isArray(filter)) {
         filteredProducts = products.filter(p => filter.includes(p.category));
+        debugLog('Filtrando por categorias:', filter);
     } else if (filter !== 'all') {
         filteredProducts = products.filter(p => p.category === filter);
+        debugLog('Filtrando por categoria:', filter);
     }
 
-    debugLog('Produtos filtrados:', filteredProducts);
+    debugLog('Produtos filtrados:', filteredProducts.length);
 
     // Cria e adiciona os cards de produtos com animação escalonada
     let index = 0;
@@ -158,6 +178,8 @@ function renderProducts(dom, products, filter) {
         dom.products.container.appendChild(productCard);
         index++;
     }
+
+    debugLog('Cards criados:', index);
 
     // Esconde o loader após renderizar
     if (dom.products.loader) {
@@ -177,27 +199,12 @@ function renderProducts(dom, products, filter) {
 export function filterProductsBySearch(dom, products, searchTerm) {
     if (!dom.products.container) return;
 
-    // Se busca está vazia, mostra todos os produtos da categoria ativa
+    // Se busca está vazia, reaplica filtro de categoria ativo
     if (!searchTerm) {
         const selected = Array.from(document.querySelectorAll('.category.active'))
             .map(c => c.dataset.category)
             .filter(cat => cat !== 'all');
-        const allBtn = document.querySelector('.category[data-category="all"]');
-        const isAllActive = allBtn ? allBtn.classList.contains('active') : false;
-        if (selected.length === 0 && !isAllActive) {
-            // Sem filtros (e 'Todos' inativo) e sem busca: não exibe produtos
-            if (dom.products.section) {
-                dom.products.section.classList.add('hidden-until-interaction');
-                dom.products.section.setAttribute('aria-hidden', 'true');
-            }
-            dom.products.container.replaceChildren();
-            if (dom.products.loader) {
-                dom.products.loader.classList.add('hidden');
-                dom.products.loader.setAttribute('aria-busy', 'false');
-            }
-            return;
-        }
-        const filterParam = selected.length ? selected : 'all';
+        const filterParam = selected.length > 0 ? selected : 'all';
         loadProducts(dom, products, filterParam);
         return;
     }
