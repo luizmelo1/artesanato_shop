@@ -32,27 +32,45 @@ class ArtesanatoShop {
      * Inicializa a aplicação
      */
     async initialize() {
-        debugLog('Inicializando Artesanato Shop...');
+        debugLog('=== INÍCIO DA INICIALIZAÇÃO ===');
 
         // Inicializa referências DOM
         this.DOM = initializeDOM();
+        debugLog('DOM inicializado:', this.DOM);
+        debugLog('Container de produtos:', this.DOM.products.container);
+        debugLog('Botões de categoria:', this.DOM.products.categories);
 
-        // Na página de produtos: esconder seção de produtos até interação do usuário
-        if (this.DOM?.products?.section) {
-            this.DOM.products.section.classList.add('hidden-until-interaction');
-            this.DOM.products.section.setAttribute('aria-hidden', 'true');
+        // Ativa o botão "Todos" por padrão na página de produtos
+        if (this.DOM?.products?.categories) {
+            debugLog('Ativando botão "Todos" por padrão...');
+            const allButton = Array.from(this.DOM.products.categories)
+                .find(btn => btn.dataset.category === 'all');
+            debugLog('Botão "Todos" encontrado:', allButton);
+            if (allButton) {
+                allButton.classList.add('active');
+                allButton.setAttribute('aria-pressed', 'true');
+                debugLog('Botão "Todos" ativado com sucesso');
+            } else {
+                debugLog('ERRO: Botão "Todos" não encontrado!');
+            }
+        } else {
+            debugLog('Não é página de produtos ou categorias não encontradas');
         }
 
         // Tenta carregar do cache primeiro
         const cachedProducts = cache.get();
+        debugLog('Cache recuperado:', cachedProducts);
         
         if (cachedProducts && cache.isValid()) {
             debugLog('Produtos carregados do cache:', cachedProducts.length, 'itens');
             this.state.products = cachedProducts;
             
             if (this.DOM.products.container) {
+                debugLog('Chamando loadProducts com cache...');
                 ProductsModule.loadProducts(this.DOM, this.state.products, 'all');
                 this.setupEventListeners();
+            } else {
+                debugLog('ERRO: Container de produtos não encontrado!');
             }
 
             SlideshowModule.initHeroSlideshow(this.DOM);
@@ -61,12 +79,17 @@ class ArtesanatoShop {
             ProductsModule.updateCacheInBackground(this.state.products);
         } else {
             // Sem cache válido, busca da API
+            debugLog('Cache inválido ou não encontrado, buscando da API...');
             try {
                 await ProductsModule.fetchProducts(this.DOM, this.state);
+                debugLog('Produtos buscados da API:', this.state.products.length, 'itens');
                 
                 if (this.DOM.products.container) {
+                    debugLog('Chamando loadProducts com API...');
                     ProductsModule.loadProducts(this.DOM, this.state.products, 'all');
                     this.setupEventListeners();
+                } else {
+                    debugLog('ERRO: Container de produtos não encontrado!');
                 }
 
                 SlideshowModule.initHeroSlideshow(this.DOM);
@@ -75,7 +98,7 @@ class ArtesanatoShop {
             }
         }
 
-        debugLog('Aplicação inicializada com sucesso!');
+        debugLog('=== FIM DA INICIALIZAÇÃO ===');
     }
 
     /**
