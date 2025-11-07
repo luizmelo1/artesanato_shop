@@ -201,9 +201,11 @@ export function filterProductsBySearch(dom, products, searchTerm) {
 
     // Se busca está vazia, reaplica filtro de categoria ativo
     if (!searchTerm) {
-        const selected = Array.from(document.querySelectorAll('.category.active'))
-            .map(c => c.dataset.category)
-            .filter(cat => cat !== 'all');
+        const selected = dom.products.categories 
+            ? Array.from(dom.products.categories)
+                .filter(c => c.classList.contains('active') && c.dataset.category !== 'all')
+                .map(c => c.dataset.category)
+            : [];
         const filterParam = selected.length > 0 ? selected : 'all';
         loadProducts(dom, products, filterParam);
         return;
@@ -237,10 +239,14 @@ function renderFilteredProducts(dom, products) {
 
     setTimeout(() => {
         // Aplica filtros de categoria ativos também, se houver
-        const selected = Array.from(document.querySelectorAll('.category.active'))
-            .map(c => c.dataset.category)
-            .filter(cat => cat !== 'all');
-        const byCategory = selected.length ? products.filter(p => selected.includes(p.category)) : products;
+        const selected = dom.products.categories
+            ? Array.from(dom.products.categories)
+                .filter(c => c.classList.contains('active') && c.dataset.category !== 'all')
+                .map(c => c.dataset.category)
+            : [];
+        const byCategory = selected.length > 0 
+            ? products.filter(p => selected.includes(p.category)) 
+            : products;
 
         if (byCategory.length === 0) {
             // Exibe mensagem quando não há resultados

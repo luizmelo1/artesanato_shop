@@ -17,7 +17,6 @@ nav ul li a,
     transition: all var(--transition-normal);
     position: relative; /* Necessário para o pseudo-elemento ::after */
     background: transparent;
-    transform: translateZ(0); /* Ativa aceleração de hardware */
     will-change: transform, background; /* Otimiza hover */
 }
 

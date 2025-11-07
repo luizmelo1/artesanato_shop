@@ -190,19 +190,6 @@ export function setupEventListeners(dom, callbacks) {
         });
     }
 
-    // Delegação de eventos para o menu de navegação
-    if (dom.nav.menu) {
-        dom.nav.menu.addEventListener('click', (e) => {
-            const navLink = e.target.closest('a');
-            if (navLink) {
-                // Fecha menu mobile após clicar em um link
-                if (window.innerWidth <= 768) {
-                    dom.nav.container.classList.remove('active');
-                }
-            }
-        });
-    }
-
     // Delegação de eventos para links do footer (scroll suave para âncoras)
     if (dom.footer.container) {
         dom.footer.container.addEventListener('click', (e) => {

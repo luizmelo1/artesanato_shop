@@ -1,49 +1,8 @@
 /* ===== PAGES/HOME.CSS ===== */
 /* Estilos específicos da página inicial (index.html) */
 
-/* ===== SEÇÃO HERO ===== */
-/* Hero com slideshow de fundo */
-.hero {
-    position: relative;
-    color: var(--light);
-    text-align: center;
-    padding: 5rem var(--spacing-sm);
-    margin-bottom: var(--spacing-xl);
-    overflow: hidden; /* Esconde partes das imagens que saem do container */
-    min-height: 400px;
-    display: flex;              /* Centraliza verticalmente o conteúdo */
-    align-items: center;        /* Alinha ao centro vertical */
-    justify-content: center;    /* Garante centralização horizontal do container interno */
-}
-
-/* Overlay escuro sobre a imagem de fundo para melhorar legibilidade do texto */
-.hero::before {
-    content: '';
-    position: absolute;
-    inset: 0; /* Equivalente a top: 0; right: 0; bottom: 0; left: 0; */
-    background: linear-gradient(
-        to bottom,
-        rgba(var(--black-rgb), 0.5),
-        rgba(var(--black-rgb), 0.7)
-    );
-    z-index: var(--z-base); /* Fica entre a imagem e o texto */
-    pointer-events: none; /* Permite cliques passarem através do overlay */
-}
-
-/* Imagens de fundo do slideshow */
-.hero-bg {
-    position: absolute;
-    inset: 0;
-    background-size: cover;      /* Cobre toda a área */
-    background-position: center;
-    background-repeat: no-repeat;
-    opacity: 0; /* Escondida por padrão */
-    transition: opacity 1.5s ease-in-out; /* Transição suave e lenta entre imagens */
-    will-change: opacity; /* Otimiza performance da animação */
-    transform: translateZ(0); /* Ativa aceleração de hardware para transições fluidas */
-}
-
-/* Background images específicas */
+/* ===== BACKGROUND IMAGES DO HERO ===== */
+/* Background images específicas da home */
 .hero-bg-1 {
     background-image: url('https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=1920&q=80');
 }
@@ -56,36 +15,9 @@
     background-image: url('https://images.unsplash.com/photo-1528484786961-e60836ce769a?auto=format&fit=crop&w=1920&q=80');
 }
 
-/* Imagem ativa no slideshow - fade in suave */
-.hero-bg.active {
-    opacity: 1;
-    animation: fadeInHero 1.5s ease-in-out;
-}
-
-/* Animação de fade in para entrada suave das imagens */
-@keyframes fadeInHero {
-    from {
-        opacity: 0;
-        transform: scale(1.05); /* Leve zoom para efeito cinematic */
-    }
-    to {
-        opacity: 1;
-        transform: scale(1);
-    }
-}
-
-/* Conteúdo do hero fica acima do overlay */
-.hero .container {
-    position: relative;
-    z-index: calc(var(--z-base) + 1);
-}
-
 /* Título responsivo usando clamp() */
 .hero h1 {
     font-size: clamp(2rem, 5vw, 2.5rem); /* Min: 2rem, Ideal: 5vw, Max: 2.5rem */
-    margin-bottom: var(--spacing-sm);
-    font-weight: 700;
-    text-shadow: 2px 2px 8px rgba(var(--black-rgb), 0.8); /* Sombra para melhorar legibilidade */
 }
 
 /* Parágrafo responsivo e centralizado */

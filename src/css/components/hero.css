@@ -1,0 +1,81 @@
+/* ===== HERO SECTION ===== */
+/* Componente hero reutilizável com slideshow de fundo */
+
+.hero {
+    position: relative;
+    color: var(--light);
+    text-align: center;
+    padding: 5rem var(--spacing-sm);
+    margin-bottom: var(--spacing-xl);
+    overflow: hidden;
+    min-height: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Overlay escuro sobre a imagem de fundo para melhorar legibilidade do texto */
+.hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        to bottom,
+        rgba(var(--black-rgb), 0.5),
+        rgba(var(--black-rgb), 0.7)
+    );
+    z-index: var(--z-base);
+    pointer-events: none;
+}
+
+/* Imagens de fundo do slideshow */
+.hero-bg {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    opacity: 0;
+    transition: opacity 1.5s ease-in-out;
+    will-change: opacity;
+    transform: translateZ(0);
+}
+
+/* Imagem ativa no slideshow */
+.hero-bg.active {
+    opacity: 1;
+    animation: fadeInHero 1.5s ease-in-out;
+}
+
+/* Animação de fade in para entrada suave das imagens */
+@keyframes fadeInHero {
+    from {
+        opacity: 0;
+        transform: scale(1.05);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Conteúdo do hero fica acima do overlay */
+.hero .container {
+    position: relative;
+    z-index: calc(var(--z-base) + 1);
+}
+
+/* Título do hero */
+.hero h1 {
+    font-size: clamp(1.8rem, 4.5vw, 2.5rem);
+    margin-bottom: var(--spacing-sm);
+    font-weight: 700;
+    text-shadow: 2px 2px 8px rgba(var(--black-rgb), 0.8);
+}
+
+/* Subtítulo/parágrafo do hero */
+.hero p {
+    font-size: clamp(0.95rem, 2.5vw, 1.1rem);
+    text-shadow: 1px 1px 6px rgba(var(--black-rgb), 0.7);
+}
+
