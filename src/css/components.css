@@ -4,6 +4,9 @@
 /* Botões e ações */
 @import 'components/buttons.css';
 
+/* Hero section (slideshow de fundo) */
+@import 'components/hero.css';
+
 /* Cards de produtos */
 @import 'components/product-card.css';
 
@@ -24,3 +27,4 @@
 
 /* Utilitários e helpers */
 @import 'components/utilities.css';
+

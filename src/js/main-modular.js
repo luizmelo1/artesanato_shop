@@ -40,7 +40,25 @@ class ArtesanatoShop {
         debugLog('Container de produtos:', this.DOM.products.container);
         debugLog('Botões de categoria:', this.DOM.products.categories);
 
-        // Ativa o botão "Todos" por padrão na página de produtos
+        // Ativa o botão "Todos" por padrão
+        this.activateAllCategoryButton();
+
+        // Carrega produtos (cache ou API)
+        await this.loadProductsData();
+
+        // Inicializa slideshow do hero
+        SlideshowModule.initHeroSlideshow(this.DOM);
+
+        // Configura event listeners apenas uma vez após carregar produtos
+        this.setupEventListeners();
+
+        debugLog('=== FIM DA INICIALIZAÇÃO ===');
+    }
+
+    /**
+     * Ativa o botão "Todos" por padrão na página de produtos
+     */
+    activateAllCategoryButton() {
         if (this.DOM?.products?.categories) {
             debugLog('Ativando botão "Todos" por padrão...');
             const allButton = Array.from(this.DOM.products.categories)
@@ -56,49 +74,58 @@ class ArtesanatoShop {
         } else {
             debugLog('Não é página de produtos ou categorias não encontradas');
         }
+    }
 
-        // Tenta carregar do cache primeiro
+    /**
+     * Carrega produtos do cache ou da API
+     */
+    async loadProductsData() {
         const cachedProducts = cache.get();
         debugLog('Cache recuperado:', cachedProducts);
         
         if (cachedProducts && cache.isValid()) {
-            debugLog('Produtos carregados do cache:', cachedProducts.length, 'itens');
-            this.state.products = cachedProducts;
+            await this.loadFromCache(cachedProducts);
+        } else {
+            await this.loadFromAPI();
+        }
+    }
+
+    /**
+     * Carrega produtos do cache
+     */
+    async loadFromCache(cachedProducts) {
+        debugLog('Produtos carregados do cache:', cachedProducts.length, 'itens');
+        this.state.products = cachedProducts;
+        
+        if (this.DOM.products.container) {
+            debugLog('Chamando loadProducts com cache...');
+            ProductsModule.loadProducts(this.DOM, this.state.products, 'all');
+        } else {
+            debugLog('ERRO: Container de produtos não encontrado!');
+        }
+        
+        // Verifica atualizações em background
+        ProductsModule.updateCacheInBackground(this.state.products);
+    }
+
+    /**
+     * Carrega produtos da API
+     */
+    async loadFromAPI() {
+        debugLog('Cache inválido ou não encontrado, buscando da API...');
+        try {
+            await ProductsModule.fetchProducts(this.DOM, this.state);
+            debugLog('Produtos buscados da API:', this.state.products.length, 'itens');
             
             if (this.DOM.products.container) {
-                debugLog('Chamando loadProducts com cache...');
+                debugLog('Chamando loadProducts com API...');
                 ProductsModule.loadProducts(this.DOM, this.state.products, 'all');
-                this.setupEventListeners();
             } else {
                 debugLog('ERRO: Container de produtos não encontrado!');
             }
-
-            SlideshowModule.initHeroSlideshow(this.DOM);
-            
-            // Verifica atualizações em background
-            ProductsModule.updateCacheInBackground(this.state.products);
-        } else {
-            // Sem cache válido, busca da API
-            debugLog('Cache inválido ou não encontrado, buscando da API...');
-            try {
-                await ProductsModule.fetchProducts(this.DOM, this.state);
-                debugLog('Produtos buscados da API:', this.state.products.length, 'itens');
-                
-                if (this.DOM.products.container) {
-                    debugLog('Chamando loadProducts com API...');
-                    ProductsModule.loadProducts(this.DOM, this.state.products, 'all');
-                    this.setupEventListeners();
-                } else {
-                    debugLog('ERRO: Container de produtos não encontrado!');
-                }
-
-                SlideshowModule.initHeroSlideshow(this.DOM);
-            } catch (error) {
-                debugError('Erro ao inicializar aplicação:', error);
-            }
+        } catch (error) {
+            debugError('Erro ao inicializar aplicação:', error);
         }
-
-        debugLog('=== FIM DA INICIALIZAÇÃO ===');
     }
 
     /**

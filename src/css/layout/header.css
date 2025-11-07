@@ -7,11 +7,11 @@ header {
     position: sticky;  /* Fixa no topo ao rolar */
     top: 0;
     z-index: var(--z-sticky);  /* Fica acima de outros elementos */
-    -webkit-backdrop-filter: blur(10px); /* Efeito de desfoque no fundo */
-    backdrop-filter: blur(10px); /* Efeito de desfoque no fundo */
     box-shadow: var(--shadow-sm);
     transition: all var(--transition-normal);
     will-change: transform, background; /* Otimiza performance de animação */
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
 }
 
 /* Estado do header quando a página é rolada */
@@ -45,11 +45,10 @@ header.scrolled {
 }
 
 /* ===== RESPONSIVIDADE - HEADER ===== */
-/* Tablets e telas médias (até 768px) */
 @media (max-width: 768px) {
-    /* Header em coluna no mobile */
     .header-content {
         flex-direction: column;
         text-align: center;
     }
 }
+

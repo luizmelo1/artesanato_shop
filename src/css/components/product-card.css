@@ -44,7 +44,6 @@
     box-shadow: var(--shadow-sm);
     transition: all var(--transition-normal);
     opacity: 0;
-    transform: translateZ(0); /* Ativa aceleração de hardware */
     will-change: transform, opacity, box-shadow; /* Otimiza performance de animações */
 }
 
@@ -83,7 +82,6 @@
     object-fit: cover;
     transition: all var(--transition-slow);
     filter: brightness(0.97); /* Leve escurecimento para destaque no hover */
-    transform: translateZ(0); /* Ativa aceleração de hardware */
     will-change: transform, filter; /* Otimiza zoom e filtros */
 }
 
