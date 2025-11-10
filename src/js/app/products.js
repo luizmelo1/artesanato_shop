@@ -5,6 +5,7 @@
 
 import { cache } from '../utils/cache.js';
 import { debugLog, debugWarn, debugError } from '../utils/debug.js';
+import { createPictureWithFallback } from '../helpers/image-fallback.js';
 
 /**
  * Busca produtos do arquivo JSON (simulando API), salva no estado e no cache.
@@ -283,16 +284,15 @@ export function createProductCard(product, index = 0) {
     card.className = 'product-card';
     card.style.animation = `fadeIn 0.5s ease forwards ${index * 0.08}s`;
 
-    // Imagem
+    // Imagem com fallback WebP
     const imageWrap = document.createElement('div');
     imageWrap.className = 'product-image';
-    const img = document.createElement('img');
-    img.loading = 'lazy';
-    img.src = product.image;
-    img.alt = product.name;
-    img.width = 400;
-    img.height = 300;
-    imageWrap.appendChild(img);
+    const picture = createPictureWithFallback(product.image, product.name, {
+        loading: 'lazy',
+        width: 400,
+        height: 300
+    });
+    imageWrap.appendChild(picture);
 
     // Info
     const info = document.createElement('div');

@@ -267,12 +267,26 @@ export function setupEventListeners(dom, callbacks) {
                         callbacks.onToggleZoom(e);
                     }
                     // Atualiza imagem principal
-                    dom.modal.mainImage.src = thumb.dataset.src;
-                    // Atualiza estado das miniaturas
-                    for (const img of dom.modal.thumbs.querySelectorAll('img')) {
-                        img.classList.remove('active');
+                    const mainPicture = dom.modal.imageContainer?.querySelector('picture');
+                    if (mainPicture && thumb.dataset.src) {
+                        // Importa a função de update dinâmicamente se necessário
+                        import('../helpers/image-fallback.js').then(({ updatePictureSource }) => {
+                            updatePictureSource(mainPicture, thumb.dataset.src, dom.modal.mainImage.alt);
+                        });
+                    } else if (dom.modal.mainImage) {
+                        dom.modal.mainImage.src = thumb.dataset.src;
                     }
-                    thumb.classList.add('active');
+                    
+                    // Atualiza estado das miniaturas (busca pela picture pai)
+                    for (const picture of dom.modal.thumbs.querySelectorAll('picture')) {
+                        picture.classList.remove('active');
+                    }
+                    const thumbPicture = thumb.closest('picture');
+                    if (thumbPicture) {
+                        thumbPicture.classList.add('active');
+                    } else {
+                        thumb.classList.add('active');
+                    }
                 }
             });
         }

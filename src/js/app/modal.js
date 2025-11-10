@@ -5,6 +5,7 @@
 
 import * as ZoomHelpers from '../helpers/zoom.js';
 import { debugLog } from '../utils/debug.js';
+import { createPictureWithFallback, updatePictureSource } from '../helpers/image-fallback.js';
 
 /**
  * Abre o modal para um produto específico.
@@ -55,30 +56,57 @@ export function openModal(dom, products, productId, state) {
         ? product.images 
         : [product.image];
     
-    if (dom.modal.mainImage) {
-        dom.modal.mainImage.src = imgs[0];
-        dom.modal.mainImage.alt = product.name;
-        dom.modal.mainImage.draggable = false;
-        dom.modal.mainImage.loading = 'eager'; // Eager para imagem do modal (já visível)
-        dom.modal.mainImage.width = 800;
-        dom.modal.mainImage.height = 600;
+    if (dom.modal.mainImage && dom.modal.imageContainer) {
+        // Substitui o <img> por <picture> para suporte a WebP com fallback
+        const existingPicture = dom.modal.imageContainer.querySelector('picture');
+        
+        if (existingPicture) {
+            // Se já existe um picture, apenas atualiza a fonte
+            updatePictureSource(existingPicture, imgs[0], product.name);
+        } else {
+            // Remove o <img> antigo e cria um <picture> novo
+            const oldImg = dom.modal.mainImage;
+            const newPicture = createPictureWithFallback(imgs[0], product.name, {
+                loading: 'eager',
+                width: 800,
+                height: 600,
+                draggable: false
+            });
+            
+            // Adiciona o ID ao <img> dentro do <picture> para manter compatibilidade
+            const newImg = newPicture.querySelector('img');
+            if (newImg) {
+                newImg.id = 'modal-main-image';
+            }
+            
+            oldImg.replaceWith(newPicture);
+            
+            // Atualiza a referência no DOM
+            dom.modal.mainImage = newImg;
+        }
     }
     
-    // Configurar miniaturas
+    // Configurar miniaturas com fallback WebP
     if (dom.modal.thumbs) {
         dom.modal.thumbs.innerHTML = '';
         dom.modal.thumbs.style.display = imgs.length > 1 ? '' : 'none';
         
         let idx = 0;
         for (const src of imgs) {
-            const thumb = document.createElement('img');
-            thumb.src = src;
-            thumb.dataset.src = src;
-            thumb.width = 72;
-            thumb.height = 72;
-            thumb.loading = 'lazy';
-            if (idx === 0) thumb.classList.add('active');
-            dom.modal.thumbs.appendChild(thumb);
+            const thumbPicture = createPictureWithFallback(src, product.name, {
+                loading: 'lazy',
+                width: 72,
+                height: 72,
+                className: idx === 0 ? 'active' : ''
+            });
+            
+            // Adiciona data-src para troca de imagem ao clicar
+            const thumbImg = thumbPicture.querySelector('img');
+            if (thumbImg) {
+                thumbImg.dataset.src = src;
+            }
+            
+            dom.modal.thumbs.appendChild(thumbPicture);
             idx++;
         }
     }
