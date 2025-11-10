@@ -55,38 +55,168 @@
     },
     {
         "id": 7,
-        "name": "Funko Pop - Edição Colecionável",
+        "name": "Funko Pop - Personagem Clássico #1",
         "category": "funkopop",
         "price": 0.00,
-        "description": "Funko Pop colecionável com acabamento exclusivo. Este produto possui várias imagens para visualização.",
-    "image": "./src/img/produtos/funkopop/funkopop_1.webp",
+        "description": "Funko Pop colecionável de personagem clássico. Acabamento premium com detalhes exclusivos. Perfeito para colecionadores e fãs.",
+        "image": "./src/img/produtos/funkopop/funkopop_1.webp",
         "images": [
-            "./src/img/produtos/funkopop/funkopop_1.webp",
-            "./src/img/produtos/funkopop/funkopop_1.1.webp"
+            "./src/img/produtos/funkopop/funkopop_1.webp"
         ],
         "link": "https://exemplo.com/funkopop1"
     },
     {
         "id": 8,
-        "name": "Funko Pop - Edição Especial",
+        "name": "Funko Pop - Edição Especial #2",
         "category": "funkopop",
         "price": 0.00,
-        "description": "Funko Pop edição especial com detalhes únicos. Peça imperdível para colecionadores.",
-    "image": "./src/img/produtos/funkopop/funkopop_2.webp",
+        "description": "Funko Pop edição especial com detalhes únicos e pintura premium. Peça imperdível para sua coleção.",
+        "image": "./src/img/produtos/funkopop/funkopop_2.webp",
         "images": [
-            "./src/img/produtos/funkopop/funkopop_2.webp",
-            "./src/img/produtos/funkopop/funkopop_2.1.webp"
+            "./src/img/produtos/funkopop/funkopop_2.webp"
         ],
         "link": "https://exemplo.com/funkopop2"
+    },
+    {
+        "id": 11,
+        "name": "Funko Pop - Herói Épico #3",
+        "category": "funkopop",
+        "price": 0.00,
+        "description": "Funko Pop de herói épico com pose icônica. Detalhes incríveis e qualidade superior para os verdadeiros colecionadores.",
+        "image": "./src/img/produtos/funkopop/funkopop_3.webp",
+        "images": [
+            "./src/img/produtos/funkopop/funkopop_3.webp"
+        ],
+        "link": "https://exemplo.com/funkopop3"
+    },
+    {
+        "id": 12,
+        "name": "Funko Pop - Vilão Lendário #4",
+        "category": "funkopop",
+        "price": 0.00,
+        "description": "Funko Pop do vilão mais icônico! Acabamento excepcional com acessórios exclusivos. Item raro para colecionadores exigentes.",
+        "image": "./src/img/produtos/funkopop/funkopop_4.webp",
+        "images": [
+            "./src/img/produtos/funkopop/funkopop_4.webp"
+        ],
+        "link": "https://exemplo.com/funkopop4"
+    },
+    {
+        "id": 13,
+        "name": "Funko Pop - Guerreiro Mítico #5",
+        "category": "funkopop",
+        "price": 0.00,
+        "description": "Funko Pop de guerreiro mítico com armadura detalhada. Acabamento artesanal e cores vibrantes. Edição limitada.",
+        "image": "./src/img/produtos/funkopop/funkopop_5.webp",
+        "images": [
+            "./src/img/produtos/funkopop/funkopop_5.webp"
+        ],
+        "link": "https://exemplo.com/funkopop5"
+    },
+    {
+        "id": 14,
+        "name": "Funko Pop - Mago Poderoso #6",
+        "category": "funkopop",
+        "price": 0.00,
+        "description": "Funko Pop de mago poderoso com cajado mágico. Detalhes místicos e acabamento brilhante. Perfeito para fãs de fantasia.",
+        "image": "./src/img/produtos/funkopop/funkopop_6.webp",
+        "images": [
+            "./src/img/produtos/funkopop/funkopop_6.webp"
+        ],
+        "link": "https://exemplo.com/funkopop6"
+    },
+    {
+        "id": 15,
+        "name": "Funko Pop - Ícone Cultural #7",
+        "category": "funkopop",
+        "price": 0.00,
+        "description": "Funko Pop de ícone cultural com roupa característica. Edição especial com acessórios únicos. Item de destaque em qualquer coleção.",
+        "image": "./src/img/produtos/funkopop/funkopop_7.webp",
+        "images": [
+            "./src/img/produtos/funkopop/funkopop_7.webp"
+        ],
+        "link": "https://exemplo.com/funkopop7"
+    },
+    {
+        "id": 16,
+        "name": "Funko Pop - Lenda do Cinema #8",
+        "category": "funkopop",
+        "price": 0.00,
+        "description": "Funko Pop de lenda do cinema em pose memorável. Qualidade premium com detalhes cinematográficos. Edição deluxe para colecionadores.",
+        "image": "./src/img/produtos/funkopop/funkopop_8.webp",
+        "images": [
+            "./src/img/produtos/funkopop/funkopop_8.webp"
+        ],
+        "link": "https://exemplo.com/funkopop8"
+    },
+    {
+        "id": 17,
+        "name": "Funko Pop - Estrela Musical #9",
+        "category": "funkopop",
+        "price": 0.00,
+        "description": "Funko Pop de estrela musical com traje icônico. Acabamento luxuoso e detalhes autênticos. Ideal para fãs de música e colecionadores.",
+        "image": "./src/img/produtos/funkopop/funkopop_9.webp",
+        "images": [
+            "./src/img/produtos/funkopop/funkopop_9.webp"
+        ],
+        "link": "https://exemplo.com/funkopop9"
+    },
+    {
+        "id": 18,
+        "name": "Funko Pop - Aventureiro Corajoso #10",
+        "category": "funkopop",
+        "price": 0.00,
+        "description": "Funko Pop de aventureiro corajoso pronto para ação. Com equipamentos detalhados e pose dinâmica. Perfeito para aventureiros de coração.",
+        "image": "./src/img/produtos/funkopop/funkopop_10.webp",
+        "images": [
+            "./src/img/produtos/funkopop/funkopop_10.webp"
+        ],
+        "link": "https://exemplo.com/funkopop10"
+    },
+    {
+        "id": 19,
+        "name": "Funko Pop - Cientista Brilhante #11",
+        "category": "funkopop",
+        "price": 0.00,
+        "description": "Funko Pop de cientista brilhante com jaleco e acessórios de laboratório. Detalhes precisos e acabamento científico. Edição inteligente.",
+        "image": "./src/img/produtos/funkopop/funkopop_11.webp",
+        "images": [
+            "./src/img/produtos/funkopop/funkopop_11.webp"
+        ],
+        "link": "https://exemplo.com/funkopop11"
+    },
+    {
+        "id": 20,
+        "name": "Funko Pop - Robô Futurista #12",
+        "category": "funkopop",
+        "price": 0.00,
+        "description": "Funko Pop de robô futurista com design metálico. Acabamento cromado e detalhes tecnológicos. Edição sci-fi premium para colecionadores.",
+        "image": "./src/img/produtos/funkopop/funkopop_12.webp",
+        "images": [
+            "./src/img/produtos/funkopop/funkopop_12.webp"
+        ],
+        "link": "https://exemplo.com/funkopop12"
+    },
+    {
+        "id": 21,
+        "name": "Funko Pop - Criatura Mística #13",
+        "category": "funkopop",
+        "price": 0.00,
+        "description": "Funko Pop de criatura mística com asas e detalhes fantásticos. Cores vibrantes e acabamento mágico. Edição rara e encantadora.",
+        "image": "./src/img/produtos/funkopop/funkopop_13.webp",
+        "images": [
+            "./src/img/produtos/funkopop/funkopop_13.webp"
+        ],
+        "link": "https://exemplo.com/funkopop13"
     }
     ,
     {
-        "id": 9,
+        "id": 22,
         "name": "Quadro Decorativo Moderno",
         "category": "quadros",
         "price": 0.00,
         "description": "Quadro decorativo moderno para ambientes sofisticados. Inclui duas imagens para visualização.",
-    "image": "./src/img/produtos/quadros/quadro_1.webp",
+        "image": "./src/img/produtos/quadros/quadro_1.webp",
         "images": [
             "./src/img/produtos/quadros/quadro_1.webp",
             "./src/img/produtos/quadros/quadro_1.1.webp"
@@ -95,7 +225,7 @@
     }
     ,
     {
-        "id": 10,
+        "id": 23,
         "name": "Buquê Artesanal de Flores",
         "category": "buques",
         "price": 0.00,
