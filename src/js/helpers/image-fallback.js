@@ -24,10 +24,16 @@ export function getOriginalImagePath(webpPath) {
         const number = Number.parseInt(match[1], 10);
         // funkopop_1 a funkopop_6 são JPG, funkopop_7+ são PNG
         const ext = number >= 7 ? 'png' : 'jpg';
-        return webpPath.replace('.webp', `.${ext}`);
+        // Substitui /webp/ por /original/ e .webp pela extensão original
+        return webpPath.replace('/webp/', '/original/').replace('.webp', `.${ext}`);
     }
     
     // Para outros casos, tenta JPG primeiro (mais comum)
+    // Se contém /webp/, substitui por /original/
+    if (webpPath.includes('/webp/')) {
+        return webpPath.replace('/webp/', '/original/').replace('.webp', '.jpg');
+    }
+    
     return webpPath.replace('.webp', '.jpg');
 }
 
