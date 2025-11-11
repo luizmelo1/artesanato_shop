@@ -6,8 +6,9 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const inputDir = path.join(__dirname, '../../src/img/produtos/funkopop');
-const outputDir = inputDir;
+const baseDir = path.join(__dirname, '../../src/img/produtos/funkopop');
+const inputDir = path.join(baseDir, 'original');
+const outputDir = path.join(baseDir, 'webp');
 
 // Lista de arquivos para converter
 const files = [

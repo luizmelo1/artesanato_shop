@@ -8,18 +8,11 @@ import { debugLog } from '../utils/debug.js';
 import { createPictureWithFallback, updatePictureSource } from '../helpers/image-fallback.js';
 
 /**
- * Abre o modal para um produto específico.
- * Preenche título, preço, descrição, imagens e links.
+ * Prepara e abre o modal com animação
  * @param {object} dom - Referências DOM
- * @param {Array} products - Lista de produtos
- * @param {number} productId - ID do produto a ser exibido.
- * @param {object} state - Estado da aplicação (para guardar elemento focado)
+ * @param {object} state - Estado da aplicação
  */
-export function openModal(dom, products, productId, state) {
-    debugLog('Abrindo modal para produto:', productId);
-    const product = products.find(p => p.id === productId);
-    if (!product) return;
-
+function prepareAndShowModal(dom, state) {
     // Armazenar elemento que tinha foco antes do modal abrir
     state.previouslyFocusedElement = document.activeElement;
 
@@ -46,7 +39,94 @@ export function openModal(dom, products, productId, state) {
             }
         }, 100);
     });
+}
+
+/**
+ * Configura a imagem principal do modal com suporte a WebP
+ * @param {object} dom - Referências DOM
+ * @param {string} imageSrc - Caminho da imagem
+ * @param {string} productName - Nome do produto para alt text
+ */
+function setupMainImage(dom, imageSrc, productName) {
+    if (!dom.modal.mainImage || !dom.modal.imageContainer) return;
     
+    const existingPicture = dom.modal.imageContainer.querySelector('picture');
+    
+    if (existingPicture) {
+        // Se já existe um picture, apenas atualiza a fonte
+        updatePictureSource(existingPicture, imageSrc, productName);
+    } else {
+        // Remove o <img> antigo e cria um <picture> novo
+        const oldImg = dom.modal.mainImage;
+        const newPicture = createPictureWithFallback(imageSrc, productName, {
+            loading: 'eager',
+            width: 800,
+            height: 600,
+            draggable: false
+        });
+        
+        // Adiciona o ID ao <img> dentro do <picture> para manter compatibilidade
+        const newImg = newPicture.querySelector('img');
+        if (newImg) {
+            newImg.id = 'modal-main-image';
+        }
+        
+        oldImg.replaceWith(newPicture);
+        
+        // Atualiza a referência no DOM
+        dom.modal.mainImage = newImg;
+    }
+}
+
+/**
+ * Configura as miniaturas de imagem do modal
+ * @param {object} dom - Referências DOM
+ * @param {Array} images - Array de caminhos de imagem
+ * @param {string} productName - Nome do produto para alt text
+ */
+function setupThumbnails(dom, images, productName) {
+    if (!dom.modal.thumbs) return;
+    
+    dom.modal.thumbs.innerHTML = '';
+    dom.modal.thumbs.style.display = images.length > 1 ? '' : 'none';
+    
+    let idx = 0;
+    for (const src of images) {
+        const thumbPicture = createPictureWithFallback(src, productName, {
+            loading: 'lazy',
+            width: 72,
+            height: 72,
+            className: idx === 0 ? 'active' : ''
+        });
+        
+        // Adiciona data-src para troca de imagem ao clicar
+        const thumbImg = thumbPicture.querySelector('img');
+        if (thumbImg) {
+            thumbImg.dataset.src = src;
+        }
+        
+        dom.modal.thumbs.appendChild(thumbPicture);
+        idx++;
+    }
+}
+
+/**
+ * Abre o modal para um produto específico.
+ * Preenche título, preço, descrição, imagens e links.
+ * @param {object} dom - Referências DOM
+ * @param {Array} products - Lista de produtos
+ * @param {number} productId - ID do produto a ser exibido.
+ * @param {object} state - Estado da aplicação (para guardar elemento focado)
+ */
+export function openModal(dom, products, productId, state) {
+    debugLog('Abrindo modal para produto:', productId);
+    const product = products.find(p => p.id === productId);
+    if (!product) return;
+
+    // Prepara e exibe o modal
+    prepareAndShowModal(dom, state);
+    
+    // Preenche informações do produto
     dom.modal.productTitle.textContent = product.name;
     dom.modal.price.textContent = `R$ ${product.price.toFixed(2)}`;
     dom.modal.description.textContent = product.description;
@@ -56,60 +136,8 @@ export function openModal(dom, products, productId, state) {
         ? product.images 
         : [product.image];
     
-    if (dom.modal.mainImage && dom.modal.imageContainer) {
-        // Substitui o <img> por <picture> para suporte a WebP com fallback
-        const existingPicture = dom.modal.imageContainer.querySelector('picture');
-        
-        if (existingPicture) {
-            // Se já existe um picture, apenas atualiza a fonte
-            updatePictureSource(existingPicture, imgs[0], product.name);
-        } else {
-            // Remove o <img> antigo e cria um <picture> novo
-            const oldImg = dom.modal.mainImage;
-            const newPicture = createPictureWithFallback(imgs[0], product.name, {
-                loading: 'eager',
-                width: 800,
-                height: 600,
-                draggable: false
-            });
-            
-            // Adiciona o ID ao <img> dentro do <picture> para manter compatibilidade
-            const newImg = newPicture.querySelector('img');
-            if (newImg) {
-                newImg.id = 'modal-main-image';
-            }
-            
-            oldImg.replaceWith(newPicture);
-            
-            // Atualiza a referência no DOM
-            dom.modal.mainImage = newImg;
-        }
-    }
-    
-    // Configurar miniaturas com fallback WebP
-    if (dom.modal.thumbs) {
-        dom.modal.thumbs.innerHTML = '';
-        dom.modal.thumbs.style.display = imgs.length > 1 ? '' : 'none';
-        
-        let idx = 0;
-        for (const src of imgs) {
-            const thumbPicture = createPictureWithFallback(src, product.name, {
-                loading: 'lazy',
-                width: 72,
-                height: 72,
-                className: idx === 0 ? 'active' : ''
-            });
-            
-            // Adiciona data-src para troca de imagem ao clicar
-            const thumbImg = thumbPicture.querySelector('img');
-            if (thumbImg) {
-                thumbImg.dataset.src = src;
-            }
-            
-            dom.modal.thumbs.appendChild(thumbPicture);
-            idx++;
-        }
-    }
+    setupMainImage(dom, imgs[0], product.name);
+    setupThumbnails(dom, imgs, product.name);
     
     // Configurar links
     dom.modal.buyLink.href = product.link;
