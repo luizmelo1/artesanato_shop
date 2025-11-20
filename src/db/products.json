@@ -208,10 +208,81 @@
             "./src/img/produtos/funkopop/webp/funkopop_13.webp"
         ],
         "link": "https://exemplo.com/funkopop13"
-    }
-    ,
+    },
     {
         "id": 22,
+        "name": "Buquê de Rosas Vermelhas Premium",
+        "category": "buques",
+        "price": 0.00,
+        "description": "Lindo buquê de rosas vermelhas frescas, simbolizando amor e paixão. Arranjo elegante com embalagem especial. Perfeito para presentear.",
+        "image": "./src/img/produtos/rosas/webp/rosas_1.webp",
+        "images": [
+            "./src/img/produtos/rosas/webp/rosas_1.webp"
+        ],
+        "link": "https://exemplo.com/rosas1"
+    },
+    {
+        "id": 23,
+        "name": "Arranjo de Rosas Romântico",
+        "category": "buques",
+        "price": 0.00,
+        "description": "Arranjo romântico com rosas selecionadas e folhagens decorativas. Acabamento sofisticado ideal para ocasiões especiais e declarações de amor.",
+        "image": "./src/img/produtos/rosas/webp/rosas_2.webp",
+        "images": [
+            "./src/img/produtos/rosas/webp/rosas_2.webp"
+        ],
+        "link": "https://exemplo.com/rosas2"
+    },
+    {
+        "id": 24,
+        "name": "Buquê de Rosas Delicado",
+        "category": "buques",
+        "price": 0.00,
+        "description": "Buquê delicado com rosas frescas em tons suaves. Perfeito para surpreender alguém especial com elegância e delicadeza.",
+        "image": "./src/img/produtos/rosas/webp/rosas_3.webp",
+        "images": [
+            "./src/img/produtos/rosas/webp/rosas_3.webp"
+        ],
+        "link": "https://exemplo.com/rosas3"
+    },
+    {
+        "id": 25,
+        "name": "Rosas Clássicas - Buquê Especial",
+        "category": "buques",
+        "price": 0.00,
+        "description": "Buquê especial com rosas clássicas de alta qualidade. Arranjo premium com embalagem luxuosa para momentos inesquecíveis.",
+        "image": "./src/img/produtos/rosas/webp/rosas_4.webp",
+        "images": [
+            "./src/img/produtos/rosas/webp/rosas_4.webp"
+        ],
+        "link": "https://exemplo.com/rosas4"
+    },
+    {
+        "id": 26,
+        "name": "Buquê de Rosas Elegante",
+        "category": "buques",
+        "price": 0.00,
+        "description": "Buquê elegante com rosas premium e acabamento refinado. Ideal para celebrações, aniversários e demonstrações de carinho.",
+        "image": "./src/img/produtos/rosas/webp/rosas_5.webp",
+        "images": [
+            "./src/img/produtos/rosas/webp/rosas_5.webp"
+        ],
+        "link": "https://exemplo.com/rosas5"
+    },
+    {
+        "id": 27,
+        "name": "Arranjo de Rosas Encantador",
+        "category": "buques",
+        "price": 0.00,
+        "description": "Arranjo encantador de rosas frescas com design artesanal. Combinação perfeita de beleza e sofisticação para presentear.",
+        "image": "./src/img/produtos/rosas/webp/rosas_6.webp",
+        "images": [
+            "./src/img/produtos/rosas/webp/rosas_6.webp"
+        ],
+        "link": "https://exemplo.com/rosas6"
+    },
+    {
+        "id": 28,
         "name": "Quadro Decorativo Moderno",
         "category": "quadros",
         "price": 0.00,
@@ -225,7 +296,7 @@
     }
     ,
     {
-        "id": 23,
+        "id": 29,
         "name": "Buquê Artesanal de Flores",
         "category": "buques",
         "price": 0.00,
