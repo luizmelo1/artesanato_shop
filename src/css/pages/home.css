@@ -2,17 +2,25 @@
 /* Estilos específicos da página inicial (index.html) */
 
 /* ===== BACKGROUND IMAGES DO HERO ===== */
-/* Background images específicas da home */
+/* Background images em alta resolução (1920x1080) com produtos da loja */
 .hero-bg-1 {
-    background-image: url('https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=1920&q=80');
+    background-image: url('../../img/hero/hero-funkopop-5.webp');
 }
 
 .hero-bg-2 {
-    background-image: url('https://images.unsplash.com/photo-1596571210530-a65ea9fda0e3?auto=format&fit=crop&w=1920&q=80');
+    background-image: url('../../img/hero/hero-rosas-2.webp');
 }
 
 .hero-bg-3 {
-    background-image: url('https://images.unsplash.com/photo-1528484786961-e60836ce769a?auto=format&fit=crop&w=1920&q=80');
+    background-image: url('../../img/hero/hero-funkopop-6.webp');
+}
+
+.hero-bg-4 {
+    background-image: url('../../img/hero/hero-rosas-5.webp');
+}
+
+.hero-bg-5 {
+    background-image: url('../../img/hero/hero-funkopop-5-alt.webp');
 }
 
 /* Título responsivo usando clamp() */
