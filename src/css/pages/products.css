@@ -1,6 +1,28 @@
 /* ===== PAGES/PRODUCTS.CSS ===== */
 /* Estilos específicos da página de produtos (products.html) */
 
+/* ===== BACKGROUND IMAGES DO HERO (PRODUCTS PAGE) ===== */
+/* Usa as mesmas imagens da home page */
+.hero-bg-1 {
+    background-image: url('../../img/hero/hero-funkopop-5.webp');
+}
+
+.hero-bg-2 {
+    background-image: url('../../img/hero/hero-rosas-2.webp');
+}
+
+.hero-bg-3 {
+    background-image: url('../../img/hero/hero-funkopop-6.webp');
+}
+
+.hero-bg-4 {
+    background-image: url('../../img/hero/hero-rosas-5.webp');
+}
+
+.hero-bg-5 {
+    background-image: url('../../img/hero/hero-funkopop-5-alt.webp');
+}
+
 /* ===== SEÇÃO DE PRODUTOS ===== */
 .products {
     padding: var(--spacing-xl) 0;
