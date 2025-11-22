@@ -12,14 +12,14 @@
     <meta name="robots" content="index, follow">
     
     <!-- Canonical URL -->
-    <link rel="canonical" href="https://luizmelo1.github.io/artesanato_shop/">
+    <link rel="canonical" href="https://artesanato-shop-c80f0.web.app/">
     
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://luizmelo1.github.io/artesanato_shop/">
+    <meta property="og:url" content="https://artesanato-shop-c80f0.web.app/">
     <meta property="og:title" content="Ateliê Arte Criativa - Artesanato Feito à Mão com Amor e Dedicação">
     <meta property="og:description" content="Há 10 anos, Ismênia cria peças artesanais únicas feitas à mão. Artesanato exclusivo com carinho, dedicação e atenção aos detalhes.">
-    <meta property="og:image" content="https://luizmelo1.github.io/artesanato_shop/src/img/icons/logo.webp">
+    <meta property="og:image" content="https://artesanato-shop-c80f0.web.app/src/img/icons/logo.webp">
     <meta property="og:image:alt" content="Logo Ateliê Arte Criativa">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
@@ -28,10 +28,10 @@
     
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:url" content="https://luizmelo1.github.io/artesanato_shop/">
+    <meta name="twitter:url" content="https://artesanato-shop-c80f0.web.app/">
     <meta name="twitter:title" content="Ateliê Arte Criativa - Artesanato Feito à Mão">
     <meta name="twitter:description" content="Com 10 anos de experiência, Ismênia cria artesanato exclusivo com carinho e dedicação.">
-    <meta name="twitter:image" content="https://luizmelo1.github.io/artesanato_shop/src/img/icons/logo.webp">
+    <meta name="twitter:image" content="https://artesanato-shop-c80f0.web.app/src/img/icons/logo.webp">
     <meta name="twitter:image:alt" content="Logo Ateliê Arte Criativa">
     
     <!-- Sitemap -->
@@ -52,8 +52,8 @@
             "@type": "LocalBusiness",
             "name": "Ateliê Arte Criativa",
             "description": "Há 10 anos, artesanato feito à mão com carinho e dedicação. Peças artesanais únicas e exclusivas.",
-            "image": "https://luizmelo1.github.io/artesanato_shop/src/img/icons/logo.webp",
-            "url": "https://luizmelo1.github.io/artesanato_shop/",
+            "image": "https://artesanato-shop-c80f0.web.app/src/img/icons/logo.webp",
+            "url": "https://artesanato-shop-c80f0.web.app/",
             "telephone": "",
             "email": "atelieartecriativa083@gmail.com",
             "address": {
@@ -88,10 +88,10 @@
             "@context": "https://schema.org",
             "@type": "WebSite",
             "name": "Ateliê Arte Criativa",
-            "url": "https://luizmelo1.github.io/artesanato_shop/",
+            "url": "https://artesanato-shop-c80f0.web.app/",
             "potentialAction": {
                 "@type": "SearchAction",
-                "target": "https://luizmelo1.github.io/artesanato_shop/products.html?search={search_term_string}",
+                "target": "https://artesanato-shop-c80f0.web.app/products.html?search={search_term_string}",
                 "query-input": "required name=search_term_string"
             }
         }
@@ -241,7 +241,14 @@
         </div>
     </dialog>
 
-    <script src="./src/js/main-modular.js" type="module"></script>
-    <script src="./src/js/header.js" defer></script>
+    <!-- Firebase SDK (apenas App e Firestore para site público) -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+
+    <!-- Firebase Config para Site Público -->
+    <script src="./src/js/firebase-public.js?v=20251121-0100"></script>
+
+    <script src="./src/js/main-modular.js?v=20251121-0100" type="module"></script>
+    <script src="./src/js/header.js?v=20251121-0100" defer></script>
 </body>
 </html>

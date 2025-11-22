@@ -12,14 +12,14 @@
     <meta name="robots" content="index, follow">
     
     <!-- Canonical URL -->
-    <link rel="canonical" href="https://luizmelo1.github.io/artesanato_shop/products.html">
+    <link rel="canonical" href="https://artesanato-shop-c80f0.web.app/products.html">
     
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://luizmelo1.github.io/artesanato_shop/products.html">
+    <meta property="og:url" content="https://artesanato-shop-c80f0.web.app/products.html">
     <meta property="og:title" content="Produtos Artesanais e Decoração | Ateliê Arte Criativa">
     <meta property="og:description" content="Com 10 anos de experiência, apresentamos artesanatos personalizados e peças únicas. Criações exclusivas com entrega em todo Brasil.">
-    <meta property="og:image" content="https://luizmelo1.github.io/artesanato_shop/src/img/icons/logo.webp">
+    <meta property="og:image" content="https://artesanato-shop-c80f0.web.app/src/img/icons/logo.webp">
     <meta property="og:image:alt" content="Logo Ateliê Arte Criativa - Produtos">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
@@ -28,10 +28,10 @@
     
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:url" content="https://luizmelo1.github.io/artesanato_shop/products.html">
+    <meta name="twitter:url" content="https://artesanato-shop-c80f0.web.app/products.html">
     <meta name="twitter:title" content="Produtos Artesanais - Ateliê Arte Criativa">
     <meta name="twitter:description" content="Há 10 anos criando artesanatos personalizados e peças únicas. Criações exclusivas.">
-    <meta name="twitter:image" content="https://luizmelo1.github.io/artesanato_shop/src/img/icons/logo.webp">
+    <meta name="twitter:image" content="https://artesanato-shop-c80f0.web.app/src/img/icons/logo.webp">
     <meta name="twitter:image:alt" content="Logo Ateliê Arte Criativa - Produtos">
     
     <!-- Sitemap -->
@@ -40,7 +40,6 @@
     <!-- Preload recursos críticos -->
     <link rel="preload" href="./src/css/style.css" as="style">
     <link rel="preload" href="https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=1920&q=80" as="image" type="image/jpeg">
-    <link rel="preload" href="./src/db/products.json" as="fetch" crossorigin="anonymous">
     <link rel="modulepreload" href="./src/js/main-modular.js">
     
     <link rel="icon" type="image/webp" href="./src/img/icons/logo.webp">
@@ -53,7 +52,7 @@
             "@type": "ItemList",
             "name": "Produtos Artesanais - Ateliê Arte Criativa",
             "description": "Com 10 anos de experiência, catálogo de artesanato feito à mão com peças exclusivas, decoração e buquês.",
-            "url": "https://luizmelo1.github.io/artesanato_shop/products.html",
+            "url": "https://artesanato-shop-c80f0.web.app/products.html",
             "numberOfItems": 10,
             "itemListElement": [
                 {
@@ -63,7 +62,7 @@
                         "@type": "Product",
                         "name": "Funko Pop - Edição Colecionável",
                         "description": "Funko Pop colecionável com acabamento exclusivo.",
-                        "image": "https://luizmelo1.github.io/artesanato_shop/src/img/produtos/funkopop/funkopop_1.webp",
+                        "image": "https://artesanato-shop-c80f0.web.app/src/img/produtos/funkopop/funkopop_1.webp",
                         "category": "Funko Pop",
                         "brand": {
                             "@type": "Brand",
@@ -84,7 +83,7 @@
                         "@type": "Product",
                         "name": "Quadro Decorativo Moderno",
                         "description": "Quadro decorativo moderno para ambientes sofisticados.",
-                        "image": "https://luizmelo1.github.io/artesanato_shop/src/img/produtos/quadros/quadro_1.webp",
+                        "image": "https://artesanato-shop-c80f0.web.app/src/img/produtos/quadros/quadro_1.webp",
                         "category": "Quadros Decorativos",
                         "brand": {
                             "@type": "Brand",
@@ -133,13 +132,13 @@
           "@type": "ListItem",
           "position": 1,
           "name": "Início",
-          "item": "https://luizmelo1.github.io/artesanato_shop/"
+          "item": "https://artesanato-shop-c80f0.web.app/"
         },
         {
           "@type": "ListItem",
           "position": 2,
           "name": "Produtos",
-          "item": "https://luizmelo1.github.io/artesanato_shop/products.html"
+          "item": "https://artesanato-shop-c80f0.web.app/products.html"
         }
       ]
     }
@@ -209,6 +208,7 @@
                 <button class="category" data-category="funkopop" aria-pressed="false">Funko Pop</button>
                 <button class="category" data-category="personalizados" aria-pressed="false">Personalizados</button>
                 <button class="category" data-category="quadros" aria-pressed="false">Quadros</button>
+                <button class="category" data-category="teste" aria-pressed="false">Teste</button>
                 <button class="category clear-filters hidden" type="button" aria-label="Limpar filtros">Limpar filtros <span class="filters-count hidden" aria-hidden="true">(0)</span></button>
             </div>
         </section>
@@ -287,7 +287,15 @@
         </div>
     </dialog>
 
-    <script src="./src/js/main-modular.js" type="module"></script>
-    <script src="./src/js/header.js" defer></script>
+    <!-- Firebase SDK (apenas App e Firestore para site público) -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+
+    <!-- Firebase Config para Site Público -->
+    <script src="./src/js/firebase-public.js?v=20251121-0100"></script>
+
+    <!-- Scripts da Aplicação -->
+    <script src="./src/js/main-modular.js?v=20251121-0100" type="module"></script>
+    <script src="./src/js/header.js?v=20251121-0100" defer></script>
 </body>
 </html>

@@ -3,12 +3,11 @@
  * Carrega, filtra, renderiza e cria cards de produtos
  */
 
-import { cache } from '../utils/cache.js';
-import { debugLog, debugWarn, debugError } from '../utils/debug.js';
+import { debugLog, debugError } from '../utils/debug.js';
 import { createPictureWithFallback } from '../helpers/image-fallback.js';
 
 /**
- * Busca produtos do arquivo JSON (simulando API), salva no estado e no cache.
+ * Busca produtos do Firestore, salva no estado e no cache.
  * @param {object} dom - Referências DOM
  * @param {object} state - Estado da aplicação
  */
@@ -23,19 +22,47 @@ export async function fetchProducts(dom, state) {
             debugLog('Loader ativado');
         }
 
-        debugLog('Fazendo fetch de ./src/db/products.json');
-        const response = await fetch('./src/db/products.json');
-        debugLog('Response recebida:', response.status, response.statusText);
-        
-        if (!response.ok) throw new Error('Falha ao carregar produtos');
+        // Verifica se Firebase está configurado
+        if (typeof firebase === 'undefined' || !firebase.firestore) {
+            const error = new Error('Firebase não está configurado. Impossível carregar produtos.');
+            debugError(error.message);
+            state.products = [];
+            throw error;
+        }
 
-        state.products = await response.json();
-        debugLog('Produtos carregados da API:', state.products.length, 'itens');
+        debugLog('Buscando produtos do Firestore...');
+        const db = firebase.firestore();
+        
+        // Busca produtos ativos SEM orderBy (evita necessidade de índice)
+        // Vamos ordenar no cliente após receber os dados
+        const snapshot = await db.collection('products')
+            .where('active', '==', true)
+            .get();
+        
+        debugLog('Snapshot recebido:', snapshot.size, 'documentos');
+        
+        // Converte documentos para array de produtos
+        state.products = snapshot.docs.map(doc => {
+            const data = doc.data();
+            return {
+                id: doc.id,
+                name: data.name || 'Sem nome',
+                category: data.category || 'Outros',
+                price: data.price || 0,
+                description: data.description || '',
+                link: data.link || '',
+                image: data.image || ''
+            };
+        });
+        
+        // Ordena produtos por nome no cliente (já que removemos orderBy da query)
+        state.products.sort((a, b) => a.name.localeCompare(b.name, 'pt-BR'));
+        
+        debugLog('Produtos carregados do Firestore:', state.products.length, 'itens');
         debugLog('Primeiros 3 produtos:', state.products.slice(0, 3));
 
-        // Salva no cache para próximas visitas
-        cache.set(state.products);
-        debugLog('Produtos salvos no cache');
+        // Cache desativado - não salva mais no localStorage
+        // cache.set(state.products);
 
         return state.products;
     } catch (err) {
@@ -61,39 +88,22 @@ export async function fetchProducts(dom, state) {
 }
 
 /**
- * Verifica atualizações do catálogo em background sem bloquear a UI.
- * Se houver mudanças, atualiza o cache para uso no próximo carregamento.
- * @param {Array} currentProducts - Produtos atuais em memória
+ * Função removida - cache desativado, produtos sempre vêm do Firestore
  */
-export async function updateCacheInBackground(currentProducts) {
-    try {
-        debugLog('Verificando atualizações em background...');
-        const response = await fetch('./src/db/products.json');
-        if (!response.ok) return;
-        
-        const newProducts = await response.json();
-        
-        // Compara produtos atuais com novos
-        if (JSON.stringify(newProducts) === JSON.stringify(currentProducts)) {
-            debugLog('Produtos estão atualizados');
-        } else {
-            debugLog('Novos produtos disponíveis, atualizando cache...');
-            cache.set(newProducts);
-        }
-    } catch (error) {
-        debugWarn('Não foi possível verificar atualizações:', error);
-    }
+export async function updateCacheInBackground() {
+    // Cache removido - não faz mais nada
 }
 
 /**
  * Força atualização completa da lista de produtos:
- * limpa o cache e recarrega da origem.
+ * recarrega direto do Firestore (cache já desativado)
  * @param {object} dom - Referências DOM
  * @param {object} state - Estado da aplicação
  */
 export async function forceRefresh(dom, state) {
     debugLog('Forçando atualização...');
-    cache.clear();
+    // Cache desativado - não precisa limpar
+    // cache.clear();
     await fetchProducts(dom, state);
     if (dom.products.container) {
         loadProducts(dom, state.products, 'all');

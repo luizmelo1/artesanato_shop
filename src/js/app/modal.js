@@ -120,8 +120,12 @@ function setupThumbnails(dom, images, productName) {
  */
 export function openModal(dom, products, productId, state) {
     debugLog('Abrindo modal para produto:', productId);
-    const product = products.find(p => p.id === productId);
-    if (!product) return;
+    // Compara IDs como strings para compatibilidade com Firestore
+    const product = products.find(p => String(p.id) === String(productId));
+    if (!product) {
+        debugLog('ERRO: Produto não encontrado com ID:', productId);
+        return;
+    }
 
     // Prepara e exibe o modal
     prepareAndShowModal(dom, state);

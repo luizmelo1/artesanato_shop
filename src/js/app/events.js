@@ -64,7 +64,9 @@ export function setupEventListeners(dom, callbacks) {
             const detailsButton = e.target.closest('.btn-details');
             if (detailsButton) {
                 e.preventDefault();
-                const productId = Number.parseInt(detailsButton.dataset.id, 10);
+                // Aceita tanto IDs numéricos quanto strings do Firestore
+                const productId = detailsButton.dataset.id;
+                debugLog('Abrindo modal para produto:', productId);
                 callbacks.onOpenModal(productId);
             }
         });

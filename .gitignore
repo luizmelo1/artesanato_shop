@@ -1,3 +1,16 @@
+# Firebase
+.firebase/
+firebase-debug.log
+firebase-debug.*.log
+
+# Environment variables (credenciais sensíveis)
+.env
+.env.local
+.env.*.local
+firebase-credentials.js
+admin/js/firebase-config.js
+src/js/firebase-public.js
+
 # Node.js dependencies
 node_modules/
 build-tools/node_modules/
@@ -6,6 +19,16 @@ package-lock.json
 # Logs
 *.log
 npm-debug.log*
+
+# Build
+.cache/
+dist/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
 
 # OS files
 .DS_Store

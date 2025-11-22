@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Admin</title>
+    <link rel="stylesheet" href="css/admin-styles-modular.css">
+</head>
+<body>
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="logo">
+            <h2>🎨 Admin</h2>
+        </div>
+        <nav class="nav-menu">
+            <a href="dashboard.html" class="nav-item active">
+                <span class="icon">📊</span>
+                Dashboard
+            </a>
+            <a href="products.html" class="nav-item">
+                <span class="icon">📦</span>
+                Produtos
+            </a>
+            <a href="categories.html" class="nav-item">
+                <span class="icon">🏷️</span>
+                Categorias
+            </a>
+        </nav>
+        <div class="user-info">
+            <div class="user-avatar">👤</div>
+            <div class="user-details">
+                <span class="user-name" id="user-email"></span>
+            </div>
+            <button class="btn-icon" id="logout-btn" title="Sair">
+                🚪
+            </button>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <header class="page-header">
+            <div>
+                <h1>Dashboard</h1>
+                <p class="page-subtitle">Bem-vinda ao painel administrativo</p>
+            </div>
+        </header>
+
+        <!-- Estatísticas -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h3>Total de Produtos</h3>
+                <div class="stat-value" id="total-products">-</div>
+            </div>
+
+            <div class="stat-card">
+                <h3>Categorias</h3>
+                <div class="stat-value" id="total-categories">-</div>
+            </div>
+
+            <div class="stat-card">
+                <h3>Produto Mais Recente</h3>
+                <div class="stat-value" id="latest-product">-</div>
+            </div>
+        </div>
+
+        <!-- Dashboard Grid -->
+        <div class="dashboard-grid">
+            <!-- Ações Rápidas -->
+            <div class="card">
+                <h2>Ações Rápidas</h2>
+                <div class="quick-actions">
+                    <a href="products.html" class="quick-action">
+                        <span class="icon">➕</span>
+                        <span>Novo Produto</span>
+                    </a>
+                    <a href="categories.html" class="quick-action">
+                        <span class="icon">🏷️</span>
+                        <span>Nova Categoria</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Produtos Recentes -->
+            <div class="card">
+                <h2>Produtos Recentes</h2>
+                <div id="recent-products-list">
+                    <p class="empty-state">Carregando produtos...</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script>
+    
+    <!-- Configuração Firebase -->
+    <script src="js/firebase-config.js"></script>
+    
+    <!-- Scripts Admin -->
+    <script src="js/auth-check.js"></script>
+    <script src="js/dashboard.js"></script>
+</body>
+</html>

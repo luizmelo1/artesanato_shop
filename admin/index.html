@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>Admin - Login | Ateliê Arte Criativa</title>
+    <link rel="stylesheet" href="/admin/css/admin-styles-modular.css">
+    <link rel="icon" href="/src/img/icons/logo.webp">
+</head>
+<body class="login-page">
+    <div class="login-container">
+        <div class="login-box">
+            <div class="login-header">
+                <div class="logo-circle">
+                    <img src="/src/img/icons/logo.webp" alt="Logo Ateliê Arte Criativa" class="logo-image">
+                </div>
+                <h1>Ateliê Arte Criativa</h1>
+                <p class="subtitle">Painel Administrativo</p>
+            </div>
+
+            <form id="login-form" class="login-form">
+                <div class="form-group">
+                    <label for="email">E-mail</label>
+                    <div class="input-wrapper">
+                        <span class="input-icon">📧</span>
+                        <input 
+                            type="email" 
+                            id="email" 
+                            required 
+                            placeholder="seu@email.com"
+                            autocomplete="email">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Senha</label>
+                    <div class="input-wrapper">
+                        <span class="input-icon">🔒</span>
+                        <input 
+                            type="password" 
+                            id="password" 
+                            required 
+                            placeholder="••••••••"
+                            autocomplete="current-password">
+                    </div>
+                </div>
+
+                <div id="error-message" class="error-message hidden"></div>
+
+                <button type="submit" class="btn btn-login" id="login-btn" ontouchstart="">
+                    <span>Entrar</span>
+                    <span class="btn-arrow">→</span>
+                </button>
+            </form>
+
+            <div class="login-footer">
+                <a href="/index.html" class="back-link">
+                    <span class="back-arrow">←</span>
+                    <span>Voltar ao site</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDKs (carregados via CDN) -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script>
+    
+    <!-- Configuração Firebase -->
+    <script src="/admin/js/firebase-config.js?v=20251120-2350"></script>
+    
+    <!-- Script de Login -->
+    <script src="/admin/js/auth.js?v=20251120-2350"></script>
+</body>
+</html>

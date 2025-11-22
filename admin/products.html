@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Produtos - Admin</title>
+    <link rel="stylesheet" href="css/admin-styles-modular.css">
+</head>
+<body>
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="logo">
+            <h2>🎨 Admin</h2>
+        </div>
+        <nav class="nav-menu">
+            <a href="dashboard.html" class="nav-item">
+                <span class="icon">📊</span>
+                Dashboard
+            </a>
+            <a href="products.html" class="nav-item active">
+                <span class="icon">📦</span>
+                Produtos
+            </a>
+            <a href="categories.html" class="nav-item">
+                <span class="icon">🏷️</span>
+                Categorias
+            </a>
+        </nav>
+        <div class="user-info">
+            <div class="user-avatar">👤</div>
+            <div class="user-details">
+                <span class="user-name" id="user-email"></span>
+            </div>
+            <button class="btn-icon" id="logout-btn" title="Sair">
+                🚪
+            </button>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <header class="page-header">
+            <div>
+                <h1>Produtos</h1>
+                <p class="page-subtitle">Gerencie os produtos da loja</p>
+            </div>
+            <button class="btn btn-primary" onclick="openModal()">
+                ➕ Novo Produto
+            </button>
+        </header>
+
+        <!-- Filtros -->
+        <div class="filters">
+            <input 
+                type="search" 
+                id="search-input" 
+                placeholder="Buscar produtos..."
+                aria-label="Buscar produtos">
+            <select id="category-filter" aria-label="Filtrar por categoria">
+                <option value="">Todas as categorias</option>
+            </select>
+            <select id="status-filter" aria-label="Filtrar por status">
+                <option value="">Todos os status</option>
+                <option value="true">Ativos</option>
+                <option value="false">Inativos</option>
+            </select>
+        </div>
+
+        <!-- Lista de Produtos -->
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Imagem</th>
+                        <th>Nome</th>
+                        <th>Categoria</th>
+                        <th>Preço</th>
+                        <th>Status</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody id="products-table-body">
+                    <tr>
+                        <td colspan="6" class="empty-state">Carregando produtos...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <!-- Modal -->
+    <div id="product-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modal-title">Novo Produto</h2>
+                <button class="btn-close" onclick="closeModal()">✕</button>
+            </div>
+            
+            <form id="product-form">
+                <div class="form-group">
+                    <label for="product-name">Nome do Produto *</label>
+                    <input type="text" id="product-name" required placeholder="Ex: Funko Pop Batman">
+                </div>
+
+                <div class="form-group">
+                    <label for="product-category">Categoria *</label>
+                    <select id="product-category" required>
+                        <option value="">Selecione uma categoria</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="product-price">Preço (R$) *</label>
+                    <input type="number" id="product-price" step="0.01" min="0" required placeholder="89.90">
+                </div>
+
+                <div class="form-group">
+                    <label for="product-description">Descrição</label>
+                    <textarea id="product-description" rows="3" placeholder="Descrição do produto"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="product-link">Link do WhatsApp</label>
+                    <input type="url" id="product-link" placeholder="https://wa.me/...">
+                </div>
+
+                <div class="form-group">
+                    <label for="product-image">Imagem do Produto *</label>
+                    <label for="product-image" class="upload-area">
+                        <p>📁 Clique para selecionar uma imagem</p>
+                        <p class="text-muted">PNG, JPG ou WebP até 5MB</p>
+                        <input type="file" id="product-image" accept="image/*" class="file-input" aria-label="Selecionar imagem do produto">
+                    </label>
+                    <div id="image-preview"></div>
+                    <div id="upload-progress" class="hidden">
+                        <div class="progress-bar-container">
+                            <div class="progress-bar"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="product-active" checked>
+                        <span>Produto ativo</span>
+                    </label>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal()">
+                        Cancelar
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        Salvar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script>
+    
+    <!-- Configuração Firebase -->
+    <script src="js/firebase-config.js"></script>
+    
+    <!-- Scripts Admin -->
+    <script src="js/auth-check.js"></script>
+    <script src="js/products.js"></script>
+</body>
+</html>

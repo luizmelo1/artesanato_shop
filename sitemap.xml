@@ -4,34 +4,34 @@
   
   <!-- Página Inicial -->
   <url>
-    <loc>https://luizmelo1.github.io/artesanato_shop/</loc>
-    <lastmod>2025-11-05</lastmod>
+    <loc>https://artesanato-shop-c80f0.web.app/</loc>
+    <lastmod>2025-11-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   
   <!-- Página de Produtos -->
   <url>
-    <loc>https://luizmelo1.github.io/artesanato_shop/products.html</loc>
-    <lastmod>2025-11-05</lastmod>
+    <loc>https://artesanato-shop-c80f0.web.app/products.html</loc>
+    <lastmod>2025-11-20</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
   </url>
   
   <!-- Seção Sobre (âncora na página inicial) -->
   <url>
-    <loc>https://luizmelo1.github.io/artesanato_shop/#about</loc>
-    <lastmod>2025-11-05</lastmod>
+    <loc>https://artesanato-shop-c80f0.web.app/#about</loc>
+    <lastmod>2025-11-20</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <!-- Seção Contato (âncora na página inicial) -->
   <url>
-    <loc>https://luizmelo1.github.io/artesanato_shop/#contact</loc>
-    <lastmod>2025-11-05</lastmod>
+    <loc>https://artesanato-shop-c80f0.web.app/#contact</loc>
+    <lastmod>2025-11-20</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
-  </url>
+  </url
   
 </urlset>
