@@ -6,10 +6,10 @@
 // Importações de módulos
 import { initializeDOM } from './app/dom.js';
 import * as ProductsModule from './app/products.js';
+import * as CategoriesModule from './app/categories.js';
 import * as ModalModule from './app/modal.js';
 import * as EventsModule from './app/events.js';
 import * as SlideshowModule from './app/slideshow.js';
-import { cache } from './utils/cache.js';
 import { debugLog, debugError } from './utils/debug.js';
 
 /**
@@ -40,8 +40,17 @@ class ArtesanatoShop {
         debugLog('Container de produtos:', this.DOM.products.container);
         debugLog('Botões de categoria:', this.DOM.products.categories);
 
+        // Carrega categorias dinamicamente do Firestore (se estiver na página de produtos)
+        if (this.DOM.products.categoriesContainer) {
+            await this.loadCategoriesData();
+        }
+
         // Ativa o botão "Todos" por padrão
         this.activateAllCategoryButton();
+
+        // Configura event listeners ANTES de carregar produtos
+        // Isso garante que os botões de categoria tenham handlers anexados
+        this.setupEventListeners();
 
         // Carrega produtos (cache ou API)
         await this.loadProductsData();
@@ -49,10 +58,29 @@ class ArtesanatoShop {
         // Inicializa slideshow do hero
         SlideshowModule.initHeroSlideshow(this.DOM);
 
-        // Configura event listeners apenas uma vez após carregar produtos
-        this.setupEventListeners();
-
         debugLog('=== FIM DA INICIALIZAÇÃO ===');
+    }
+
+    /**
+     * Carrega categorias do Firestore e renderiza botões
+     */
+    async loadCategoriesData() {
+        try {
+            debugLog('Carregando categorias do Firestore...');
+            const categories = await CategoriesModule.loadCategories(this.DOM);
+            
+            if (categories.length > 0) {
+                debugLog('Renderizando botões de categorias...');
+                CategoriesModule.renderCategoryButtons(this.DOM, categories);
+                // Atualiza a referência DOM após renderizar as categorias
+                this.DOM.products.categories = this.DOM.products.categoriesContainer.querySelectorAll('.category');
+                debugLog('Referência de categorias atualizada:', this.DOM.products.categories.length, 'botões');
+            } else {
+                debugLog('Nenhuma categoria encontrada, mantendo botões padrão');
+            }
+        } catch (error) {
+            debugError('Erro ao carregar categorias:', error);
+        }
     }
 
     /**
@@ -80,14 +108,11 @@ class ArtesanatoShop {
      * Carrega produtos do cache ou da API
      */
     async loadProductsData() {
-        const cachedProducts = cache.get();
-        debugLog('Cache recuperado:', cachedProducts);
+        debugLog('=== loadProductsData ===');
         
-        if (cachedProducts && cache.isValid()) {
-            await this.loadFromCache(cachedProducts);
-        } else {
-            await this.loadFromAPI();
-        }
+        // CACHE DESATIVADO - Sempre busca do Firestore para garantir dados atualizados
+        debugLog('Buscando direto do Firestore (cache desativado permanentemente)');
+        await this.loadFromAPI();
     }
 
     /**

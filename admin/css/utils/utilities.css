@@ -1,0 +1,150 @@
+/* ===============================================
+   UTILITIES & RESPONSIVE
+   =============================================== */
+
+.hidden {
+    display: none !important;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.mt-1 { margin-top: 0.5rem; }
+.mt-2 { margin-top: 1rem; }
+.mt-3 { margin-top: 1.5rem; }
+.mt-4 { margin-top: 2rem; }
+
+.mb-1 { margin-bottom: 0.5rem; }
+.mb-2 { margin-bottom: 1rem; }
+.mb-3 { margin-bottom: 1.5rem; }
+.mb-4 { margin-bottom: 2rem; }
+
+/* ===============================================
+   RESPONSIVE
+   =============================================== */
+
+@media (max-width: 768px) {
+    .sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+    }
+    
+    .user-info {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 1rem 1.5rem;
+        background-color: rgba(0, 0, 0, 0.2);
+    }
+    
+    .user-name {
+        display: block;
+        font-size: 0.875rem;
+        color: rgba(255, 255, 255, 0.9);
+        word-break: break-all;
+    }
+    
+    #logout-btn,
+    .btn-icon {
+        cursor: pointer;
+        pointer-events: auto;
+        touch-action: manipulation;
+        min-width: 44px;
+        min-height: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(255, 255, 255, 0.1);
+        border: none;
+        border-radius: 8px;
+        font-size: 1.25rem;
+        color: white;
+        flex-shrink: 0;
+    }
+    
+    #logout-btn:active,
+    .btn-icon:active {
+        background: rgba(255, 255, 255, 0.3);
+        transform: scale(0.95);
+    }
+    
+    .main-content {
+        margin-left: 0;
+        padding: 1rem;
+    }
+    
+    .page-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+    
+    .filters {
+        grid-template-columns: 1fr;
+    }
+    
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .categories-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    /* Login page mobile */
+    .login-container {
+        padding: 1rem;
+        min-height: 100vh;
+    }
+    
+    .login-box {
+        padding: 2rem 1.5rem;
+        width: 100%;
+        max-width: 100%;
+    }
+    
+    .logo-circle {
+        width: 80px;
+        height: 80px;
+        margin-bottom: 1rem;
+    }
+    
+    .login-header h1 {
+        font-size: 1.5rem;
+    }
+    
+    .login-header .subtitle {
+        font-size: 0.8rem;
+    }
+    
+    .btn-login {
+        padding: 1rem;
+        font-size: 1rem;
+        min-height: 48px;
+    }
+    
+    .input-wrapper input,
+    .form-group input[type="text"],
+    .form-group input[type="email"],
+    .form-group input[type="password"] {
+        font-size: 16px !important; /* Previne zoom no iOS */
+        min-height: 48px;
+        padding: 0.875rem !important;
+    }
+    
+    .input-wrapper input {
+        padding-left: 3rem !important;
+    }
+    
+    .form-group label {
+        font-size: 0.95rem;
+        font-weight: 600;
+    }
+    
+    /* Melhorar área de toque */
+    .btn, .btn-login, button {
+        min-height: 44px;
+    }
+}

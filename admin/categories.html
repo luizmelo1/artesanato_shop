@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Categorias - Admin</title>
+    <link rel="stylesheet" href="css/admin-styles-modular.css">
+</head>
+<body>
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="logo">
+            <h2>🎨 Admin</h2>
+        </div>
+        <nav class="nav-menu">
+            <a href="dashboard.html" class="nav-item">
+                <span class="icon">📊</span>
+                Dashboard
+            </a>
+            <a href="products.html" class="nav-item">
+                <span class="icon">📦</span>
+                Produtos
+            </a>
+            <a href="categories.html" class="nav-item active">
+                <span class="icon">🏷️</span>
+                Categorias
+            </a>
+        </nav>
+        <div class="user-info">
+            <div class="user-avatar">👤</div>
+            <div class="user-details">
+                <span class="user-name" id="user-email"></span>
+            </div>
+            <button class="btn-icon" id="logout-btn" title="Sair">
+                🚪
+            </button>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <header class="page-header">
+            <div>
+                <h1>Categorias</h1>
+                <p class="page-subtitle">Gerencie as categorias dos produtos</p>
+            </div>
+            <button class="btn btn-primary" onclick="openModal()">
+                ➕ Nova Categoria
+            </button>
+        </header>
+
+        <!-- Categorias Grid -->
+        <div id="categories-list" class="categories-grid">
+            <!-- Categorias serão carregadas aqui -->
+        </div>
+    </main>
+
+    <!-- Modal -->
+    <div id="category-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modal-title">Nova Categoria</h2>
+                <button class="btn-close" onclick="closeModal()">✕</button>
+            </div>
+            
+            <form id="category-form">
+                <div class="form-group">
+                    <label for="category-name">Nome da Categoria *</label>
+                    <input type="text" id="category-name" required 
+                           placeholder="Ex: Funko Pop, Rosas, Quadros">
+                </div>
+
+                <div class="form-group">
+                    <label for="category-description">Descrição</label>
+                    <textarea id="category-description" rows="3"
+                              placeholder="Descrição da categoria (opcional)"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="category-active" checked>
+                        <span>Categoria ativa</span>
+                    </label>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal()">
+                        Cancelar
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        Salvar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script>
+    
+    <!-- Scripts -->
+    <script src="js/firebase-config.js"></script>
+    <script src="js/auth-check.js"></script>
+    <script src="js/categories.js"></script>
+</body>
+</html>

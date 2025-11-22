@@ -29,6 +29,7 @@ export function initializeDOM() {
             container: document.getElementById('products-container'),
             loader: document.getElementById('products-loader'),
             searchInput: document.getElementById('product-search'),
+            categoriesContainer: document.querySelector('.categories'),
             categories: isProductsPage ? document.querySelectorAll('.category') : null,
             grid: document.querySelector('.products-grid')
         },

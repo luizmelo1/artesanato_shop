@@ -1,0 +1,20 @@
+/* ===============================================
+   ADMIN PANEL STYLES - MODULAR
+   =============================================== */
+
+/* 1. Core - Fundamentos */
+@import url('core/base.css');
+@import url('core/layout.css');
+
+/* 2. Components - Elementos reutilizáveis */
+@import url('components/components.css');
+@import url('components/tables.css');
+@import url('components/modal.css');
+
+/* 3. Pages - Estilos específicos de cada página */
+@import url('pages/login.css');
+@import url('pages/dashboard.css');
+@import url('pages/categories.css');
+
+/* 4. Utils - Classes auxiliares e responsividade */
+@import url('utils/utilities.css');

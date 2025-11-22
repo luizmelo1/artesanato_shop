@@ -4,7 +4,7 @@
  */
 
 // Flag de debug - altere para true durante desenvolvimento
-const DEBUG_MODE = false;
+const DEBUG_MODE = true;
 
 /**
  * Log condicional (apenas se DEBUG_MODE = true)
