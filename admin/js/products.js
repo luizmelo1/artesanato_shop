@@ -12,10 +12,14 @@ const productForm = document.getElementById('product-form');
 const searchInput = document.getElementById('search-input');
 const categoryFilter = document.getElementById('category-filter');
 const statusFilter = document.getElementById('status-filter');
-const imageInput = document.getElementById('product-image');
-const imagePreview = document.getElementById('image-preview');
+const imagesInput = document.getElementById('product-images');
+const imagesPreview = document.getElementById('images-preview');
 const uploadProgress = document.getElementById('upload-progress');
 const progressBar = document.querySelector('.progress-bar');
+const uploadStatus = document.querySelector('.upload-status');
+
+// Array para armazenar URLs de imagens temporariamente
+let selectedImages = [];
 
 // Carregar produtos
 async function loadProducts() {
@@ -142,9 +146,10 @@ function filterProducts() {
 // Abrir modal (novo produto)
 function openModal() {
     currentProductId = null;
+    selectedImages = [];
     modalTitle.textContent = 'Novo Produto';
     productForm.reset();
-    imagePreview.innerHTML = '';
+    imagesPreview.innerHTML = '';
     uploadProgress.classList.add('hidden');
     modal.classList.add('show');
 }
@@ -165,10 +170,9 @@ async function editProduct(productId) {
     document.getElementById('product-link').value = product.link || '';
     document.getElementById('product-active').checked = product.active;
     
-    // Mostrar imagem atual
-    if (product.image) {
-        imagePreview.innerHTML = `<img src="${product.image}" alt="${product.name}">`;
-    }
+    // Mostrar imagens atuais
+    selectedImages = product.images || (product.image ? [product.image] : []);
+    renderImagesPreview();
     
     modal.classList.add('show');
 }
@@ -200,10 +204,16 @@ productForm.addEventListener('submit', async (e) => {
             updatedAt: firebase.firestore.FieldValue.serverTimestamp()
         };
         
-        // Upload de imagem (se houver)
-        if (imageInput.files.length > 0) {
-            const imageUrl = await uploadImage(imageInput.files[0]);
-            productData.image = imageUrl;
+        // Upload de novas imagens (se houver)
+        if (imagesInput.files.length > 0) {
+            const newImageUrls = await uploadMultipleImages(Array.from(imagesInput.files));
+            selectedImages = [...selectedImages, ...newImageUrls];
+        }
+        
+        // Salvar array de imagens
+        if (selectedImages.length > 0) {
+            productData.images = selectedImages;
+            productData.image = selectedImages[0]; // Mantém compatibilidade com código antigo
         }
         
         // Salvar no Firestore
@@ -230,50 +240,64 @@ productForm.addEventListener('submit', async (e) => {
     }
 });
 
-// Upload de imagem
-async function uploadImage(file) {
-    return new Promise((resolve, reject) => {
+// Upload de múltiplas imagens
+async function uploadMultipleImages(files) {
+    if (files.length === 0) return [];
+    
+    uploadProgress.classList.remove('hidden');
+    const uploadedUrls = [];
+    
+    for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        
         // Validar tipo
         if (!file.type.startsWith('image/')) {
-            reject(new Error('Arquivo não é uma imagem'));
-            return;
+            showNotification(`${file.name} não é uma imagem`, 'error');
+            continue;
         }
         
         // Validar tamanho (5MB)
         if (file.size > 5 * 1024 * 1024) {
-            reject(new Error('Imagem muito grande (máximo 5MB)'));
-            return;
+            showNotification(`${file.name} muito grande (máximo 5MB)`, 'error');
+            continue;
         }
         
-        // Nome único
+        try {
+            uploadStatus.textContent = `Enviando imagem ${i + 1} de ${files.length}...`;
+            const url = await uploadSingleImage(file, i, files.length);
+            uploadedUrls.push(url);
+        } catch (error) {
+            console.error('Erro ao fazer upload:', error);
+            showNotification(`Erro ao enviar ${file.name}`, 'error');
+        }
+    }
+    
+    uploadProgress.classList.add('hidden');
+    uploadStatus.textContent = '';
+    progressBar.style.width = '0%';
+    
+    return uploadedUrls;
+}
+
+// Upload de uma única imagem
+async function uploadSingleImage(file, index, total) {
+    return new Promise((resolve, reject) => {
         const timestamp = Date.now();
-        const fileName = `products/${timestamp}_${file.name}`;
-        
-        // Upload
+        const fileName = `products/${timestamp}_${index}_${file.name}`;
         const uploadTask = storage.ref().child(fileName).put(file);
-        
-        // Mostrar progresso
-        uploadProgress.classList.remove('hidden');
         
         uploadTask.on('state_changed',
             (snapshot) => {
-                // Progresso
                 const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                progressBar.style.width = progress + '%';
+                const totalProgress = ((index + (progress / 100)) / total) * 100;
+                progressBar.style.width = totalProgress + '%';
             },
-            (error) => {
-                // Erro
-                uploadProgress.classList.add('hidden');
-                reject(error);
-            },
+            (error) => reject(error),
             async () => {
-                // Sucesso
                 try {
                     const url = await uploadTask.snapshot.ref.getDownloadURL();
-                    uploadProgress.classList.add('hidden');
                     resolve(url);
                 } catch (error) {
-                    uploadProgress.classList.add('hidden');
                     reject(error);
                 }
             }
@@ -281,18 +305,55 @@ async function uploadImage(file) {
     });
 }
 
-// Preview de imagem
-imageInput.addEventListener('change', (e) => {
-    const file = e.target.files[0];
-    if (file) {
-        const reader = new FileReader();
-        reader.onload = (event) => {
-            if (typeof event.target.result === 'string') {
-                imagePreview.innerHTML = `<img src="${event.target.result}" alt="Preview">`;
-            }
-        };
-        reader.readAsDataURL(file);
-    }
+// Renderizar preview de imagens
+function renderImagesPreview() {
+    imagesPreview.innerHTML = selectedImages.map((url, index) => `
+        <div class="image-preview-item">
+            <img src="${url}" alt="Imagem ${index + 1}">
+            <button type="button" class="remove-image" onclick="removeImage(${index})" title="Remover imagem">×</button>
+            <span class="image-order">#${index + 1}</span>
+        </div>
+    `).join('');
+}
+
+// Remover imagem do array
+function removeImage(index) {
+    selectedImages.splice(index, 1);
+    renderImagesPreview();
+}
+
+// Preview de novas imagens selecionadas
+imagesInput.addEventListener('change', (e) => {
+    const files = Array.from(e.target.files);
+    if (files.length === 0) return;
+    
+    // Criar previews locais das novas imagens
+    const previewPromises = files.map(file => {
+        return new Promise((resolve) => {
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                if (typeof event.target.result === 'string') {
+                    resolve(event.target.result);
+                }
+            };
+            reader.readAsDataURL(file);
+        });
+    });
+    
+    Promise.all(previewPromises).then(previews => {
+        // Adiciona previews temporários (serão substituídos por URLs após upload)
+        const existingCount = selectedImages.length;
+        previews.forEach((preview, i) => {
+            const tempDiv = document.createElement('div');
+            tempDiv.className = 'image-preview-item';
+            tempDiv.innerHTML = `
+                <img src="${preview}" alt="Nova imagem ${i + 1}">
+                <span class="image-order">#${existingCount + i + 1}</span>
+                <span style="position:absolute;top:0.5rem;left:0.5rem;background:rgba(0,0,0,0.7);color:white;padding:0.25rem 0.5rem;border-radius:4px;font-size:0.75rem;">Aguardando upload</span>
+            `;
+            imagesPreview.appendChild(tempDiv);
+        });
+    });
 });
 
 // Excluir produto

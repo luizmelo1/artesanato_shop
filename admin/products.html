@@ -125,17 +125,18 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="product-image">Imagem do Produto *</label>
-                    <label for="product-image" class="upload-area">
-                        <p>📁 Clique para selecionar uma imagem</p>
-                        <p class="text-muted">PNG, JPG ou WebP até 5MB</p>
-                        <input type="file" id="product-image" accept="image/*" class="file-input" aria-label="Selecionar imagem do produto">
+                    <label for="product-images">Imagens do Produto *</label>
+                    <label for="product-images" class="upload-area">
+                        <p>📁 Clique para selecionar imagens</p>
+                        <p class="text-muted">Múltiplas imagens • PNG, JPG ou WebP até 5MB cada</p>
+                        <input type="file" id="product-images" accept="image/*" multiple class="file-input" aria-label="Selecionar imagens do produto">
                     </label>
-                    <div id="image-preview"></div>
+                    <div id="images-preview" class="images-preview-grid"></div>
                     <div id="upload-progress" class="hidden">
                         <div class="progress-bar-container">
                             <div class="progress-bar"></div>
                         </div>
+                        <p class="upload-status"></p>
                     </div>
                 </div>
 
