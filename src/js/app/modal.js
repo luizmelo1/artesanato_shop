@@ -92,12 +92,16 @@ function setupThumbnails(dom, images, productName) {
     
     let idx = 0;
     for (const src of images) {
-        const thumbPicture = createPictureWithFallback(src, productName, {
+        const thumbPicture = createPictureWithFallback(src, `${productName} - Imagem ${idx + 1}`, {
             loading: 'lazy',
             width: 72,
-            height: 72,
-            className: idx === 0 ? 'active' : ''
+            height: 72
         });
+        
+        // Adiciona classe active na primeira miniatura
+        if (idx === 0) {
+            thumbPicture.classList.add('active');
+        }
         
         // Adiciona data-src para troca de imagem ao clicar
         const thumbImg = thumbPicture.querySelector('img');
