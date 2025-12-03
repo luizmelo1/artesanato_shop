@@ -13,9 +13,8 @@ firebase-debug.*.log
 .env.test
 firebase-credentials.js
 
-# Credenciais Firebase Admin (NUNCA COMMITAR!)
-admin/js/firebase-config.js
-**/firebase-config.js
+# Credenciais Firebase Admin (DEPLOY AUTORIZADO - protegido por domínio)
+# admin/js/firebase-config.js (comentado - pode ser commitado)
 firebase-adminsdk-*.json
 
 # Credenciais Firebase Públicas (podem ser deployadas - protegidas por Security Rules)
