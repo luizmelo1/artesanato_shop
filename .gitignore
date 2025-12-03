@@ -19,6 +19,8 @@ src/js/firebase-public.js
 **/firebase-config.js
 **/firebase-public.js
 firebase-adminsdk-*.json
+firebase-config.local.js
+build-tools/inject-firebase-config.js
 
 # Backups locais (NUNCA COMMITAR!)
 *.backup.js

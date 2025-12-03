@@ -13,11 +13,13 @@
   "scripts": {
     "convert:instagram": "node build-tools/tools/convert-instagram.js",
     "build:images": "node build-tools/tools/convert-instagram.js",
+    "build:env": "node build-tools/build-env.js",
     "dev:admin": "cd admin && npx http-server -p 8080 -o",
     "dev:public": "npx http-server -p 8000 -o",
     "firebase:login": "firebase login",
     "firebase:deploy": "firebase deploy --only hosting",
     "firebase:rules": "firebase deploy --only firestore:rules,storage:rules",
+    "deploy": "node build-tools/deploy.js",
     "setup": "echo Leia README_SETUP.md para instruções de configuração inicial"
   },
   "devDependencies": {
