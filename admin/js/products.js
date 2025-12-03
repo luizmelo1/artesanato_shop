@@ -184,6 +184,32 @@ function closeModal() {
     currentProductId = null;
 }
 
+// Função auxiliar para validar e fazer upload de imagens
+async function validateAndUploadImages() {
+    // Validar arquivos de imagem ANTES de fazer upload
+    if (globalThis.ValidationModule) {
+        const imageValidation = globalThis.ValidationModule.validateImageFiles(
+            imagesInput.files,
+            { maxFiles: 10, maxSize: 5 * 1024 * 1024 }
+        );
+        
+        if (!imageValidation.valid) {
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'image-upload-error';
+            errorDiv.innerHTML = `
+                <strong>Erro nos arquivos de imagem:</strong>
+                <ul>${imageValidation.errors.map(err => `<li>${err}</li>`).join('')}</ul>
+            `;
+            imagesPreview.before(errorDiv);
+            
+            throw new Error('Validação de imagens falhou');
+        }
+    }
+    
+    const newImageUrls = await uploadMultipleImages(Array.from(imagesInput.files));
+    selectedImages = [...selectedImages, ...newImageUrls];
+}
+
 // Salvar produto
 productForm.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -193,6 +219,16 @@ productForm.addEventListener('submit', async (e) => {
     submitBtn.textContent = 'Salvando...';
     
     try {
+        // Limpar erros anteriores
+        if (globalThis.ValidationModule) {
+            globalThis.ValidationModule.clearAllErrors();
+        }
+        
+        // Upload de novas imagens (se houver)
+        if (imagesInput.files.length > 0) {
+            await validateAndUploadImages();
+        }
+        
         // Dados do produto
         const productData = {
             name: document.getElementById('product-name').value.trim(),
@@ -201,19 +237,35 @@ productForm.addEventListener('submit', async (e) => {
             description: document.getElementById('product-description').value.trim(),
             link: document.getElementById('product-link').value.trim(),
             active: document.getElementById('product-active').checked,
+            images: selectedImages,
             updatedAt: firebase.firestore.FieldValue.serverTimestamp()
         };
         
-        // Upload de novas imagens (se houver)
-        if (imagesInput.files.length > 0) {
-            const newImageUrls = await uploadMultipleImages(Array.from(imagesInput.files));
-            selectedImages = [...selectedImages, ...newImageUrls];
+        // Validar dados do produto
+        if (globalThis.ValidationModule) {
+            const validation = globalThis.ValidationModule.validateProduct(productData);
+            
+            if (!validation.valid) {
+                // Mostrar erros de validação
+                globalThis.ValidationModule.showValidationErrors(validation.errors);
+                
+                // Scroll para o primeiro erro
+                const firstError = document.querySelector('.input-error');
+                if (firstError) {
+                    firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    firstError.focus();
+                }
+                
+                throw new Error('Validação falhou');
+            }
+            
+            // Usar dados sanitizados
+            Object.assign(productData, validation.sanitized);
         }
         
-        // Salvar array de imagens
+        // Garantir compatibilidade: salvar primeira imagem como 'image'
         if (selectedImages.length > 0) {
-            productData.images = selectedImages;
-            productData.image = selectedImages[0]; // Mantém compatibilidade com código antigo
+            productData.image = selectedImages[0];
         }
         
         // Salvar no Firestore
@@ -327,6 +379,39 @@ imagesInput.addEventListener('change', (e) => {
     const files = Array.from(e.target.files);
     if (files.length === 0) return;
     
+    // Remover erros anteriores de imagem
+    const oldError = document.querySelector('.image-upload-error');
+    if (oldError) oldError.remove();
+    
+    // Validar arquivos ANTES de criar previews
+    if (globalThis.ValidationModule) {
+        const validation = globalThis.ValidationModule.validateImageFiles(
+            files,
+            { maxFiles: 10, maxSize: 5 * 1024 * 1024 }
+        );
+        
+        if (!validation.valid) {
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'image-upload-error';
+            errorDiv.innerHTML = `
+                <strong>⚠️ Erro nos arquivos selecionados:</strong>
+                <ul>${validation.errors.map(err => `<li>${err}</li>`).join('')}</ul>
+            `;
+            imagesPreview.before(errorDiv);
+            
+            // Limpar input
+            imagesInput.value = '';
+            return;
+        }
+        
+        // Usar apenas arquivos válidos
+        const dataTransfer = new DataTransfer();
+        for (const file of validation.validFiles) {
+            dataTransfer.items.add(file);
+        }
+        imagesInput.files = dataTransfer.files;
+    }
+    
     // Criar previews locais das novas imagens
     const previewPromises = files.map(file => {
         return new Promise((resolve) => {
@@ -343,16 +428,18 @@ imagesInput.addEventListener('change', (e) => {
     Promise.all(previewPromises).then(previews => {
         // Adiciona previews temporários (serão substituídos por URLs após upload)
         const existingCount = selectedImages.length;
-        previews.forEach((preview, i) => {
+        let index = 0;
+        for (const preview of previews) {
             const tempDiv = document.createElement('div');
             tempDiv.className = 'image-preview-item';
             tempDiv.innerHTML = `
-                <img src="${preview}" alt="Nova imagem ${i + 1}">
-                <span class="image-order">#${existingCount + i + 1}</span>
+                <img src="${preview}" alt="Nova imagem ${index + 1}">
+                <span class="image-order">#${existingCount + index + 1}</span>
                 <span style="position:absolute;top:0.5rem;left:0.5rem;background:rgba(0,0,0,0.7);color:white;padding:0.25rem 0.5rem;border-radius:4px;font-size:0.75rem;">Aguardando upload</span>
             `;
             imagesPreview.appendChild(tempDiv);
-        });
+            index++;
+        }
     });
 });
 

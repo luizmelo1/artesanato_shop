@@ -1,0 +1,311 @@
+/**
+ * Estilos para Validação de Formulários
+ */
+
+/* ============================================
+   CAMPOS COM ERRO
+   ============================================ */
+
+.input-error {
+    border-color: #dc3545 !important;
+    background-color: #fff5f5 !important;
+    box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.1) !important;
+}
+
+.input-error:focus {
+    border-color: #dc3545 !important;
+    box-shadow: 0 0 0 4px rgba(220, 53, 69, 0.2) !important;
+    outline: none;
+}
+
+/* ============================================
+   MENSAGENS DE ERRO
+   ============================================ */
+
+.field-error-message {
+    display: block;
+    margin-top: 0.25rem;
+    font-size: 0.875rem;
+    color: #dc3545;
+    font-weight: 500;
+    animation: slideIn 0.2s ease-out;
+}
+
+.field-error-message::before {
+    content: "⚠️ ";
+    margin-right: 0.25rem;
+}
+
+/* ============================================
+   VALIDAÇÃO EM TEMPO REAL
+   ============================================ */
+
+/* Campo válido */
+.input-valid {
+    border-color: #28a745 !important;
+    background-color: #f8fff9 !important;
+}
+
+.input-valid:focus {
+    border-color: #28a745 !important;
+    box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.1) !important;
+}
+
+/* Indicador de sucesso */
+.field-success-message {
+    display: block;
+    margin-top: 0.25rem;
+    font-size: 0.875rem;
+    color: #28a745;
+    font-weight: 500;
+    animation: slideIn 0.2s ease-out;
+}
+
+.field-success-message::before {
+    content: "✓ ";
+    margin-right: 0.25rem;
+}
+
+/* ============================================
+   VALIDAÇÃO DE IMAGENS
+   ============================================ */
+
+.image-upload-error {
+    background-color: #fff5f5;
+    border: 2px dashed #dc3545;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-top: 0.5rem;
+}
+
+.image-upload-error ul {
+    margin: 0.5rem 0 0 1.5rem;
+    padding: 0;
+    list-style: disc;
+}
+
+.image-upload-error li {
+    color: #dc3545;
+    font-size: 0.875rem;
+    margin-bottom: 0.25rem;
+}
+
+/* ============================================
+   CONTADOR DE CARACTERES
+   ============================================ */
+
+.char-counter {
+    display: block;
+    text-align: right;
+    font-size: 0.75rem;
+    color: #6c757d;
+    margin-top: 0.25rem;
+}
+
+.char-counter.warning {
+    color: #ffc107;
+    font-weight: 600;
+}
+
+.char-counter.danger {
+    color: #dc3545;
+    font-weight: 600;
+}
+
+/* ============================================
+   INDICADORES DE FORÇA (SENHA, ETC)
+   ============================================ */
+
+.strength-indicator {
+    display: flex;
+    gap: 0.25rem;
+    margin-top: 0.5rem;
+    height: 4px;
+}
+
+.strength-bar {
+    flex: 1;
+    background-color: #e9ecef;
+    border-radius: 2px;
+    transition: background-color 0.3s ease;
+}
+
+.strength-bar.active {
+    background-color: #28a745;
+}
+
+.strength-bar.weak {
+    background-color: #dc3545;
+}
+
+.strength-bar.medium {
+    background-color: #ffc107;
+}
+
+.strength-bar.strong {
+    background-color: #28a745;
+}
+
+/* ============================================
+   TOOLTIP DE VALIDAÇÃO
+   ============================================ */
+
+.validation-tooltip {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background-color: #fff;
+    border: 1px solid #e9ecef;
+    border-top: none;
+    border-radius: 0 0 8px 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 0.75rem;
+    margin-top: -1px;
+    z-index: 1000;
+    animation: slideDown 0.2s ease-out;
+}
+
+.validation-tooltip ul {
+    margin: 0;
+    padding: 0 0 0 1.25rem;
+    font-size: 0.875rem;
+}
+
+.validation-tooltip li {
+    margin-bottom: 0.25rem;
+    color: #6c757d;
+}
+
+.validation-tooltip li.valid {
+    color: #28a745;
+}
+
+.validation-tooltip li.invalid {
+    color: #dc3545;
+}
+
+.validation-tooltip li::marker {
+    content: "• ";
+}
+
+.validation-tooltip li.valid::marker {
+    content: "✓ ";
+}
+
+.validation-tooltip li.invalid::marker {
+    content: "✗ ";
+}
+
+/* ============================================
+   BADGE DE OBRIGATÓRIO
+   ============================================ */
+
+.required-badge {
+    color: #dc3545;
+    font-weight: 600;
+    margin-left: 0.25rem;
+}
+
+label .required-badge::before {
+    content: "*";
+}
+
+/* ============================================
+   ANIMAÇÕES
+   ============================================ */
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-5px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes shake {
+    0%, 100% {
+        transform: translateX(0);
+    }
+    10%, 30%, 50%, 70%, 90% {
+        transform: translateX(-5px);
+    }
+    20%, 40%, 60%, 80% {
+        transform: translateX(5px);
+    }
+}
+
+.shake {
+    animation: shake 0.5s ease-in-out;
+}
+
+/* ============================================
+   RESPONSIVO
+   ============================================ */
+
+@media (max-width: 768px) {
+    .field-error-message,
+    .field-success-message {
+        font-size: 0.8125rem;
+    }
+    
+    .validation-tooltip {
+        position: fixed;
+        top: auto;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        border-radius: 16px 16px 0 0;
+        max-height: 50vh;
+        overflow-y: auto;
+    }
+}
+
+/* ============================================
+   ACESSIBILIDADE
+   ============================================ */
+
+/* Focus visível para leitores de tela */
+.input-error:focus-visible,
+.input-valid:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 2px;
+}
+
+/* Aumentar contraste para modo de alto contraste */
+@media (prefers-contrast: high) {
+    .input-error {
+        border-width: 3px;
+    }
+    
+    .field-error-message {
+        font-weight: 700;
+    }
+}
+
+/* Reduzir animações se preferido */
+@media (prefers-reduced-motion: reduce) {
+    .field-error-message,
+    .field-success-message,
+    .validation-tooltip {
+        animation: none;
+    }
+    
+    .shake {
+        animation: none;
+    }
+}

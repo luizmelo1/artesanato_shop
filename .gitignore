@@ -2,14 +2,40 @@
 .firebase/
 firebase-debug.log
 firebase-debug.*.log
+.firebase.json.backup
 
 # Environment variables (credenciais sensíveis)
 .env
 .env.local
 .env.*.local
+.env.development
+.env.production
+.env.test
 firebase-credentials.js
+
+# Credenciais Firebase (NUNCA COMMITAR!)
 admin/js/firebase-config.js
 src/js/firebase-public.js
+**/firebase-config.js
+**/firebase-public.js
+firebase-adminsdk-*.json
+
+# Backups locais (NUNCA COMMITAR!)
+*.backup.js
+*.backup.json
+admin/js/*.backup.*
+src/js/*.backup.*
+**/*.backup.*
+
+# Chaves e certificados
+*.key
+*.pem
+*.p12
+*.pfx
+*.cer
+*.crt
+service-account.json
+serviceAccountKey.json
 
 # Node.js dependencies
 node_modules/
@@ -33,3 +59,26 @@ dist/
 # OS files
 .DS_Store
 Thumbs.db
+desktop.ini
+*.tmp
+
+# Arquivos temporários e sensíveis
+*.sql
+*.sqlite
+*.db
+*.bak
+*_backup
+*-backup
+temp/
+tmp/
+
+# Documentos sensíveis
+secrets.txt
+passwords.txt
+credentials.txt
+api-keys.txt
+tokens.txt
+
+# Uploads temporários
+uploads/
+temp-uploads/

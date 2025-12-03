@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Produtos - Admin</title>
     <link rel="stylesheet" href="css/admin-styles-modular.css">
+    <link rel="stylesheet" href="css/validation.css">
 </head>
 <body>
     <!-- Sidebar -->
@@ -98,30 +99,62 @@
             
             <form id="product-form">
                 <div class="form-group">
-                    <label for="product-name">Nome do Produto *</label>
-                    <input type="text" id="product-name" required placeholder="Ex: Funko Pop Batman">
+                    <label for="product-name">
+                        Nome do Produto <span class="required-badge"></span>
+                    </label>
+                    <input type="text" id="product-name" required 
+                           placeholder="Ex: Funko Pop Batman"
+                           minlength="3" maxlength="100"
+                           aria-required="true"
+                           aria-describedby="product-name-help">
+                    <small id="product-name-help" class="form-text text-muted">
+                        Mínimo 3 caracteres, máximo 100
+                    </small>
                 </div>
 
                 <div class="form-group">
-                    <label for="product-category">Categoria *</label>
-                    <select id="product-category" required>
+                    <label for="product-category">
+                        Categoria <span class="required-badge"></span>
+                    </label>
+                    <select id="product-category" required aria-required="true">
                         <option value="">Selecione uma categoria</option>
                     </select>
                 </div>
 
                 <div class="form-group">
-                    <label for="product-price">Preço (R$) *</label>
-                    <input type="number" id="product-price" step="0.01" min="0" required placeholder="89.90">
+                    <label for="product-price">
+                        Preço (R$) <span class="required-badge"></span>
+                    </label>
+                    <input type="number" id="product-price" 
+                           step="0.01" min="0.01" max="999999.99" 
+                           required placeholder="89.90"
+                           aria-required="true"
+                           aria-describedby="product-price-help">
+                    <small id="product-price-help" class="form-text text-muted">
+                        Entre R$ 0,01 e R$ 999.999,99
+                    </small>
                 </div>
 
                 <div class="form-group">
-                    <label for="product-description">Descrição</label>
-                    <textarea id="product-description" rows="3" placeholder="Descrição do produto"></textarea>
+                    <label for="product-description">Descrição (opcional)</label>
+                    <textarea id="product-description" rows="3" 
+                              placeholder="Descrição detalhada do produto"
+                              maxlength="1000"
+                              aria-describedby="product-description-help"></textarea>
+                    <small id="product-description-help" class="form-text text-muted">
+                        Máximo 1000 caracteres
+                    </small>
                 </div>
 
                 <div class="form-group">
-                    <label for="product-link">Link do WhatsApp</label>
-                    <input type="url" id="product-link" placeholder="https://wa.me/...">
+                    <label for="product-link">Link do WhatsApp (opcional)</label>
+                    <input type="url" id="product-link" 
+                           placeholder="https://wa.me/5583999999999"
+                           maxlength="500"
+                           aria-describedby="product-link-help">
+                    <small id="product-link-help" class="form-text text-muted">
+                        Cole o link completo do WhatsApp
+                    </small>
                 </div>
 
                 <div class="form-group">
@@ -167,6 +200,9 @@
     
     <!-- Configuração Firebase -->
     <script src="js/firebase-config.js"></script>
+    
+    <!-- Validação (carrega ANTES dos scripts admin) -->
+    <script src="js/validation.js"></script>
     
     <!-- Scripts Admin -->
     <script src="js/auth-check.js"></script>
