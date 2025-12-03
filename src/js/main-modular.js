@@ -111,7 +111,9 @@ class ArtesanatoShop {
         debugLog('=== loadProductsData ===');
         debugLog('Buscando produtos do Firestore...');
         
-        try {ebugLog('Produtos carregados:', this.state.products.length, 'itens');
+        try {
+            await ProductsModule.fetchProducts(this.DOM, this.state);
+            debugLog('Produtos carregados:', this.state.products.length, 'itens');
             
             if (this.DOM.products.container) {
                 debugLog('Renderizando produtos...');
@@ -168,6 +170,11 @@ class ArtesanatoShop {
 
             onTouchEnd: (e) => {
                 ModalModule.handleTouchEnd(this.DOM, e);
+            },
+
+            // Paginação
+            onLoadMore: async () => {
+                await ProductsModule.loadMoreProducts(this.DOM, this.state);
             }
         };
 

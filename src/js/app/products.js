@@ -6,14 +6,36 @@
 import { debugLog, debugError } from '../utils/debug.js';
 import { createPictureWithFallback } from '../helpers/image-fallback.js';
 
+// Configuração de paginação
+const PRODUCTS_PER_PAGE = 20;
+let lastVisibleDoc = null;
+let hasMoreProducts = true;
+let isLoadingMore = false;
+
 /**
- * Busca produtos do Firestore e salva no estado.
+ * Busca produtos do Firestore com paginação e salva no estado.
  * @param {object} dom - Referências DOM
  * @param {object} state - Estado da aplicação
+ * @param {boolean} loadMore - Se true, carrega mais produtos (paginação)
  */
-export async function fetchProducts(dom, state) {
+export async function fetchProducts(dom, state, loadMore = false) {
     debugLog('=== fetchProducts ===');
-    debugLog('Iniciando busca de produtos...');
+    debugLog('Iniciando busca de produtos... LoadMore:', loadMore);
+    
+    // Evita múltiplas requisições simultâneas
+    if (isLoadingMore) {
+        debugLog('Já está carregando produtos, ignorando...');
+        return state.products;
+    }
+    
+    // Verifica se ainda há mais produtos para carregar
+    if (loadMore && !hasMoreProducts) {
+        debugLog('Não há mais produtos para carregar');
+        return state.products;
+    }
+    
+    isLoadingMore = true;
+    
     try {
         // Indica carregamento (acessível)
         if (dom.products.loader) {
@@ -33,16 +55,38 @@ export async function fetchProducts(dom, state) {
         debugLog('Buscando produtos do Firestore...');
         const db = firebase.firestore();
         
-        // Busca produtos ativos SEM orderBy (evita necessidade de índice)
-        // Vamos ordenar no cliente após receber os dados
-        const snapshot = await db.collection('products')
+        // Construir query com paginação
+        let query = db.collection('products')
             .where('active', '==', true)
-            .get();
+            .orderBy('name')
+            .limit(PRODUCTS_PER_PAGE);
+        
+        // Se está carregando mais, começa após o último documento
+        if (loadMore && lastVisibleDoc) {
+            query = query.startAfter(lastVisibleDoc);
+            debugLog('Carregando após documento:', lastVisibleDoc.id);
+        } else if (!loadMore) {
+            // Reset para primeira página
+            lastVisibleDoc = null;
+            hasMoreProducts = true;
+        }
+        
+        const snapshot = await query.get();
         
         debugLog('Snapshot recebido:', snapshot.size, 'documentos');
         
+        // Verifica se há mais produtos
+        hasMoreProducts = snapshot.size === PRODUCTS_PER_PAGE;
+        debugLog('Há mais produtos:', hasMoreProducts);
+        
+        // Salva último documento para próxima paginação
+        if (snapshot.docs.length > 0) {
+            lastVisibleDoc = snapshot.docs[snapshot.docs.length - 1];
+            debugLog('Último documento:', lastVisibleDoc.id);
+        }
+        
         // Converte documentos para array de produtos
-        state.products = snapshot.docs.map(doc => {
+        const newProducts = snapshot.docs.map(doc => {
             const data = doc.data();
             return {
                 id: doc.id,
@@ -51,14 +95,20 @@ export async function fetchProducts(dom, state) {
                 price: data.price || 0,
                 description: data.description || '',
                 link: data.link || '',
-                image: data.image || ''
+                image: data.image || '',
+                images: data.images || []
             };
         });
         
-        // Ordena produtos por nome no cliente (já que removemos orderBy da query)
-        state.products.sort((a, b) => a.name.localeCompare(b.name, 'pt-BR'));
+        // Se loadMore, adiciona ao array existente, senão substitui
+        if (loadMore) {
+            state.products = [...state.products, ...newProducts];
+            debugLog('Produtos adicionados. Total:', state.products.length);
+        } else {
+            state.products = newProducts;
+            debugLog('Produtos carregados:', state.products.length, 'itens');
+        }
         
-        debugLog('Produtos carregados do Firestore:', state.products.length, 'itens');
         debugLog('Primeiros 3 produtos:', state.products.slice(0, 3));
 
         return state.products;
@@ -76,12 +126,56 @@ export async function fetchProducts(dom, state) {
         }
         throw err;
     } finally {
+        isLoadingMore = false;
         if (dom.products.loader) {
             dom.products.loader.classList.add('hidden');
             dom.products.loader.setAttribute('aria-busy', 'false');
             debugLog('Loader desativado');
         }
     }
+}
+
+/**
+ * Verifica se há mais produtos disponíveis para carregar
+ * @returns {boolean}
+ */
+export function hasMore() {
+    return hasMoreProducts;
+}
+
+/**
+ * Carrega próxima página de produtos (infinite scroll)
+ * @param {object} dom - Referências DOM
+ * @param {object} state - Estado da aplicação
+ */
+export async function loadMoreProducts(dom, state) {
+    debugLog('=== loadMoreProducts ===');
+    
+    if (!hasMoreProducts || isLoadingMore) {
+        debugLog('Não pode carregar mais produtos');
+        return;
+    }
+    
+    await fetchProducts(dom, state, true);
+    
+    // Renderiza apenas os novos produtos
+    const filter = getCurrentFilter(dom);
+    loadProducts(dom, state.products, filter, true);
+}
+
+/**
+ * Obtém filtro atual ativo
+ * @param {object} dom - Referências DOM
+ * @returns {string|Array}
+ */
+function getCurrentFilter(dom) {
+    if (!dom.products.categories) return 'all';
+    
+    const selected = Array.from(dom.products.categories)
+        .filter(c => c.classList.contains('active') && c.dataset.category !== 'all')
+        .map(c => c.dataset.category);
+    
+    return selected.length > 0 ? selected : 'all';
 }
 
 /**
@@ -104,15 +198,23 @@ export async function forceRefresh(dom, state) {
  * @param {object} dom - Referências DOM
  * @param {Array} products - Lista de produtos
  * @param {string} [filterCategory='all'] - Categoria alvo (ou 'all' para todas).
+ * @param {boolean} [append=false] - Se true, adiciona produtos sem limpar container
  */
-export function loadProducts(dom, products, filter = 'all') {
+export function loadProducts(dom, products, filter = 'all', append = false) {
     debugLog('=== loadProducts ===');
     debugLog('DOM:', dom);
     debugLog('Products array length:', products.length);
     debugLog('Filter:', filter);
+    debugLog('Append mode:', append);
     
     if (!dom.products.container) {
         debugLog('Container de produtos não encontrado');
+        return;
+    }
+    
+    if (append) {
+        // Modo append: adiciona novos produtos sem animação de saída
+        renderProducts(dom, products, filter, append);
         return;
     }
     
@@ -128,12 +230,12 @@ export function loadProducts(dom, products, filter = 'all') {
         
         // Aguarda animação de saída completar (300ms)
         setTimeout(() => {
-            renderProducts(dom, products, filter);
+            renderProducts(dom, products, filter, false);
         }, 300);
     } else {
         // Primeira carga ou sem produtos: renderiza diretamente
         debugLog('Primeira carga, renderizando diretamente');
-        renderProducts(dom, products, filter);
+        renderProducts(dom, products, filter, false);
     }
 }
 
@@ -142,11 +244,13 @@ export function loadProducts(dom, products, filter = 'all') {
  * @param {object} dom - Referências DOM
  * @param {Array} products - Lista de produtos
  * @param {string} filterCategory - Categoria para filtrar.
+ * @param {boolean} append - Se true, adiciona ao container existente
  */
-function renderProducts(dom, products, filter) {
+function renderProducts(dom, products, filter, append = false) {
     debugLog('=== renderProducts ===');
     debugLog('Filter:', filter);
     debugLog('Total products:', products.length);
+    debugLog('Append mode:', append);
     
     // Mostra o loader (acessível)
     if (dom.products.loader) {
@@ -154,8 +258,10 @@ function renderProducts(dom, products, filter) {
         dom.products.loader.setAttribute('aria-busy', 'true');
     }
 
-    // Limpa o container antes de adicionar novos produtos
-    dom.products.container.replaceChildren();
+    // Limpa o container apenas se não estiver em modo append
+    if (!append) {
+        dom.products.container.replaceChildren();
+    }
 
     // Filtra produtos pela categoria selecionada
     let filteredProducts = products;
@@ -169,15 +275,34 @@ function renderProducts(dom, products, filter) {
 
     debugLog('Produtos filtrados:', filteredProducts.length);
 
+    // Em modo append, calcula índice inicial baseado nos cards existentes
+    let startIndex = 0;
+    if (append) {
+        const existingCards = dom.products.container.querySelectorAll('.product-card');
+        startIndex = existingCards.length;
+        debugLog('Índice inicial para append:', startIndex);
+        
+        // Filtra apenas produtos novos (não renderizados ainda)
+        const existingIds = new Set(
+            Array.from(existingCards).map(card => {
+                const detailsBtn = card.querySelector('.btn-details');
+                return detailsBtn ? detailsBtn.dataset.id : null;
+            }).filter(Boolean)
+        );
+        
+        filteredProducts = filteredProducts.filter(p => !existingIds.has(p.id));
+        debugLog('Novos produtos para renderizar:', filteredProducts.length);
+    }
+
     // Cria e adiciona os cards de produtos com animação escalonada
-    let index = 0;
+    let index = startIndex;
     for (const product of filteredProducts) {
         const productCard = createProductCard(product, index);
         dom.products.container.appendChild(productCard);
         index++;
     }
 
-    debugLog('Cards criados:', index);
+    debugLog('Cards criados:', index - startIndex);
 
     // Esconde o loader após renderizar
     if (dom.products.loader) {

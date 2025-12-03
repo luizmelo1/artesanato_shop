@@ -4,6 +4,12 @@ let currentProductId = null;
 let allProducts = [];
 let allCategories = [];
 
+// Paginação
+const ADMIN_PRODUCTS_PER_PAGE = 50; // Admin carrega mais produtos por página
+let lastAdminDoc = null;
+let hasMoreAdminProducts = true;
+let isLoadingAdminProducts = false;
+
 // Elementos do DOM
 const productsTable = document.getElementById('products-table-body');
 const modal = document.getElementById('product-modal');
@@ -21,18 +27,81 @@ const uploadStatus = document.querySelector('.upload-status');
 // Array para armazenar URLs de imagens temporariamente
 let selectedImages = [];
 
-// Carregar produtos
-async function loadProducts() {
+// Carregar produtos com paginação
+async function loadProducts(loadMore = false) {
+    if (isLoadingAdminProducts) return;
+    if (loadMore && !hasMoreAdminProducts) return;
+    
+    isLoadingAdminProducts = true;
+    
     try {
-        const snapshot = await db.collection('products').orderBy('name').get();
-        allProducts = snapshot.docs.map(doc => ({
+        let query = db.collection('products')
+            .orderBy('name')
+            .limit(ADMIN_PRODUCTS_PER_PAGE);
+        
+        if (loadMore && lastAdminDoc) {
+            query = query.startAfter(lastAdminDoc);
+        } else if (!loadMore) {
+            // Reset paginação
+            lastAdminDoc = null;
+            hasMoreAdminProducts = true;
+            allProducts = [];
+        }
+        
+        const snapshot = await query.get();
+        
+        hasMoreAdminProducts = snapshot.size === ADMIN_PRODUCTS_PER_PAGE;
+        
+        if (snapshot.docs.length > 0) {
+            lastAdminDoc = snapshot.docs[snapshot.docs.length - 1];
+        }
+        
+        const newProducts = snapshot.docs.map(doc => ({
             id: doc.id,
             ...doc.data()
         }));
+        
+        if (loadMore) {
+            allProducts = [...allProducts, ...newProducts];
+        } else {
+            allProducts = newProducts;
+        }
+        
         renderProducts();
+        updateLoadMoreButton();
     } catch (error) {
         console.error('Erro ao carregar produtos:', error);
         showNotification('Erro ao carregar produtos', 'error');
+    } finally {
+        isLoadingAdminProducts = false;
+    }
+}
+
+// Atualizar botão "Carregar Mais"
+function updateLoadMoreButton() {
+    let loadMoreBtn = document.getElementById('load-more-products');
+    
+    if (!loadMoreBtn && hasMoreAdminProducts) {
+        // Cria botão se não existir
+        loadMoreBtn = document.createElement('button');
+        loadMoreBtn.id = 'load-more-products';
+        loadMoreBtn.className = 'btn btn-secondary';
+        loadMoreBtn.textContent = 'Carregar Mais Produtos';
+        loadMoreBtn.style.cssText = 'margin: 1rem auto; display: block;';
+        loadMoreBtn.onclick = () => loadProducts(true);
+        
+        const table = document.querySelector('.table-container');
+        if (table) {
+            table.after(loadMoreBtn);
+        }
+    }
+    
+    if (loadMoreBtn) {
+        loadMoreBtn.style.display = hasMoreAdminProducts ? 'block' : 'none';
+        loadMoreBtn.disabled = isLoadingAdminProducts;
+        loadMoreBtn.textContent = isLoadingAdminProducts 
+            ? 'Carregando...' 
+            : `Carregar Mais (${allProducts.length} produtos carregados)`;
     }
 }
 
