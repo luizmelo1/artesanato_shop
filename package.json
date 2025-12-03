@@ -1,6 +1,6 @@
 {
   "name": "artesanato_shop",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "private": true,
   "type": "module",
   "description": "Ateliê Arte Criativa - Artesanato Feito à Mão há 10 anos",
@@ -12,9 +12,17 @@
   "license": "UNLICENSED",
   "scripts": {
     "convert:instagram": "node build-tools/tools/convert-instagram.js",
-    "build:images": "node build-tools/tools/convert-instagram.js"
+    "build:images": "node build-tools/tools/convert-instagram.js",
+    "dev:admin": "cd admin && npx http-server -p 8080 -o",
+    "dev:public": "npx http-server -p 8000 -o",
+    "firebase:login": "firebase login",
+    "firebase:deploy": "firebase deploy --only hosting",
+    "firebase:rules": "firebase deploy --only firestore:rules,storage:rules",
+    "setup": "echo Leia README_SETUP.md para instruções de configuração inicial"
   },
   "devDependencies": {
+    "firebase-tools": "^13.0.0",
+    "http-server": "^14.1.1",
     "sharp": "^0.34.4"
   },
   "keywords": [
@@ -22,6 +30,11 @@
     "pwa",
     "e-commerce",
     "handmade",
-    "static-site"
-  ]
+    "static-site",
+    "firebase"
+  ],
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  }
 }

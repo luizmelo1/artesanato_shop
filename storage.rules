@@ -1,0 +1,31 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    
+    // ============================================
+    // PRODUTOS - Imagens públicas, upload autenticado
+    // ============================================
+    match /products/{imageId} {
+      // Qualquer um pode visualizar imagens de produtos (site público)
+      allow read: if true;
+      
+      // Apenas usuários autenticados podem fazer upload
+      // Validações:
+      // - Tamanho máximo: 5MB
+      // - Apenas imagens (image/jpeg, image/png, image/webp, image/gif)
+      allow write: if request.auth != null
+                   && request.resource.size < 5 * 1024 * 1024
+                   && request.resource.contentType.matches('image/.*');
+      
+      // Permitir deleção apenas para usuários autenticados
+      allow delete: if request.auth != null;
+    }
+    
+    // ============================================
+    // OUTRAS PASTAS - Bloqueadas por padrão
+    // ============================================
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}
