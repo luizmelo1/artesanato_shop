@@ -168,6 +168,11 @@ class ArtesanatoShop {
 
             onTouchEnd: (e) => {
                 ModalModule.handleTouchEnd(this.DOM, e);
+            },
+
+            // Paginação
+            onLoadMore: async () => {
+                await ProductsModule.loadMoreProducts(this.DOM, this.state);
             }
         };
 

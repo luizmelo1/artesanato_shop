@@ -297,6 +297,9 @@ export function setupEventListeners(dom, callbacks) {
     // Registra eventos globais (teclado e redimensionamento)
     setupGlobalEvents(dom, callbacks);
 
+    // Infinite scroll para paginação
+    setupInfiniteScroll(dom, callbacks);
+
     // Estado inicial do botão limpar filtros
     updateClearBtnVisibility();
 }
@@ -341,4 +344,69 @@ export function setupGlobalEvents(dom, callbacks) {
             window.scrollTo({ top: 0, behavior: 'smooth' });
         });
     }
+}
+
+/**
+ * Configura infinite scroll para carregar mais produtos
+ * @param {object} dom - Referências DOM
+ * @param {object} callbacks - Funções de callback
+ */
+function setupInfiniteScroll(dom, callbacks) {
+    if (!dom.products.container || !callbacks.onLoadMore) {
+        debugLog('Infinite scroll não configurado - container ou callback ausente');
+        return;
+    }
+
+    debugLog('Configurando infinite scroll...');
+
+    const options = {
+        root: null, // viewport
+        rootMargin: '200px', // Carrega quando faltam 200px para o fim
+        threshold: 0
+    };
+
+    // Elemento sentinela no final da lista
+    let sentinel = document.createElement('div');
+    sentinel.className = 'load-more-sentinel';
+    sentinel.style.height = '1px';
+    sentinel.setAttribute('aria-hidden', 'true');
+
+    // Observer para detectar quando sentinela fica visível
+    const observer = new IntersectionObserver((entries) => {
+        for (const entry of entries) {
+            if (entry.isIntersecting) {
+                debugLog('Sentinela visível - carregando mais produtos...');
+                callbacks.onLoadMore();
+            }
+        }
+    }, options);
+
+    // Função para adicionar sentinela (chamada após cada render)
+    const addSentinel = () => {
+        const existingSentinel = dom.products.container.querySelector('.load-more-sentinel');
+        if (existingSentinel) {
+            existingSentinel.remove();
+        }
+
+        // Adiciona sentinela ao final do container
+        dom.products.container.appendChild(sentinel);
+        observer.observe(sentinel);
+        debugLog('Sentinela adicionada ao container');
+    };
+
+    // MutationObserver para detectar quando produtos são adicionados
+    const containerObserver = new MutationObserver(() => {
+        // Verifica se há produtos renderizados
+        const hasProducts = dom.products.container.querySelector('.product-card');
+        if (hasProducts && !dom.products.container.contains(sentinel)) {
+            addSentinel();
+        }
+    });
+
+    containerObserver.observe(dom.products.container, {
+        childList: true,
+        subtree: false
+    });
+
+    debugLog('Infinite scroll configurado com sucesso');
 }
