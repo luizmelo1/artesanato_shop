@@ -52,7 +52,7 @@ class ArtesanatoShop {
         // Isso garante que os botões de categoria tenham handlers anexados
         this.setupEventListeners();
 
-        // Carrega produtos (cache ou API)
+        // Carrega produtos do Firestore
         await this.loadProductsData();
 
         // Inicializa slideshow do hero
@@ -105,51 +105,22 @@ class ArtesanatoShop {
     }
 
     /**
-     * Carrega produtos do cache ou da API
+     * Carrega produtos do Firestore
      */
     async loadProductsData() {
         debugLog('=== loadProductsData ===');
+        debugLog('Buscando produtos do Firestore...');
         
-        // CACHE DESATIVADO - Sempre busca do Firestore para garantir dados atualizados
-        debugLog('Buscando direto do Firestore (cache desativado permanentemente)');
-        await this.loadFromAPI();
-    }
-
-    /**
-     * Carrega produtos do cache
-     */
-    async loadFromCache(cachedProducts) {
-        debugLog('Produtos carregados do cache:', cachedProducts.length, 'itens');
-        this.state.products = cachedProducts;
-        
-        if (this.DOM.products.container) {
-            debugLog('Chamando loadProducts com cache...');
-            ProductsModule.loadProducts(this.DOM, this.state.products, 'all');
-        } else {
-            debugLog('ERRO: Container de produtos não encontrado!');
-        }
-        
-        // Verifica atualizações em background
-        ProductsModule.updateCacheInBackground(this.state.products);
-    }
-
-    /**
-     * Carrega produtos da API
-     */
-    async loadFromAPI() {
-        debugLog('Cache inválido ou não encontrado, buscando da API...');
-        try {
-            await ProductsModule.fetchProducts(this.DOM, this.state);
-            debugLog('Produtos buscados da API:', this.state.products.length, 'itens');
+        try {ebugLog('Produtos carregados:', this.state.products.length, 'itens');
             
             if (this.DOM.products.container) {
-                debugLog('Chamando loadProducts com API...');
+                debugLog('Renderizando produtos...');
                 ProductsModule.loadProducts(this.DOM, this.state.products, 'all');
             } else {
                 debugLog('ERRO: Container de produtos não encontrado!');
             }
         } catch (error) {
-            debugError('Erro ao inicializar aplicação:', error);
+            debugError('Erro ao carregar produtos:', error);
         }
     }
 

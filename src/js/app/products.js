@@ -7,7 +7,7 @@ import { debugLog, debugError } from '../utils/debug.js';
 import { createPictureWithFallback } from '../helpers/image-fallback.js';
 
 /**
- * Busca produtos do Firestore, salva no estado e no cache.
+ * Busca produtos do Firestore e salva no estado.
  * @param {object} dom - Referências DOM
  * @param {object} state - Estado da aplicação
  */
@@ -61,9 +61,6 @@ export async function fetchProducts(dom, state) {
         debugLog('Produtos carregados do Firestore:', state.products.length, 'itens');
         debugLog('Primeiros 3 produtos:', state.products.slice(0, 3));
 
-        // Cache desativado - não salva mais no localStorage
-        // cache.set(state.products);
-
         return state.products;
     } catch (err) {
         debugError('ERRO ao buscar produtos:', err);
@@ -88,22 +85,12 @@ export async function fetchProducts(dom, state) {
 }
 
 /**
- * Função removida - cache desativado, produtos sempre vêm do Firestore
- */
-export async function updateCacheInBackground() {
-    // Cache removido - não faz mais nada
-}
-
-/**
- * Força atualização completa da lista de produtos:
- * recarrega direto do Firestore (cache já desativado)
+ * Força atualização completa da lista de produtos do Firestore.
  * @param {object} dom - Referências DOM
  * @param {object} state - Estado da aplicação
  */
 export async function forceRefresh(dom, state) {
     debugLog('Forçando atualização...');
-    // Cache desativado - não precisa limpar
-    // cache.clear();
     await fetchProducts(dom, state);
     if (dom.products.container) {
         loadProducts(dom, state.products, 'all');
