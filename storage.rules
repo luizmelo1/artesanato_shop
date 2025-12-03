@@ -12,10 +12,11 @@ service firebase.storage {
       // Apenas usuários autenticados podem fazer upload
       // Validações:
       // - Tamanho máximo: 5MB
-      // - Apenas imagens (image/jpeg, image/png, image/webp, image/gif)
+      // - Apenas imagens seguras (JPEG, PNG, WebP, GIF)
+      // - SVG bloqueado (pode conter JavaScript e causar XSS)
       allow write: if request.auth != null
                    && request.resource.size < 5 * 1024 * 1024
-                   && request.resource.contentType.matches('image/.*');
+                   && request.resource.contentType in ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
       
       // Permitir deleção apenas para usuários autenticados
       allow delete: if request.auth != null;
