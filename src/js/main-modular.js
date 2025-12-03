@@ -111,7 +111,9 @@ class ArtesanatoShop {
         debugLog('=== loadProductsData ===');
         debugLog('Buscando produtos do Firestore...');
         
-        try {ebugLog('Produtos carregados:', this.state.products.length, 'itens');
+        try {
+            await ProductsModule.fetchProducts(this.DOM, this.state);
+            debugLog('Produtos carregados:', this.state.products.length, 'itens');
             
             if (this.DOM.products.container) {
                 debugLog('Renderizando produtos...');
