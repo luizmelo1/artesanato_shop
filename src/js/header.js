@@ -58,4 +58,12 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
     }
+
+    // Fecha menu mobile ao mudar orientação do dispositivo
+    globalThis.addEventListener('orientationchange', () => {
+        if (nav && mobileMenu && nav.classList.contains('active')) {
+            nav.classList.remove('active');
+            mobileMenu.setAttribute('aria-expanded', 'false');
+        }
+    });
 });
