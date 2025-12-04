@@ -1,5 +1,7 @@
 // Gerenciamento de Produtos
 
+import { ImageOptimizer } from './image-optimizer.js';
+
 let currentProductId = null;
 let allProducts = [];
 let allCategories = [];
@@ -361,7 +363,7 @@ productForm.addEventListener('submit', async (e) => {
     }
 });
 
-// Upload de múltiplas imagens
+// Upload de múltiplas imagens com otimização
 async function uploadMultipleImages(files) {
     if (files.length === 0) return [];
     
@@ -377,16 +379,39 @@ async function uploadMultipleImages(files) {
             continue;
         }
         
-        // Validar tamanho (5MB)
+        // Validar tamanho original (5MB)
         if (file.size > 5 * 1024 * 1024) {
             showNotification(`${file.name} muito grande (máximo 5MB)`, 'error');
             continue;
         }
         
         try {
+            uploadStatus.textContent = `Otimizando imagem ${i + 1} de ${files.length}...`;
+            
+            // Otimizar imagem antes do upload
+            const optimized = await ImageOptimizer.optimizeImage(file);
+            
+            // Mostrar info de compressão
+            console.log(`📊 Otimização de ${file.name}:`);
+            console.log(`   Original: ${ImageOptimizer.formatFileSize(optimized.info.originalSize)}`);
+            console.log(`   Otimizada: ${ImageOptimizer.formatFileSize(optimized.info.optimizedSize)}`);
+            console.log(`   Compressão: ${optimized.info.compression}%`);
+            
+            // Criar novo File a partir do Blob otimizado
+            const optimizedFile = new File(
+                [optimized.optimized],
+                file.name.replace(/\.\w+$/, '.jpg'), // Sempre salvar como JPG
+                { type: 'image/jpeg' }
+            );
+            
             uploadStatus.textContent = `Enviando imagem ${i + 1} de ${files.length}...`;
-            const url = await uploadSingleImage(file, i, files.length);
+            const url = await uploadSingleImage(optimizedFile, i, files.length);
             uploadedUrls.push(url);
+            
+            // Notificar compressão bem-sucedida
+            if (i === files.length - 1) {
+                showNotification(`${files.length} imagens otimizadas e enviadas com sucesso!`, 'success');
+            }
         } catch (error) {
             console.error('Erro ao fazer upload:', error);
             showNotification(`Erro ao enviar ${file.name}`, 'error');
