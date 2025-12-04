@@ -89,6 +89,9 @@
                 </div>
             </div>
         </div>
+
+        <!-- Analytics Dashboard -->
+        <div id="analytics-container" class="mt-4"></div>
     </main>
 
     <!-- Firebase SDKs -->
@@ -103,5 +106,15 @@
     <!-- Scripts Admin -->
     <script src="js/auth-check.js"></script>
     <script src="js/dashboard.js"></script>
+    <!-- Scripts -->
+    <script type="module">
+      import { getProductAnalytics, renderAnalyticsDashboard } from './js/analytics.js';
+      // Carrega estatísticas ao abrir a página
+      const stats = await getProductAnalytics();
+      renderAnalyticsDashboard(stats);
+      // Para atualização automática em tempo real:
+      // import { initRealtimeAnalytics } from './js/analytics.js';
+      // initRealtimeAnalytics();
+    </script>
 </body>
 </html>
