@@ -19,6 +19,44 @@ export async function getProductAnalytics() {
             ...doc.data()
         }));
         // Estatísticas gerais
+        // Distribuição de preços
+        const priceRanges = [0, 50, 100, 200, 500, 1000];
+        const priceDistribution = priceRanges.map((min, i) => {
+            const max = priceRanges[i + 1] || Infinity;
+            return {
+                range: max === Infinity ? `R$ ${min}+` : `R$ ${min} - R$ ${max}`,
+                count: products.filter(p => p.price >= min && p.price < max).length
+            };
+        });
+
+        // Score de qualidade
+        const score = Math.round(
+            (
+                (products.filter(p => p.image && p.image !== '').length / products.length) * 0.3 +
+                (products.filter(p => p.description && p.description.trim() !== '').length / products.length) * 0.3 +
+                (products.filter(p => p.link && p.link !== '').length / products.length) * 0.2 +
+                (products.filter(p => p.active).length / products.length) * 0.2
+            ) * 100
+        );
+
+        // Insights automáticos
+        const insights = [];
+        if (products.filter(p => !p.image || p.image === '').length > 0) {
+            insights.push('Existem produtos sem imagem.');
+        }
+        if (products.filter(p => !p.description || p.description.trim() === '').length > 0) {
+            insights.push('Existem produtos sem descrição.');
+        }
+        if (products.filter(p => !p.link || p.link === '').length > 0) {
+            insights.push('Existem produtos sem link.');
+        }
+        if (products.filter(p => !p.active).length > 5) {
+            insights.push('Há muitos produtos inativos.');
+        }
+        if (products.length > 0 && score > 90) {
+            insights.push('Catálogo com excelente qualidade!');
+        }
+
         const stats = {
             totalProducts: products.length,
             activeProducts: products.filter(p => p.active).length,
@@ -33,7 +71,10 @@ export async function getProductAnalytics() {
                 .slice(0, 5),
             productsWithoutImage: products.filter(p => !p.image || p.image === '').length,
             productsWithoutDescription: products.filter(p => !p.description || p.description.trim() === '').length,
-            productsWithoutLink: products.filter(p => !p.link || p.link === '').length
+            productsWithoutLink: products.filter(p => !p.link || p.link === '').length,
+            priceDistribution,
+            score,
+            insights
         };
         return stats;
     } catch (error) {
@@ -107,19 +148,53 @@ export function renderAnalyticsDashboard(stats) {
                     ${stats.productsWithoutLink} sem link
                 </p>
             </div>
+            <div class="stat-card">
+                <h3>⭐ Score de Qualidade</h3>
+                <div class="stat-value">${stats.score} / 100</div>
+                <div style="background: #e0e0e0; height: 8px; border-radius: 4px; overflow: hidden; margin-top: 0.5rem;">
+                    <div style="background: linear-gradient(90deg, #10b981, #3b82f6); width: ${stats.score}%; height: 100%;"></div>
+                </div>
+            </div>
         </div>
         <div class="card mt-4">
             <h2>📊 Produtos por Categoria</h2>
             <div id="category-chart"></div>
         </div>
         <div class="card mt-4">
+            <h2>💸 Distribuição de Preços</h2>
+            <div id="price-distribution-chart"></div>
+        </div>
+        <div class="card mt-4">
             <h2>🆕 Produtos Adicionados Recentemente</h2>
             <div id="recent-products-list"></div>
+        </div>
+        <div class="card mt-4">
+            <h2>🔎 Insights Automáticos</h2>
+            <ul>
+                ${stats.insights.map(i => `<li>${i}</li>`).join('')}
+            </ul>
         </div>
         ${generateQualityAlerts(stats)}
     `;
     renderCategoryChart(stats.productsByCategory);
     renderRecentProducts(stats.recentProducts);
+    renderPriceDistributionChart(stats.priceDistribution);
+function renderPriceDistributionChart(priceDistribution) {
+    const chartContainer = document.getElementById('price-distribution-chart');
+    if (!chartContainer) return;
+    const maxCount = Math.max(...priceDistribution.map(r => r.count));
+    chartContainer.innerHTML = priceDistribution.map(range => `
+        <div style="margin-bottom: 0.5rem;">
+            <div style="display: flex; justify-content: space-between;">
+                <span>${range.range}</span>
+                <span>${range.count} produtos</span>
+            </div>
+            <div style="background: #e0e0e0; height: 16px; border-radius: 8px; overflow: hidden;">
+                <div style="background: linear-gradient(90deg, #6366f1, #10b981); width: ${(range.count / maxCount) * 100}%; height: 100%;"></div>
+            </div>
+        </div>
+    `).join('');
+}
 }
 
 function renderCategoryChart(categoryData) {

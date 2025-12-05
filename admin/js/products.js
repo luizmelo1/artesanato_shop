@@ -587,3 +587,8 @@ document.addEventListener('DOMContentLoaded', () => {
     loadCategories();
     loadProducts();
 });
+
+globalThis.openModal = openModal;
+globalThis.closeModal = closeModal;
+globalThis.editProduct = editProduct;
+globalThis.deleteProduct = deleteProduct;

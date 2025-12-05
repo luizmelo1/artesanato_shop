@@ -3,7 +3,6 @@
  * Permite ativar/desativar logs sem alterar código em produção
  */
 
-// Flag de debug - altere para true durante desenvolvimento
 const DEBUG_MODE = false;
 
 /**

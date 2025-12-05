@@ -1,6 +1,3 @@
-// Script de debug para mobile
-// Adiciona logs visíveis na tela
-
 (function() {
     const debugDiv = document.createElement('div');
     debugDiv.id = 'mobile-debug';
@@ -46,14 +43,12 @@
         debugDiv.style.display = 'none';
     };
     
-    // Intercepta console.log
     const originalLog = console.log;
     console.log = function(...args) {
         globalThis.mobileLog(...args);
         originalLog.apply(console, args);
     };
     
-    // Intercepta console.error
     const originalError = console.error;
     console.error = function(...args) {
         globalThis.mobileLog('ERROR:', ...args);
@@ -62,7 +57,6 @@
     
     mobileLog('Mobile Debug iniciado');
     
-    // Adiciona botão para limpar logs
     const clearBtn = document.createElement('button');
     clearBtn.textContent = '✕';
     clearBtn.style.cssText = `

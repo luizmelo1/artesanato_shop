@@ -20,7 +20,9 @@
     "firebase:deploy": "firebase deploy --only hosting",
     "firebase:rules": "firebase deploy --only firestore:rules,storage:rules",
     "deploy": "node build-tools/deploy.js",
-    "setup": "echo Leia README_SETUP.md para instruções de configuração inicial"
+    "setup": "echo Leia README_SETUP.md para instruções de configuração inicial",
+    "prebuild": "node build-tools/inject-firebase-config.js",
+    "build": "npm run prebuild && echo 'Adicione aqui seu comando de build real'"
   },
   "devDependencies": {
     "firebase-tools": "^13.0.0",
@@ -38,5 +40,8 @@
   "engines": {
     "node": ">=18.0.0",
     "npm": ">=9.0.0"
+  },
+  "dependencies": {
+    "firebase-admin": "^13.6.0"
   }
 }
