@@ -17,7 +17,6 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Cores para output
 const colors = {
   reset: '\x1b[0m',
   bright: '\x1b[1m',

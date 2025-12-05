@@ -83,7 +83,7 @@ export function renderCategoryButtons(dom, categories) {
         btn.textContent = category.name;
         
         if (insertBefore) {
-            container.insertBefore(btn, insertBefore);
+            insertBefore.before(btn);
         } else {
             container.appendChild(btn);
         }

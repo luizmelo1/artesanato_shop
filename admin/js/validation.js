@@ -3,10 +3,6 @@
  * Validação robusta de dados antes de salvar no Firestore
  */
 
-// ============================================
-// REGRAS DE VALIDAÇÃO
-// ============================================
-
 const VALIDATION_RULES = {
     product: {
         name: {
@@ -398,16 +394,13 @@ function validateCategory(categoryData) {
  */
 function validateImageFile(file, options = {}) {
     const {
-        maxSize = 5 * 1024 * 1024, // 5MB
-        allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/gif']
+        maxSize = 5 * 1024 * 1024,
+        allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp']
     } = options;
-    
-    // Validar existência
     if (!file) {
         return { valid: false, error: 'Nenhum arquivo selecionado' };
     }
     
-    // Validar tipo
     if (!allowedTypes.includes(file.type)) {
         return { 
             valid: false, 
@@ -415,7 +408,6 @@ function validateImageFile(file, options = {}) {
         };
     }
     
-    // Validar tamanho
     if (file.size > maxSize) {
         const maxMB = (maxSize / (1024 * 1024)).toFixed(1);
         return { 
@@ -488,13 +480,9 @@ function showFieldError(fieldId, errorMessage) {
     const field = document.getElementById(fieldId);
     if (!field) return;
     
-    // Remove erro anterior
     clearFieldError(fieldId);
     
-    // Adiciona classe de erro
-    field.classList.add('input-error');
-    
-    // Cria elemento de erro
+    field.classList.add('error');
     const errorDiv = document.createElement('div');
     errorDiv.className = 'field-error-message';
     errorDiv.id = `${fieldId}-error`;
@@ -548,11 +536,7 @@ function showValidationErrors(errors) {
     }
 }
 
-// ============================================
-// EXPORTS
-// ============================================
-
-// Expor funções globalmente para uso no products.js
+// Expor funções globalmente
 globalThis.ValidationModule = {
     validateProduct,
     validateCategory,

@@ -38,7 +38,6 @@ function loadEnv() {
   return env;
 }
 
-// Cores para output
 const colors = {
   reset: '\x1b[0m',
   green: '\x1b[32m',
@@ -70,7 +69,6 @@ try {
     process.exit(1);
   }
 
-  // Arquivos para processar (HTML e JS)
   const filesToProcess = [
     'products.html',
     'index.html',

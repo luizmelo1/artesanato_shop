@@ -84,3 +84,5 @@ tokens.txt
 # Uploads temporários
 uploads/
 temp-uploads/
+
+src/js/firebase-config-private.js

@@ -1,9 +1,4 @@
-/**
- * Artesanato Shop - Aplicação Principal
- * Ponto de entrada modular da aplicação
- */
-
-// Importações de módulos
+// Importações principais
 import { initializeDOM } from './app/dom.js';
 import * as ProductsModule from './app/products.js';
 import * as CategoriesModule from './app/categories.js';
@@ -17,7 +12,7 @@ import { debugLog, debugError } from './utils/debug.js';
  */
 class ArtesanatoShop {
     constructor() {
-        // Estado da aplicação
+        // Estado principal
         this.state = {
             products: [],
             previouslyFocusedElement: null,
@@ -34,28 +29,27 @@ class ArtesanatoShop {
     async initialize() {
         debugLog('=== INÍCIO DA INICIALIZAÇÃO ===');
 
-        // Inicializa referências DOM
+        // Inicializa DOM
         this.DOM = initializeDOM();
         debugLog('DOM inicializado:', this.DOM);
         debugLog('Container de produtos:', this.DOM.products.container);
         debugLog('Botões de categoria:', this.DOM.products.categories);
 
-        // Carrega categorias dinamicamente do Firestore (se estiver na página de produtos)
+        // Carrega categorias se existir container
         if (this.DOM.products.categoriesContainer) {
             await this.loadCategoriesData();
         }
 
-        // Ativa o botão "Todos" por padrão
+        // Ativa botão "Todos"
         this.activateAllCategoryButton();
 
-        // Configura event listeners ANTES de carregar produtos
-        // Isso garante que os botões de categoria tenham handlers anexados
+        // Configura event listeners antes de carregar produtos
         this.setupEventListeners();
 
-        // Carrega produtos do Firestore
+        // Carrega produtos
         await this.loadProductsData();
 
-        // Inicializa slideshow do hero
+        // Inicializa slideshow
         SlideshowModule.initHeroSlideshow(this.DOM);
 
         debugLog('=== FIM DA INICIALIZAÇÃO ===');
@@ -72,7 +66,7 @@ class ArtesanatoShop {
             if (categories.length > 0) {
                 debugLog('Renderizando botões de categorias...');
                 CategoriesModule.renderCategoryButtons(this.DOM, categories);
-                // Atualiza a referência DOM após renderizar as categorias
+                // Atualiza referência DOM após renderizar categorias
                 this.DOM.products.categories = this.DOM.products.categoriesContainer.querySelectorAll('.category');
                 debugLog('Referência de categorias atualizada:', this.DOM.products.categories.length, 'botões');
             } else {
@@ -88,7 +82,7 @@ class ArtesanatoShop {
      */
     activateAllCategoryButton() {
         if (this.DOM?.products?.categories) {
-            debugLog('Ativando botão "Todos" por padrão...');
+            debugLog('Ativando botão "Todos"...');
             const allButton = Array.from(this.DOM.products.categories)
                 .find(btn => btn.dataset.category === 'all');
             debugLog('Botão "Todos" encontrado:', allButton);
@@ -108,7 +102,6 @@ class ArtesanatoShop {
      * Carrega produtos do Firestore
      */
     async loadProductsData() {
-        debugLog('=== loadProductsData ===');
         debugLog('Buscando produtos do Firestore...');
         
         try {
@@ -130,9 +123,9 @@ class ArtesanatoShop {
      * Configura todos os event listeners da aplicação
      */
     setupEventListeners() {
-        // Callbacks para os eventos
+        // Callbacks principais
         const callbacks = {
-            // Produtos e busca
+            // Busca de produtos
             onSearch: (searchTerm) => {
                 ProductsModule.filterProductsBySearch(this.DOM, this.state.products, searchTerm);
             },
@@ -141,7 +134,7 @@ class ArtesanatoShop {
                 ProductsModule.loadProducts(this.DOM, this.state.products, categories);
             },
 
-            // Modal
+            // Modal de produto
             onOpenModal: (productId) => {
                 ModalModule.openModal(this.DOM, this.state.products, productId, this.state);
             },
@@ -150,7 +143,7 @@ class ArtesanatoShop {
                 ModalModule.closeModal(this.DOM, this.state);
             },
 
-            // Zoom
+            // Zoom de imagem
             onImageZoom: (e) => {
                 ModalModule.handleImageZoom(this.DOM, e);
             },
@@ -159,7 +152,7 @@ class ArtesanatoShop {
                 ModalModule.toggleImageZoom(this.DOM, e);
             },
 
-            // Touch events
+            // Eventos de toque
             onTouchStart: (e) => {
                 ModalModule.handleTouchStart(this.DOM, e);
             },
@@ -172,13 +165,13 @@ class ArtesanatoShop {
                 ModalModule.handleTouchEnd(this.DOM, e);
             },
 
-            // Paginação
+            // Paginação de produtos
             onLoadMore: async () => {
                 await ProductsModule.loadMoreProducts(this.DOM, this.state);
             }
         };
 
-        // Configura os listeners com delegação de eventos
+        // Configura listeners
         EventsModule.setupEventListeners(this.DOM, callbacks);
     }
 
@@ -190,14 +183,14 @@ class ArtesanatoShop {
     }
 }
 
-// Instância global da aplicação
+// Instância global
 const app = new ArtesanatoShop();
 
-// Inicializar quando o DOM estiver pronto
+// Inicializar app quando DOM estiver pronto
 document.addEventListener('DOMContentLoaded', () => {
     debugLog('DOM Content Loaded');
     app.initialize();
 });
 
-// Exporta a instância para uso em console/debug
+// Exporta instância para debug
 export default app;

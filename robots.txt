@@ -14,5 +14,19 @@ Disallow: /node_modules/
 Disallow: /src/css/legacy/
 Disallow: /src/js/legacy/
 
+# Bloquear arquivos sensíveis e temporários
+Disallow: /*.env
+Disallow: /*.backup
+Disallow: /*.backup.*
+Disallow: /*.example.js
+Disallow: /*.DS_Store
+Disallow: /*firebase-config-private.js
+Disallow: /*firebase-config.js
+
+# Bloquear ferramentas de build e deploy
+Disallow: /build-tools/
+Disallow: /.vscode/
+Disallow: /.github/
+
 # Sitemap
 Sitemap: https://artesanato-shop-c80f0.web.app/sitemap.xml
