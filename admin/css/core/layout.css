@@ -26,11 +26,23 @@
     font-weight: 700;
 }
 
+
 /* Navigation */
 .nav-menu {
     flex: 1;
     padding: 1.5rem 0;
 }
+
+/* User Info */
+.user-info {
+    padding: 1rem 1.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+}
+
 
 .nav-item {
     display: flex;
@@ -38,58 +50,75 @@
     padding: 0.875rem 1.5rem;
     color: rgba(255, 255, 255, 0.85);
     text-decoration: none;
-    transition: all 0.2s;
+    transition: all 0.25s cubic-bezier(.4,1,.7,1.2);
     gap: 0.75rem;
     font-weight: 500;
+    border-radius: 14px;
+    position: relative;
+    overflow: hidden;
 }
 
 .nav-item .icon {
-    font-size: 1.25rem;
-}
-
-.nav-item:hover {
-    background-color: rgba(255, 255, 255, 0.25);
-    color: #1a1a1a;
+    font-size: 1.35rem;
+    filter: drop-shadow(0 2px 6px rgba(99,102,241,0.15));
 }
 
 .nav-item.active {
-    background-color: #5568d3;
-    color: #ffffff;
+    background: linear-gradient(90deg, #6366f1 60%, #8b5cf6 100%);
+    color: #e5e7eb;
+    box-shadow: 0 4px 24px 0 rgba(99,102,241,0.25), 0 1.5px 0 0 #6366f1;
+    font-weight: 600;
+    z-index: 1;
 }
 
-/* User Info */
-.user-info {
-    padding: 1.5rem;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
+.nav-item.active .icon {
+    filter: none;
+    /* Deixa o emoji mais vibrante */
+    text-shadow: 0 2px 8px #fff, 0 1px 0 #6366f1;
+}
+
+.nav-item:hover:not(.active) {
+    background: rgba(99,102,241,0.10);
+    color: #e5e7eb;
+    box-shadow: 0 2px 12px 0 rgba(99,102,241,0.10);
+    transform: translateY(-2px) scale(1.03);
+}
+
+.nav-item:active {
+
+    filter: brightness(0.97);
 }
 
 .user-avatar {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, var(--primary-color), var(--info-color));
-    display: flex;
-    align-items: center;
     justify-content: center;
-    font-size: 1.25rem;
+    font-size: 1.5rem;
+    flex-shrink: 0;
+    box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
 }
 
 .user-details {
     flex: 1;
     min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
 }
 
 .user-name {
     display: block;
     font-size: 0.875rem;
-    color: rgba(255, 255, 255, 0.9);
-    font-weight: 500;
+    color: #ffffff;
+    font-weight: 600;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+}
+
+.user-role {
+    display: block;
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.5);
+    font-weight: 400;
 }
 
 /* Main Content */

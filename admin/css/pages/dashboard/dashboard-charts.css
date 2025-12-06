@@ -1,0 +1,53 @@
+/* admin/css/pages/dashboard-charts.css */
+/* Gráficos do Dashboard */
+
+/* ===== GRÁFICOS ===== */
+.chart-card canvas, #category-chart canvas, #price-distribution-chart canvas {
+    display: block;
+    margin: 0 auto;
+    max-width: 100%;
+    height: auto !important;
+}
+
+#category-chart, #price-distribution-chart {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 320px;
+    padding: 1rem 0;
+}
+
+/* Classes para os gráficos de pizza */
+.pie-charts-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 4rem;
+    min-height: 340px;
+}
+
+.pie-chart-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 320px;
+}
+
+.chart-label {
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    text-align: center;
+    width: 100%;
+    color: var(--text-primary);
+}
+
+.chart-slider {
+    width: 180px;
+    margin-bottom: 1rem;
+}
+
+.pie-chart-canvas {
+    max-width: 500px;
+    min-width: 200px;
+    width: 320px;
+}

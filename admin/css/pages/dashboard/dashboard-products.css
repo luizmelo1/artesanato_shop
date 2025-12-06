@@ -1,0 +1,73 @@
+/* admin/css/pages/dashboard-products.css */
+/* Lista de Produtos do Dashboard */
+
+/* ===== LISTA DE PRODUTOS MELHORADA ===== */
+.product-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.product-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    background: var(--bg-primary);
+    border-radius: 12px;
+    transition: all 0.2s;
+    cursor: pointer;
+}
+
+.product-item:hover {
+    background: var(--bg-secondary);
+    box-shadow: var(--shadow-sm);
+    transform: translateX(4px);
+}
+
+.product-image {
+    width: 60px;
+    height: 60px;
+    border-radius: 10px;
+    object-fit: cover;
+    box-shadow: var(--shadow-sm);
+}
+
+.product-info {
+    flex: 1;
+    position: relative;
+    z-index: 1;
+}
+
+.product-name {
+    font-weight: 600;
+    color: #0f172a !important;
+    margin-bottom: 0.25rem;
+}
+
+.product-category {
+    font-size: 0.875rem;
+    color: #64748b !important;
+}
+
+.product-price {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: #10b981 !important;
+    position: relative;
+    z-index: 1;
+}
+
+.badge {
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    position: relative;
+    z-index: 1;
+}
+
+.badge.success {
+    background: rgba(16, 185, 129, 0.1);
+    color: #10b981 !important;
+}

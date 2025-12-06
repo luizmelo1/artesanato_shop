@@ -1,0 +1,67 @@
+/* admin/css/pages/dashboard-responsive.css */
+/* Responsividade do Dashboard */
+
+/* ===== RESPONSIVO ===== */
+@media (max-width: 768px) {
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .quick-actions {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .page-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+    
+    .pie-charts-container {
+        flex-direction: column;
+        gap: 2rem;
+        min-height: unset;
+    }
+    
+    .pie-chart-wrapper {
+        width: 100%;
+        max-width: 100%;
+    }
+    
+    .chart-label {
+        width: 100%;
+    }
+    
+    .chart-slider {
+        width: 100%;
+        max-width: 280px;
+    }
+    
+    .pie-chart-canvas {
+        width: 100%;
+        max-width: 320px;
+    }
+    
+    #category-chart, #price-distribution-chart {
+        padding: 0.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .quick-actions {
+        grid-template-columns: 1fr;
+    }
+    
+    .stat-value {
+        font-size: 1.875rem;
+    }
+    
+    .product-item {
+        flex-direction: column;
+        text-align: center;
+    }
+}

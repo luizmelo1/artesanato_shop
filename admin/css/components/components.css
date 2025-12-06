@@ -85,33 +85,7 @@
     border: 1px solid var(--border-color);
 }
 
-/* Stats Cards */
-.stats-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 1.5rem;
-    margin-bottom: 2rem;
-}
-
-.stat-card {
-    background: linear-gradient(135deg, var(--primary-color), var(--info-color));
-    color: white;
-    border-radius: var(--border-radius);
-    padding: 1.5rem;
-    box-shadow: var(--shadow-md);
-}
-
-.stat-card h3 {
-    font-size: 0.875rem;
-    font-weight: 600;
-    opacity: 0.9;
-    margin-bottom: 0.5rem;
-}
-
-.stat-card .stat-value {
-    font-size: 2rem;
-    font-weight: 700;
-}
+/* Stats Cards - Estilos movidos para dashboard-stats.css */
 
 /* Form Elements */
 .form-group {

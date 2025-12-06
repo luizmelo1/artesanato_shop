@@ -211,6 +211,16 @@ function filterProducts() {
         filtered = filtered.filter(p => p.active === isActive);
     }
     
+    // Filtros especiais da URL (vindos do dashboard)
+    const urlParams = new URLSearchParams(window.location.search);
+    const filterType = urlParams.get('filter');
+    
+    if (filterType === 'no-description') {
+        filtered = filtered.filter(p => !p.description || p.description.trim() === '');
+    } else if (filterType === 'no-link') {
+        filtered = filtered.filter(p => !p.whatsappLink || p.whatsappLink.trim() === '');
+    }
+    
     return filtered;
 }
 
@@ -582,13 +592,69 @@ modal.addEventListener('click', (e) => {
     }
 });
 
+// Aplicar filtro da URL
+function applyUrlFilter() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const filterType = urlParams.get('filter');
+    
+    if (filterType) {
+        // Adicionar badge informativo acima da tabela
+        const tableContainer = document.querySelector('.table-container');
+        if (tableContainer) {
+            const filterBadge = document.createElement('div');
+            filterBadge.className = 'filter-badge';
+            filterBadge.style.cssText = `
+                background: linear-gradient(135deg, #6366f1, #8b5cf6);
+                color: white;
+                padding: 1rem 1.5rem;
+                border-radius: 12px;
+                margin-bottom: 1.5rem;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                box-shadow: 0 4px 6px rgba(99, 102, 241, 0.3);
+            `;
+            
+            const filterText = filterType === 'no-description' 
+                ? '📝 Mostrando apenas produtos sem descrição'
+                : '🔗 Mostrando apenas produtos sem link do WhatsApp';
+            
+            filterBadge.innerHTML = `
+                <span style="font-weight: 600;">${filterText}</span>
+                <button onclick="clearUrlFilter()" style="
+                    background: rgba(255, 255, 255, 0.2);
+                    border: none;
+                    color: white;
+                    padding: 0.5rem 1rem;
+                    border-radius: 6px;
+                    cursor: pointer;
+                    font-weight: 600;
+                    transition: all 0.2s;
+                " onmouseover="this.style.background='rgba(255, 255, 255, 0.3)'" 
+                   onmouseout="this.style.background='rgba(255, 255, 255, 0.2)'">
+                    ✕ Limpar Filtro
+                </button>
+            `;
+            
+            tableContainer.parentNode.insertBefore(filterBadge, tableContainer);
+        }
+    }
+}
+
+// Limpar filtro da URL
+function clearUrlFilter() {
+    window.location.href = 'products.html';
+}
+
 // Inicializar
 document.addEventListener('DOMContentLoaded', () => {
     loadCategories();
     loadProducts();
+    applyUrlFilter();
 });
 
 globalThis.openModal = openModal;
 globalThis.closeModal = closeModal;
 globalThis.editProduct = editProduct;
 globalThis.deleteProduct = deleteProduct;
+globalThis.clearUrlFilter = clearUrlFilter;

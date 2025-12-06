@@ -13,7 +13,7 @@
 
 /* 3. Pages - Estilos específicos de cada página */
 @import url('pages/login.css');
-@import url('pages/dashboard.css');
+@import url('pages/dashboard/dashboard.css');
 @import url('pages/categories.css');
 
 /* 4. Utils - Classes auxiliares e responsividade */
