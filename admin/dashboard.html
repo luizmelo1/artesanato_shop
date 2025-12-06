@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard - Admin</title>
     <link rel="stylesheet" href="css/admin-styles-modular.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0"></script>
 </head>
 <body>
     <!-- Sidebar -->
@@ -27,9 +29,12 @@
             </a>
         </nav>
         <div class="user-info">
-            <div class="user-avatar">👤</div>
-            <div class="user-details">
-                <span class="user-name" id="user-email"></span>
+            <div class="user-card">
+                <div class="user-avatar">👤</div>
+                <div class="user-details">
+                    <span class="user-name" id="user-email"></span>
+                    <span class="user-role">Administrador</span>
+                </div>
             </div>
             <button class="btn-icon" id="logout-btn" title="Sair">
                 🚪
@@ -45,6 +50,9 @@
                 <p class="page-subtitle">Bem-vinda ao painel administrativo</p>
             </div>
         </header>
+
+        <!-- Insights e Sugestões -->
+        <div id="admin-insights"></div>
 
         <!-- Estatísticas -->
         <div class="stats-grid">
@@ -78,14 +86,6 @@
                         <span class="icon">🏷️</span>
                         <span>Nova Categoria</span>
                     </a>
-                </div>
-            </div>
-
-            <!-- Produtos Recentes -->
-            <div class="card">
-                <h2>Produtos Recentes</h2>
-                <div id="recent-products-list">
-                    <p class="empty-state">Carregando produtos...</p>
                 </div>
             </div>
         </div>
