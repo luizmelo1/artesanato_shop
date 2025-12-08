@@ -70,11 +70,29 @@
             </select>
         </div>
 
+        <!-- Barra de Ações em Lote -->
+        <div class="bulk-actions-bar hidden" id="bulk-actions-bar">
+            <div class="bulk-selection-info">
+                <label class="checkbox-wrapper">
+                    <input type="checkbox" id="select-all-products" aria-label="Selecionar todos os produtos">
+                    <span class="checkbox-label">Selecionar Todos</span>
+                </label>
+                <span class="selected-count" id="selected-count">0 selecionados</span>
+            </div>
+            <button id="bulk-action-button" class="btn btn-primary" disabled>
+                <span>Ações em Lote</span>
+                <span>▼</span>
+            </button>
+        </div>
+
         <!-- Lista de Produtos -->
         <div class="table-container">
             <table>
                 <thead>
-                    <tr>
+                <tr>
+                        <th class="checkbox-column">
+                            <input type="checkbox" id="select-all-table" aria-label="Selecionar todos">
+                        </th>
                         <th>Imagem</th>
                         <th>Nome</th>
                         <th>Categoria</th>
@@ -85,7 +103,7 @@
                 </thead>
                 <tbody id="products-table-body">
                     <tr>
-                        <td colspan="6" class="empty-state">Carregando produtos...</td>
+                        <td colspan="7" class="empty-state">Carregando produtos...</td>
                     </tr>
                 </tbody>
             </table>
@@ -195,6 +213,43 @@
         </div>
     </div>
 
+    <!-- Modal de Ações em Lote -->
+    <div id="bulk-actions-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Ações em Lote</h2>
+                <button class="btn-close" onclick="closeBulkModal()">✕</button>
+            </div>
+            <div class="modal-body">
+                <p class="bulk-modal-info">
+                    <strong id="bulk-modal-count">0</strong> produto(s) selecionado(s)
+                </p>
+                <div class="bulk-actions-list">
+                    <button class="bulk-action-item" data-action="delete">
+                        <span class="action-icon">🗑️</span>
+                        <span class="action-text">Excluir Produtos</span>
+                    </button>
+                    <button class="bulk-action-item" data-action="activate">
+                        <span class="action-icon">✅</span>
+                        <span class="action-text">Ativar Produtos</span>
+                    </button>
+                    <button class="bulk-action-item" data-action="deactivate">
+                        <span class="action-icon">❌</span>
+                        <span class="action-text">Desativar Produtos</span>
+                    </button>
+                    <button class="bulk-action-item" data-action="change-category">
+                        <span class="action-icon">📁</span>
+                        <span class="action-text">Alterar Categoria</span>
+                    </button>
+                    <button class="bulk-action-item" data-action="change-price">
+                        <span class="action-icon">💰</span>
+                        <span class="action-text">Alterar Preço</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
@@ -211,5 +266,6 @@
     <script src="js/auth-check.js"></script>
     <script src="js/image-optimizer.js" type="module"></script>
     <script src="js/products.js" type="module"></script>
+    <script src="js/bulk-actions.js"></script>
 </body>
 </html>

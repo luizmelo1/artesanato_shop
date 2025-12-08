@@ -152,14 +152,20 @@ function renderProducts() {
     if (filtered.length === 0) {
         productsTable.innerHTML = `
             <tr>
-                <td colspan="6" class="empty-state">Nenhum produto encontrado</td>
+                <td colspan="7" class="empty-state">Nenhum produto encontrado</td>
             </tr>
         `;
         return;
     }
     
     productsTable.innerHTML = filtered.map(product => `
-        <tr>
+        <tr data-product-id="${product.id}">
+            <td class="product-checkbox-cell">
+                <input type="checkbox" 
+                       class="product-checkbox" 
+                       data-product-id="${product.id}"
+                       aria-label="Selecionar ${product.name}">
+            </td>
             <td>
                 <img src="${product.image || '../src/img/placeholder.png'}" 
                      alt="${product.name}" 
@@ -183,6 +189,11 @@ function renderProducts() {
             </td>
         </tr>
     `).join('');
+    
+    // Reconfigura event listeners dos checkboxes após renderizar
+    if (typeof setupProductCheckboxListeners === 'function') {
+        setupProductCheckboxListeners();
+    }
 }
 
 // Filtrar produtos
@@ -212,7 +223,7 @@ function filterProducts() {
     }
     
     // Filtros especiais da URL (vindos do dashboard)
-    const urlParams = new URLSearchParams(window.location.search);
+    const urlParams = new URLSearchParams(globalThis.location.search);
     const filterType = urlParams.get('filter');
     
     if (filterType === 'no-description') {
@@ -294,22 +305,18 @@ async function validateAndUploadImages() {
 // Salvar produto
 productForm.addEventListener('submit', async (e) => {
     e.preventDefault();
-    
     const submitBtn = productForm.querySelector('button[type="submit"]');
     submitBtn.disabled = true;
     submitBtn.textContent = 'Salvando...';
-    
     try {
         // Limpar erros anteriores
         if (globalThis.ValidationModule) {
             globalThis.ValidationModule.clearAllErrors();
         }
-        
         // Upload de novas imagens (se houver)
         if (imagesInput.files.length > 0) {
             await validateAndUploadImages();
         }
-        
         // Dados do produto
         const productData = {
             name: document.getElementById('product-name').value.trim(),
@@ -321,34 +328,27 @@ productForm.addEventListener('submit', async (e) => {
             images: selectedImages,
             updatedAt: firebase.firestore.FieldValue.serverTimestamp()
         };
-        
         // Validar dados do produto
         if (globalThis.ValidationModule) {
             const validation = globalThis.ValidationModule.validateProduct(productData);
-            
             if (!validation.valid) {
                 // Mostrar erros de validação
                 globalThis.ValidationModule.showValidationErrors(validation.errors);
-                
                 // Scroll para o primeiro erro
                 const firstError = document.querySelector('.input-error');
                 if (firstError) {
                     firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
                     firstError.focus();
                 }
-                
                 throw new Error('Validação falhou');
             }
-            
             // Usar dados sanitizados
             Object.assign(productData, validation.sanitized);
         }
-        
         // Garantir compatibilidade: salvar primeira imagem como 'image'
         if (selectedImages.length > 0) {
             productData.image = selectedImages[0];
         }
-        
         // Salvar no Firestore
         if (currentProductId) {
             // Atualizar
@@ -360,10 +360,8 @@ productForm.addEventListener('submit', async (e) => {
             await db.collection('products').add(productData);
             showNotification('Produto criado com sucesso!', 'success');
         }
-        
         closeModal();
         loadProducts();
-        
     } catch (error) {
         console.error('Erro ao salvar produto:', error);
         showNotification('Erro ao salvar produto', 'error');
@@ -552,7 +550,6 @@ async function deleteProduct(productId, productName) {
     if (!confirm(`Tem certeza que deseja excluir "${productName}"?`)) {
         return;
     }
-    
     try {
         await db.collection('products').doc(productId).delete();
         showNotification('Produto excluído com sucesso!', 'success');
@@ -594,7 +591,7 @@ modal.addEventListener('click', (e) => {
 
 // Aplicar filtro da URL
 function applyUrlFilter() {
-    const urlParams = new URLSearchParams(window.location.search);
+    const urlParams = new URLSearchParams(globalThis.location.search);
     const filterType = urlParams.get('filter');
     
     if (filterType) {
@@ -643,7 +640,7 @@ function applyUrlFilter() {
 
 // Limpar filtro da URL
 function clearUrlFilter() {
-    window.location.href = 'products.html';
+    globalThis.location.href = 'products.html';
 }
 
 // Inicializar

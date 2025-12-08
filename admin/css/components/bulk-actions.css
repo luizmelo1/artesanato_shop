@@ -1,0 +1,225 @@
+/* ===========================
+   BULK ACTIONS - AÇÕES EM LOTE
+   Estilos para seleção e operações em lote
+   =========================== */
+
+/* Barra de ações em lote */
+.bulk-actions-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 1.5rem;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 12px;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+    transition: all 0.3s ease;
+    animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.bulk-actions-bar.hidden {
+    display: none;
+}
+
+.bulk-selection-info {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    color: white;
+}
+
+/* Checkbox wrapper */
+.checkbox-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-select: none; /* Safari */
+}
+
+.checkbox-wrapper input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    accent-color: #fff;
+}
+
+.checkbox-label {
+    font-weight: 500;
+    font-size: 0.95rem;
+}
+
+.selected-count {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 0.4rem 1rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #4a63e7; /* Contraste ajustado */
+    -webkit-backdrop-filter: blur(10px); /* Safari */
+    backdrop-filter: blur(10px);
+}
+
+/* Botão de ações em lote */
+#bulk-action-button {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: white;
+    color: #667eea;
+    border: none;
+    padding: 0.7rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+#bulk-action-button:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    background: #f8f9ff;
+}
+
+#bulk-action-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background: #e0e0e0;
+    color: #666; /* Contraste ajustado */
+}
+
+/* Checkboxes na tabela */
+.checkbox-column {
+    width: 50px;
+    text-align: center;
+}
+
+.product-checkbox-cell {
+    width: 50px;
+    text-align: center;
+}
+
+.product-checkbox {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    accent-color: #667eea;
+}
+
+#select-all-table {
+    cursor: pointer;
+    width: 20px;
+    height: 20px;
+    accent-color: #667eea;
+}
+
+/* Linha selecionada */
+tr.selected {
+    background-color: #f8f9ff !important;
+    box-shadow: inset 3px 0 0 #667eea;
+}
+
+tr.selected:hover {
+    background-color: #f0f2ff !important;
+}
+
+/* Modal de ações em lote */
+#bulk-actions-modal .modal-content {
+    max-width: 500px;
+}
+
+.bulk-modal-info {
+    text-align: center;
+    font-size: 1.1rem;
+    color: #666;
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    background: #f5f7ff;
+    border-radius: 8px;
+}
+
+#bulk-modal-count {
+    color: #667eea;
+    font-size: 1.4rem;
+}
+
+/* Lista de ações */
+.bulk-actions-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.bulk-action-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1.25rem;
+    background: white;
+    border: 2px solid #e0e0e0;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 1rem;
+    text-align: left;
+    width: 100%;
+}
+
+.bulk-action-item:hover {
+    background: #f8f9ff;
+    border-color: #667eea;
+    transform: translateX(5px);
+}
+
+.action-icon {
+    font-size: 1.5rem;
+    flex-shrink: 0;
+}
+
+.action-text {
+    font-weight: 500;
+    color: #333; /* Adjusted from #666 */
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+    .bulk-actions-bar {
+        flex-direction: column;
+        gap: 1rem;
+        padding: 1rem;
+    }
+
+    .bulk-selection-info {
+        width: 100%;
+        justify-content: space-between;
+        flex-wrap: wrap;
+    }
+
+    #bulk-action-button {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .bulk-action-item {
+        font-size: 0.95rem;
+        padding: 0.9rem 1rem;
+    }
+
+    .selected-count {
+        font-size: 0.85rem;
+        padding: 0.3rem 0.8rem;
+    }
+}

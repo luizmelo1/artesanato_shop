@@ -53,13 +53,48 @@ tbody tr:hover {
 
 /* Filters */
 .filters {
-    background-color: var(--bg-primary);
-    padding: 1.5rem;
-    border-radius: var(--border-radius);
-    box-shadow: var(--shadow-sm);
-    border: 1px solid var(--border-color);
-    margin-bottom: 1.5rem;
+    background: #fff;
+    padding: 24px 32px;
+    border-radius: 16px;
+    box-shadow: 0 2px 12px rgba(79, 140, 255, 0.08);
+    border: none;
+    margin-bottom: 32px;
     display: grid;
     grid-template-columns: 2fr 1fr 1fr;
-    gap: 1rem;
+    gap: 24px;
 }
+
+.filters input[type="search"] {
+    border-radius: 8px;
+    border: 1.5px solid #e3e8f0;
+    padding: 10px 18px;
+    font-size: 1rem;
+    background: #f5f7fa;
+    box-shadow: 0 1px 4px rgba(79, 140, 255, 0.04);
+    transition: border 0.2s, box-shadow 0.2s;
+}
+
+.filters input[type="search"]:focus {
+    outline: none;
+    border-color: #4f8cff;
+    box-shadow: 0 0 0 2px rgba(79, 140, 255, 0.12);
+}
+
+.filters select {
+    border-radius: 8px;
+    border: 1.5px solid #e3e8f0;
+    padding: 10px 18px;
+    font-size: 1rem;
+    background: #f5f7fa;
+    color: #23293a;
+    box-shadow: 0 1px 4px rgba(79, 140, 255, 0.04);
+    transition: border 0.2s, box-shadow 0.2s;
+    cursor: pointer;
+}
+
+.filters select:focus {
+    outline: none;
+    border-color: #4f8cff;
+    box-shadow: 0 0 0 2px rgba(79, 140, 255, 0.12);
+}
+
