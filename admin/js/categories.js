@@ -114,13 +114,11 @@ categoryForm.addEventListener('submit', async (e) => {
         if (currentCategoryId) {
             // Atualizar
             await db.collection('categories').doc(currentCategoryId).update(categoryData);
-            
             // Atualizar produtos com essa categoria
             if (categoryData.name !== allCategories.find(c => c.id === currentCategoryId).name) {
                 const oldName = allCategories.find(c => c.id === currentCategoryId).name;
                 await updateProductsCategory(oldName, categoryData.name);
             }
-            
             showNotification('Categoria atualizada com sucesso!', 'success');
         } else {
             // Criar nova
@@ -169,33 +167,25 @@ async function deleteCategory(categoryId, categoryName) {
             showNotification('Categoria não encontrada', 'error');
             return;
         }
-        
         const categorySlug = categoryDoc.data().slug || categoryDoc.data().name;
-        
         // Verificar em tempo real se existem produtos com esta categoria
         const productsSnapshot = await db.collection('products')
             .where('category', '==', categorySlug)
             .limit(1)
             .get();
-        
         const productCount = productsSnapshot.size;
-        
         // Se houver produtos, contar quantos são
         if (productCount > 0) {
             const allProductsSnapshot = await db.collection('products')
                 .where('category', '==', categorySlug)
                 .get();
-            
             const totalProducts = allProductsSnapshot.size;
-            
             // Mostra lista de produtos
             let productNames = [];
             for (const doc of allProductsSnapshot.docs.slice(0, 5)) {
                 productNames.push(`• ${doc.data().name}`);
             }
-            
             const moreProducts = totalProducts > 5 ? `\n... e mais ${totalProducts - 5} produto(s)` : '';
-            
             alert(`⚠️ Não é possível excluir a categoria "${categoryName}"!\n\n` +
                   `Esta categoria contém ${totalProducts} produto(s):\n\n` +
                   `${productNames.join('\n')}${moreProducts}\n\n` +
@@ -205,7 +195,6 @@ async function deleteCategory(categoryId, categoryName) {
                   `Depois você poderá excluir esta categoria.`);
             return;
         }
-        
         // Se não tem produtos, pede confirmação
         if (!confirm(`✅ Confirmar exclusão?\n\n` +
                      `Categoria: "${categoryName}"\n` +
@@ -213,12 +202,10 @@ async function deleteCategory(categoryId, categoryName) {
                      `Esta ação não pode ser desfeita.`)) {
             return;
         }
-        
         // Exclui a categoria
         await db.collection('categories').doc(categoryId).delete();
         showNotification('✓ Categoria excluída com sucesso!', 'success');
         loadCategories();
-        
     } catch (error) {
         console.error('Erro ao excluir categoria:', error);
         showNotification('Erro ao excluir categoria: ' + error.message, 'error');

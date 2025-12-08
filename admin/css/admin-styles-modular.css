@@ -10,6 +10,7 @@
 @import url('components/components.css');
 @import url('components/tables.css');
 @import url('components/modal.css');
+@import url('components/bulk-actions.css');
 
 /* 3. Pages - Estilos específicos de cada página */
 @import url('pages/login.css');

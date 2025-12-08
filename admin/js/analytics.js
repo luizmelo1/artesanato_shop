@@ -386,84 +386,100 @@ function renderStatusPieChart(active, inactive) {
 function renderPriceDistributionChart(priceDistribution) {
     const chartContainer = document.getElementById('price-distribution-chart');
     if (!chartContainer) return;
+    
+    // Filtra apenas ranges com produtos
+    const validRanges = priceDistribution.filter(r => r.count > 0);
+    
     chartContainer.innerHTML = `
-      <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:420px;">
-        <label for="barChartWidth" style="margin-bottom:0.5rem;font-weight:600;">Ajuste a largura do gráfico:</label>
-        <input type="range" id="barChartWidth" min="320" max="900" value="700" style="width:220px;margin-bottom:1rem;">
-        <canvas id="priceBarChart" style="max-width:900px;min-width:320px;width:700px;"></canvas>
+      <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:1.5rem 0;">
+        <label for="priceChartWidth" style="margin-bottom:0.5rem;font-weight:600;">Ajuste o tamanho do gráfico:</label>
+        <input type="range" id="priceChartWidth" min="250" max="450" value="350" style="width:220px;margin-bottom:1.5rem;">
+        <canvas id="priceDonutChart" style="max-width:450px;min-width:250px;width:350px;"></canvas>
       </div>`;
-    const ctx = document.getElementById('priceBarChart').getContext('2d');
-    const labels = priceDistribution.map(r => r.range);
-    const data = priceDistribution.map(r => r.count);
-    const barColors = labels.map((_, i) => i % 2 === 0 ? '#6366f1' : '#10b981');
+    
+    const ctx = document.getElementById('priceDonutChart').getContext('2d');
+    const labels = validRanges.map(r => r.range);
+    const data = validRanges.map(r => r.count);
+    
+    // Cores vibrantes para cada faixa de preço
+    const colors = [
+        '#10b981', // Verde - mais baratos
+        '#3b82f6', // Azul
+        '#6366f1', // Roxo
+        '#f59e0b', // Amarelo
+        '#ef4444', // Vermelho
+        '#8b5cf6'  // Roxo escuro - mais caros
+    ];
+    
     const chart = new Chart(ctx, {
-        type: 'bar',
+        type: 'doughnut',
         data: {
             labels,
             datasets: [{
-                label: 'Produtos',
                 data,
-                backgroundColor: barColors,
-                borderRadius: 10,
-                maxBarThickness: 60
+                backgroundColor: colors.slice(0, data.length),
+                borderWidth: 3,
+                borderColor: '#fff',
+                hoverOffset: 12,
+                hoverBorderWidth: 4
             }]
         },
         options: {
+            responsive: true,
+            maintainAspectRatio: true,
             plugins: {
                 legend: {
-                    display: false
+                    display: true,
+                    position: 'bottom',
+                    labels: {
+                        font: { size: 13 },
+                        color: '#222',
+                        boxWidth: 18,
+                        padding: 12,
+                        usePointStyle: true,
+                        pointStyle: 'circle'
+                    }
                 },
                 tooltip: {
                     callbacks: {
                         label: function(context) {
-                            return `${context.label}: ${context.parsed.y} produtos`;
+                            const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                            const value = context.parsed;
+                            const percent = ((value / total) * 100).toFixed(1);
+                            return `${context.label}: ${value} produtos (${percent}%)`;
                         }
-                    }
+                    },
+                    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                    padding: 12,
+                    titleFont: { size: 14 },
+                    bodyFont: { size: 13 },
+                    cornerRadius: 8
                 },
                 datalabels: {
-                    anchor: 'end',
-                    align: 'center',
-                    color: '#222',
-                    font: { weight: 'bold', size: 16 },
-                    formatter: function(value) {
-                        return value > 0 ? value : '';
-                    }
+                    color: '#fff',
+                    font: { 
+                        weight: 'bold', 
+                        size: 14 
+                    },
+                    formatter: function(value, context) {
+                        const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                        const percent = ((value / total) * 100).toFixed(0);
+                        return value > 0 ? `${value}\n${percent}%` : '';
+                    },
+                    textAlign: 'center'
                 }
             },
-            scales: {
-                x: {
-                    title: {
-                        display: true,
-                        text: 'Faixa de Preço',
-                        font: { size: 18 }
-                    },
-                    ticks: {
-                        font: { size: 16 },
-                        maxRotation: 30,
-                        minRotation: 0
-                    }
-                },
-                y: {
-                    title: {
-                        display: true,
-                        text: 'Quantidade de Produtos',
-                        font: { size: 18 }
-                    },
-                    beginAtZero: true,
-                    ticks: {
-                        stepSize: 1,
-                        font: { size: 16 }
-                    }
-                }
-            }
+            cutout: '60%'
         },
         plugins: [ChartDataLabels]
     });
+    
     // Slider para ajuste manual do tamanho do gráfico
-    const slider = document.getElementById('barChartWidth');
+    const slider = document.getElementById('priceChartWidth');
     slider.addEventListener('input', function() {
-      document.getElementById('priceBarChart').style.width = this.value + 'px';
-      chart.resize();
+        const canvas = document.getElementById('priceDonutChart');
+        canvas.style.width = this.value + 'px';
+        chart.resize();
     });
 }
 }
